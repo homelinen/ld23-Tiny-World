@@ -9,7 +9,7 @@ public class Planetoid {
 	private Sprite sprite;
 	private Body pBody;
 	
-	public Planetoid(Vec2 startPos, Sprite s, BodyDef bodyDef, World world){
+	public Planetoid(Sprite s, BodyDef bodyDef, World world){
 		//TODO: Need an initial mass
 		//TODO: Startpos unused?
 		

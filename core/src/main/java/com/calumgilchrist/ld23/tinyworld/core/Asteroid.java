@@ -9,7 +9,7 @@ import org.jbox2d.dynamics.World;
 public class Asteroid extends Planetoid {
 
 	public Asteroid(Vec2 startPos, Sprite s, BodyDef bodyDef, World world) {
-		super(startPos, s, bodyDef, world);
+		super(s, bodyDef, world);
 		
 	}
 

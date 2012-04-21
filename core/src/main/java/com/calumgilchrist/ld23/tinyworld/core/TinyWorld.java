@@ -14,35 +14,28 @@ import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.Keyboard;
 import playn.core.Pointer;
-import playn.core.Keyboard.Event;
-import playn.core.Keyboard.TypedEvent;
 
-public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
+public class TinyWorld implements Game, Pointer.Listener {
 	ArrayList<Planetoid> planetoids;
 	
 	Player player;
 	
 	World world;
 	
-	private boolean upKeyDown;
-	private boolean downKeyDown;
-	private boolean leftKeyDown;
-	private boolean rightKeyDown;
+	private KeyboardInput keyboard;
 	
 	private GroupLayer planetoidLayer;
 	// TODO remove everything from root layer
 	
 	@Override
-	public void init() {		
-		initKeyboard();
+	public void init() {	
+		keyboard = new KeyboardInput();
 		
 		planetoids = new ArrayList<Planetoid>();
 		planetoidLayer = graphics().createGroupLayer();
 		
 		pointer().setListener(this);
-		keyboard().setListener(this);
 	
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
@@ -50,13 +43,14 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().add(bgLayer);
 		
 		// Load grey asteroid image asset
-		Image asteroid = assets().getImage("images/grey-asteroid.png");
+		Image asteroidImage = assets().getImage("images/grey-asteroid.png");
+		Image planetoidImage = assets().getImage("images/planetoid.png");
 		
 		//Set up the world
 		world = new World(new Vec2(), false);
 		
 		for (int i=0; i < 30; i++) {
-			createAsteroid(asteroid);
+			createAsteroid(asteroidImage);
 		}
 		
 		Vec2 playerStart = new Vec2(graphics().width() / 2, graphics().height() / 2);
@@ -66,13 +60,12 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		
 		playerBodyDef.position.set(playerStart.mul(1/Constants.PHYS_RATIO));
 		
-		//TODO Player should be in middle
-		player = new Player(new Vec2(60,60),new Sprite((int) playerStart.x, (int) playerStart.y), playerBodyDef, world);
+		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
-		player.getSprite().addFrame(asteroid);
+		player.getSprite().addFrame(planetoidImage);
 		
 		graphics().rootLayer().add(planetoidLayer);
-		//graphics().rootLayer().setScale(0.5f);
+		//planetoidLayer.setScale(0.5f);
 	}
 
 	public void createAsteroid(Image asteroid) {
@@ -127,7 +120,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		world.step(60, 6, 3);
 		world.clearForces();
 		
-		handleKeyboard();
+		player.applyThrust(keyboard.getMovement());
 		cameraFollowPlayer();
 		player.update();
 		
@@ -152,76 +145,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		ty = ty - (graphics().height());
 		
 		planetoidLayer.setOrigin(tx,ty);
-	}
-	
-	public void initKeyboard(){
-		upKeyDown = false;
-		downKeyDown = false;
-		leftKeyDown = false;
-		rightKeyDown = false;
-	}
-	
-	public void handleKeyboard(){
-		int px, py;
-		px = py = 0;
-		
-		if(upKeyDown){
-			py = py - (int) Constants.PHYS_RATIO;
-		}
-		if(downKeyDown){
-			py = py + (int) Constants.PHYS_RATIO;
-		}
-		if(leftKeyDown){
-			px = px - (int) Constants.PHYS_RATIO;
-		}
-		if(rightKeyDown){
-			px = px + (int) Constants.PHYS_RATIO;
-		}
-		player.applyThrust(new Vec2(px,py));
-	}
-
-	@Override
-	public void onKeyDown(Event event) {
-		switch (event.key()) {
-		case W:
-			upKeyDown = true;
-			break;
-		case A:
-			leftKeyDown = true;
-			break;
-		case S:
-			downKeyDown = true;
-			break;
-		case D:
-			rightKeyDown = true;
-			break;
-		case ESCAPE:
-			System.exit(0);
-		}
-		
-	}
-
-	@Override
-	public void onKeyTyped(TypedEvent event) {
-	}
-
-	@Override
-	public void onKeyUp(Event event) {
-		// TODO Auto-generated method stub
-		switch (event.key()) {
-		case W:
-			upKeyDown = false;
-			break;
-		case A:
-			leftKeyDown = false;
-			break;
-		case S:
-			downKeyDown = false;
-			break;
-		case D:
-			rightKeyDown = false;
-			break;
-		}
 	}
 
 	@Override
