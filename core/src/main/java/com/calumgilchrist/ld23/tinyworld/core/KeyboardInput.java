@@ -9,6 +9,7 @@ import playn.core.Keyboard.Event;
 import playn.core.Keyboard.TypedEvent;
 
 public class KeyboardInput implements Keyboard.Listener {
+	// Boolean values that represent whether a key is currently pressed or not
 	private boolean upKeyDown;
 	private boolean downKeyDown;
 	private boolean leftKeyDown;

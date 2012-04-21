@@ -65,7 +65,7 @@ public class TinyWorld implements Game, Pointer.Listener {
 		player.getSprite().addFrame(planetoidImage);
 		
 		graphics().rootLayer().add(planetoidLayer);
-		//planetoidLayer.setScale(0.5f);
+		planetoidLayer.setScale(0.5f);
 	}
 
 	public void createAsteroid(Image asteroid) {
