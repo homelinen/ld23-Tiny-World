@@ -75,8 +75,22 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y), astrBodyDef, world);
 		astr.getSprite().addFrame(asteroid);
 		
+		
 		//Apply a force to the asteroid
 		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
+		
+		/*
+		 * Generate a nice random vector by multiplying direction by random numbers 
+		 */
+		float forceFactor = 100f;
+		
+		Random rand = new Random();
+		
+		float xComp = forceDir.x * rand.nextInt((int) forceFactor) / forceFactor;
+		float yComp = forceDir.y * rand.nextInt((int) forceFactor) / forceFactor;
+		
+		//Initial Force, need to randomise
+		Vec2 thrust = new Vec2(xComp, yComp);
 		astr.applyThrust(forceDir.mul(0.1f));
 		
 		planetoids.add(astr);
