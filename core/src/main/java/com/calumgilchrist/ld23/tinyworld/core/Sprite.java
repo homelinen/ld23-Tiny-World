@@ -12,7 +12,7 @@ public class Sprite {
 	private Image currentImage;
 	
 	private int x;
-	private int y
+	private int y;
 
 	public Sprite(int posX, int posY) {
 		x = posX;
