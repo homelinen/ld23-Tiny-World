@@ -1,9 +1,13 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+
+import pythagoras.d.Circle;
 
 public class Planetoid {
 	private Sprite sprite;
@@ -15,6 +19,16 @@ public class Planetoid {
 		
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
+		
+		CircleShape circle = new CircleShape();
+		
+		float magicBoundRatio = 2.2f;
+		circle.m_radius = this.sprite.getWidth() / Constants.PHYS_RATIO / magicBoundRatio;
+		
+		FixtureDef fixDef = new FixtureDef();
+		fixDef.shape = circle;
+		
+		pBody.createFixture(fixDef);
 	}
 	
 	/**
