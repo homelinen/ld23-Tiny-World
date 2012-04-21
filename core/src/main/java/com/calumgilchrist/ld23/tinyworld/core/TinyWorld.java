@@ -68,6 +68,10 @@ public class TinyWorld implements Game, Keyboard.Listener {
 
 	@Override
 	public void update(float delta) {
+		
+		//Values need playing with, and to be stored
+		world.step(60, 30, 30);
+		
 		// For every planetoid update it's sprite
 		for (Planetoid p : planetoids) {
 			p.getSprite().update();
