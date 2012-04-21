@@ -56,6 +56,10 @@ public class Sprite {
 	}
 
 	public void setFrame(int frame) {
+		if(frame < 0 || frame > frames.size()){
+			System.out.println("Error - frame: "+frame+" is out of bounds");
+			System.exit(-1);
+		}
 		currentFrame = frame;
 	}
 
