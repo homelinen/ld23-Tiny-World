@@ -30,6 +30,9 @@ public class Planetoid {
 
 	public void setPos(Vec2 pos) {
 		this.pos = pos;
+		
+		sprite.setX((int) pos.x);
+		sprite.setY((int) pos.y);
 	}
 	
 	public Body getBody() {

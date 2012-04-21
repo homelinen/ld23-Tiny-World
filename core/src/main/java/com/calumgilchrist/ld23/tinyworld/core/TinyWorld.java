@@ -19,7 +19,11 @@ import playn.core.Keyboard.TypedEvent;
 
 public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	ArrayList<Planetoid> planetoids;
+	
+	Planetoid player;
+	
 	World world;
+	Vec2 mousePos;
 
 	@Override
 	public void init() {
@@ -29,7 +33,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		keyboard().setListener(this);
 	
 		// create and add background image layer
-		Image bgImage = assets().getImage("images/starfield.png");
+		Image bgImage = assets().getImage("images/bg.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
@@ -37,6 +41,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		Image asteroid = assets().getImage("images/grey-asteroid.png");
 
 		Vec2 pStart = new Vec2(20,20);
+		mousePos = new Vec2(-50,-50);
 		
 		//Set up the world
 		world = new World(new Vec2(), false);
@@ -53,7 +58,10 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		p.getSprite().addFrame(asteroid);
 		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);
-	
+		
+		player = new Planetoid(new Vec2(100,100),new Sprite(100,100), pBodyDef, world);
+		graphics().rootLayer().add(player.getSprite().getImageLayer());
+		player.getSprite().addFrame(asteroid);
 	}
 
 	@Override
@@ -65,9 +73,12 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void update(float delta) {
-		
 		//Values need playing with, and to be stored
 		world.step(60, 30, 30);
+		
+		player.setPos(mousePos);
+		
+		player.getSprite().update();
 		
 		// For every planetoid update it's sprite
 		for (Planetoid p : planetoids) {
@@ -105,6 +116,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
 		System.out.println(event.x() + "," +event.y());
+		mousePos = new Vec2(event.x(),event.y());
 		
 	}
 
@@ -116,7 +128,5 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void onPointerDrag(playn.core.Pointer.Event event) {
-		System.out.println(event.x() + "," +event.y());
-		
 	}
 }
