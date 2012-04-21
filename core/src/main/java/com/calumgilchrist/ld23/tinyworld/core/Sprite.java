@@ -13,7 +13,7 @@ public class Sprite {
 	private int x;
 	private int y;
 
-	public Sprite(int posX, int posY) {
+	public Sprite(int posX, int posY, Image img) {
 		x = posX;
 		y = posY;
 		
@@ -21,6 +21,10 @@ public class Sprite {
 		
 		layer = PlayN.graphics().createImageLayer();
 		frames = new ArrayList<Image>();
+		addFrame(img);
+		
+		//Need to do this to initialise the imageLayer
+		update();
 	}
 	
 	public ImageLayer getImageLayer(){
@@ -47,6 +51,13 @@ public class Sprite {
 		return y;
 	}
 
+	public float getHeight() {
+		return layer.height();
+	}
+	
+	public float getWidth() {
+		return layer.width();
+	}
 	public int getCurrentFrame() {
 		return currentFrame;
 	}
