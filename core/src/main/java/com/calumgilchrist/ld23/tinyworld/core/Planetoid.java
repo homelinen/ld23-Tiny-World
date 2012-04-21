@@ -20,6 +20,16 @@ public class Planetoid {
 		this.pBody = world.createBody(bodyDef);
 	}
 	
+	/**
+	 * Apply force to the center of the planetoid
+	 * @param force
+	 */
+	public void applyThrust(Vec2 force) {
+
+		force = force.mul(1/Constants.PHYS_RATIO);
+		this.getBody().applyForce(force, this.getBody().getWorldCenter());
+	}
+	
 	public Sprite getSprite(){
 		return sprite;
 	}
