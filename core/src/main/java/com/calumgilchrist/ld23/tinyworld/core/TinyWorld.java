@@ -185,7 +185,9 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		
 		if (belowBound) {
 			pos = -pos;
-		} 
+		} else {
+			pos += limit;
+		}
 		
 		return pos;
 	}
