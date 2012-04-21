@@ -66,11 +66,12 @@ public class Sprite {
 	public void update() {
 		currentImage = frames.get(currentFrame);
 
-		if(currentImage != null){			
+		if(currentImage != null){	
+			layer.setTranslation(x, y);
 			layer.setImage(currentImage);
 			layer.setWidth(currentImage.width());
 			layer.setHeight(currentImage.height());
-			layer.setSourceRect(x, y, currentImage.width(), currentImage.height());
+			//layer.setSourceRect(x, y, currentImage.width(), currentImage.height());
 		}
 	}
 }
