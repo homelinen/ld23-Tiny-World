@@ -48,4 +48,10 @@ public class Planetoid {
 	public Body getBody() {
 		return this.pBody;
 	}
+	
+	public void update(){
+		this.getSprite().setX((int) this.getBody().getWorldCenter().x);
+		this.getSprite().setX((int) this.getBody().getWorldCenter().y);
+		this.getSprite().update();
+	}
 }

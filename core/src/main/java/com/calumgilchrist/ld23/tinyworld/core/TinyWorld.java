@@ -83,11 +83,11 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		
 		//player.setPos(mousePos);
 		
-		player.getSprite().update();
+		player.update();
 		
 		// For every planetoid update it's sprite
 		for (Planetoid p : planetoids) {
-			p.getSprite().update();
+			p.update();
 		}
 	}
 
@@ -134,7 +134,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void onPointerDrag(playn.core.Pointer.Event event) {
 		mousePos = new Vec2(event.x(),event.y());
-		player.applyThrust(new Vec2(10,10));
-		
+		player.applyThrust(new Vec2(100,100));
 	}
 }
