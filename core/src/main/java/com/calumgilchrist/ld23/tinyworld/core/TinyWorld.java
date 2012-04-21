@@ -20,7 +20,7 @@ import playn.core.Keyboard.TypedEvent;
 public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	ArrayList<Planetoid> planetoids;
 	
-	Planetoid player;
+	Player player;
 	
 	World world;
 	Vec2 mousePos;
@@ -41,7 +41,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		Image asteroid = assets().getImage("images/grey-asteroid.png");
 
 		Vec2 pStart = new Vec2(20,20);
-		mousePos = new Vec2(-50,-50);
+		mousePos = new Vec2(60,60);
 		
 		//Set up the world
 		world = new World(new Vec2(), false);
@@ -59,7 +59,11 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);
 		
-		player = new Planetoid(new Vec2(100,100),new Sprite(100,100), pBodyDef, world);
+		BodyDef playerBodyDef = new BodyDef();
+		playerBodyDef.type = BodyType.DYNAMIC;
+		playerBodyDef.position.set(mousePos.mul(1/Constants.PHYS_RATIO));
+		
+		player = new Player(mousePos,new Sprite(100,100), playerBodyDef, world);
 		graphics().rootLayer().add(player.getSprite().getImageLayer());
 		player.getSprite().addFrame(asteroid);
 	}
@@ -74,9 +78,10 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void update(float delta) {
 		//Values need playing with, and to be stored
+		world.clearForces();
 		world.step(60, 30, 30);
 		
-		player.setPos(mousePos);
+		//player.setPos(mousePos);
 		
 		player.getSprite().update();
 		
@@ -116,7 +121,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
 		System.out.println(event.x() + "," +event.y());
-		mousePos = new Vec2(event.x(),event.y());
+		
 		
 	}
 
@@ -128,5 +133,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void onPointerDrag(playn.core.Pointer.Event event) {
+		mousePos = new Vec2(event.x(),event.y());
+		player.applyThrust(new Vec2(10,10));
+		
 	}
 }
