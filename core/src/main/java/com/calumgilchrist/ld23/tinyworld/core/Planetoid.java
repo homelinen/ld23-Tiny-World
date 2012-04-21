@@ -13,7 +13,6 @@ public class Planetoid {
 	
 	public Planetoid(Sprite s, BodyDef bodyDef, World world){
 		//TODO: Need an initial mass
-		//TODO: Startpos unused?
 		
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
