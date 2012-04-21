@@ -6,6 +6,16 @@ public class Planetoid {
 	private int x;
 	private int y;
 	
+	public Planetoid(int posX, int posY, Sprite s){
+		x = posX;
+		y = posY;
+		s = sprite;
+	}
+	
+	public Sprite getSprite(){
+		return sprite;
+	}
+	
 	public int getX() {
 		return x;
 	}
