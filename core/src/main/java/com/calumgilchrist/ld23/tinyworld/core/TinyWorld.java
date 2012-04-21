@@ -25,12 +25,15 @@ import playn.core.Pointer;
 
 public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 
-	ArrayList<Planetoid> planetoids;
+	ArrayList<Asteroid> planetoids;
 	ArrayList<Body> destroyList;
 	
 	Player player;
 	
 	World world;
+	
+	//TODO: Delete me
+	boolean touched = false;
 	
 	private KeyboardInput keyboard;
 	
@@ -41,7 +44,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	public void init() {	
 		keyboard = new KeyboardInput();
 		
-		planetoids = new ArrayList<Planetoid>();
+		planetoids = new ArrayList<Asteroid>();
 		destroyList = new ArrayList<Body>();
 		
 		planetoidLayer = graphics().createGroupLayer();
@@ -80,7 +83,10 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	}
 
 	public void createAsteroid(Image asteroid) {
-
+		
+		//TODO: Randomise it!
+		float forceFactor = 100;
+		
 		//Start Vector off screen (This should be random)
 		Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
 		
@@ -93,22 +99,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, asteroid), astrBodyDef, world);
 		
-		//Apply a force to the asteroid
-		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
-		
-		/*
-		 * Generate a nice random vector by multiplying direction by random numbers 
-		 */
-		float forceFactor = 100f;
-		
-		Random rand = new Random();
-		
-		float xComp = forceDir.x * rand.nextInt((int) forceFactor) / forceFactor;
-		float yComp = forceDir.y * rand.nextInt((int) forceFactor) / forceFactor;
-		
-		//Initial Force, need to randomise
-		Vec2 thrust = new Vec2(xComp, yComp);
-		astr.applyThrust(thrust);
+		astr.applyThrust(astr.getThrustForce(forceFactor));
 		
 		planetoids.add(astr);
 		planetoidLayer.add(astr.getSprite().getImageLayer());
@@ -124,12 +115,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 
 	@Override
 	public void update(float delta) {
-		
-		//Destroy bodies to be destroyed
-		for (Body body: destroyList) {
-			world.destroyBody(body);
-		}
-		
+				
 		//Values need playing with, and to be stored
 		world.step(60, 6, 3);
 		world.clearForces();
@@ -141,6 +127,11 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		// For every planetoid update it's sprite
 		for (Planetoid p : planetoids) {
 			p.update();
+		}
+		
+		//Destroy bodies to be destroyed
+		for (Body body: destroyList) {
+			replaceAsteroid(body);
 		}
 	}
 
@@ -218,42 +209,15 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		
 		Body hitter;
-		Planetoid parent;
-		Planetoid planet;
 		
-		Iterator<Planetoid> it;
-		boolean found;
-		
-		//Add a Body to be destroyed on next update
-		if (player.getBody().equals(contact.getFixtureA().m_body)){
-			
-		} else if (player.getBody().equals(contact.getFixtureB().m_body)) {
-			/*
-			 * This will be slow
-			 * TODO: Make a proper search
-			 */
-			found = false;
+		//Fixture A is never the contact, I think
+		if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
 			hitter = contact.getFixtureA().m_body;
 				
-			it = planetoids.iterator();
-			
-			while (it.hasNext() && !found) {
-				planet = it.next();
-				
-				if (planet.getBody().equals(hitter)) {
-					found = true;
-					parent = planet;
-				}
-			}
-			hitter.setTransform(genStartPos(graphics().width(), graphics().height()), 0);
-			
+			destroyList.add(hitter);
 		}
-		
-		
-		
 	}
 
 	@Override
@@ -271,6 +235,39 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
+	}
+	
+	/**
+	 * Take a body, destroy it and replace it.
+	 * @param body
+	 */
+	public void replaceAsteroid(Body body){
+		boolean found = false;
+		Asteroid planet;
 		
+		Iterator<Asteroid> it = planetoids.iterator();
+		
+		/*
+		 * Slow and awful
+		 * TODO: Use something better than O(n)
+		 */
+		while (it.hasNext() && !found) {
+			planet = it.next();
+			if (planet.getBody().equals(body)) {
+				Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
+				
+				found = true;
+				world.destroyBody(body);
+				
+				//Set up an asteroid
+				BodyDef astrBodyDef = new BodyDef();
+				astrBodyDef.type= BodyType.DYNAMIC;
+				
+				//Initial Position
+				astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
+				
+				planet.newBody(astrBodyDef, world);
+			}
+		}
 	}
 }
