@@ -12,8 +12,11 @@ import org.jbox2d.dynamics.World;
 import playn.core.Game;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Keyboard;
+import playn.core.Keyboard.Event;
+import playn.core.Keyboard.TypedEvent;
 
-public class TinyWorld implements Game {
+public class TinyWorld implements Game, Keyboard.Listener {
 	ArrayList<Planetoid> planetoids;
 	World world;
 
@@ -66,5 +69,27 @@ public class TinyWorld implements Game {
 	@Override
 	public int updateRate() {
 		return 25;
+	}
+
+	@Override
+	public void onKeyDown(Event event) {
+		
+		switch (event.key()) {
+		case ESCAPE:
+			//Quit
+		}
+		
+	}
+
+	@Override
+	public void onKeyTyped(TypedEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onKeyUp(Event event) {
+		// TODO Auto-generated method stub
+		
 	}
 }
