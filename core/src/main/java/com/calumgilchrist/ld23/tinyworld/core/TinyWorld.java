@@ -46,8 +46,19 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//Set up the world
 		world = new World(new Vec2(), false);
 		
-		//TODO asteroidInit
+		createAsteroid(asteroid);
 		
+		BodyDef playerBodyDef = new BodyDef();
+		playerBodyDef.type = BodyType.DYNAMIC;
+		playerBodyDef.position.set(mousePos.mul(1/Constants.PHYS_RATIO));
+		
+		player = new Player(mousePos,new Sprite(100,100), playerBodyDef, world);
+		graphics().rootLayer().add(player.getSprite().getImageLayer());
+		player.getSprite().addFrame(asteroid);
+	}
+
+	public void createAsteroid(Image asteroid) {
+
 		//Start Vector off screen (This should be random)
 		Vec2 astrStart = new Vec2(900, 50);
 		
@@ -67,16 +78,9 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		
 		planetoids.add(astr);
 		graphics().rootLayer().add(astr.getSprite().getImageLayer());
-	
-		BodyDef playerBodyDef = new BodyDef();
-		playerBodyDef.type = BodyType.DYNAMIC;
-		playerBodyDef.position.set(mousePos.mul(1/Constants.PHYS_RATIO));
-		
-		player = new Player(mousePos,new Sprite(100,100), playerBodyDef, world);
-		graphics().rootLayer().add(player.getSprite().getImageLayer());
-		player.getSprite().addFrame(asteroid);
 	}
-
+	
+	
 	@Override
 	public void paint(float alpha) {
 		// the background automatically paints itself, so no need to do anything
