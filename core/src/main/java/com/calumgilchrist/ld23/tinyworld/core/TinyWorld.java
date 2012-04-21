@@ -108,7 +108,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		planetoidLayer = graphics().createGroupLayer();
 
 		// Load grey asteroid image asset
-		Image asteroidImage = assets().getImage("images/grey-asteroid.png");
+		Image asteroidImage = assets().getImage("images/bubbly-asteroid.png");
 		Image planetoidImage = assets().getImage("images/planetoid.png");
 
 		// Set up the world
@@ -301,7 +301,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
 			hitter = contact.getFixtureA().m_body;
-				
+			player.addMass(contact.getFixtureA().m_body.m_mass);
 			destroyList.add(hitter);
 		}
 	}
