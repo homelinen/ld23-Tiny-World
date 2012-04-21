@@ -13,6 +13,7 @@ import playn.core.Game;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Keyboard;
+import playn.core.Pointer;
 import playn.core.Keyboard.Event;
 import playn.core.Keyboard.TypedEvent;
 
@@ -25,7 +26,7 @@ public class TinyWorld implements Game, Keyboard.Listener {
 		planetoids = new ArrayList<Planetoid>();
 
 		// create and add background image layer
-		Image bgImage = assets().getImage("images/bg.png");
+		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
@@ -49,6 +50,13 @@ public class TinyWorld implements Game, Keyboard.Listener {
 		p.getSprite().addFrame(asteroid);
 		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);
+		
+		// Setup the pointer listener
+		pointer().setListener(new Pointer.Adapter() {
+			public void onPointerStart(Pointer.Event event){
+				System.out.println(event.x() + "," +event.y());
+			}
+		});
 	}
 
 	@Override
