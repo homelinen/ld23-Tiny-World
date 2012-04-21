@@ -9,7 +9,8 @@ public class Planetoid {
 	public Planetoid(int posX, int posY, Sprite s){
 		x = posX;
 		y = posY;
-		s = sprite;
+		
+		sprite = s;
 	}
 	
 	public Sprite getSprite(){

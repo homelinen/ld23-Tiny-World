@@ -1,8 +1,7 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
 import java.util.ArrayList;
-import playn.core.ImageLayer;
-import playn.core.Image;
+import playn.core.*;
 
 public class Sprite {
 
@@ -19,6 +18,13 @@ public class Sprite {
 		y = posY;
 		
 		currentFrame = 0;
+		
+		layer = PlayN.graphics().createImageLayer();
+		frames = new ArrayList<Image>();
+	}
+	
+	public ImageLayer getImageLayer(){
+		return layer;
 	}
 	
 	public void addFrame(Image i){
@@ -52,20 +58,19 @@ public class Sprite {
 	public void incCurrentFrame() {
 		currentFrame = currentFrame + 1;
 
-		if (currentFrame < frames.size()) {
+		if (currentFrame > frames.size()) {
 			currentFrame = 0;
 		}
 	}
 
-	private void update() {
+	public void update() {
 		currentImage = frames.get(currentFrame);
 
-		if(currentImage != null){
-			layer.setTranslation((float) x, (float) y);
-			
+		if(currentImage != null){			
 			layer.setImage(currentImage);
 			layer.setWidth(currentImage.width());
 			layer.setHeight(currentImage.height());
+			layer.setSourceRect(x, y, currentImage.width(), currentImage.height());
 		}
 	}
 }
