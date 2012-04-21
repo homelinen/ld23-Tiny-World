@@ -46,19 +46,28 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//Set up the world
 		world = new World(new Vec2(), false);
 		
-		//Body Definition for a planetoid
-		BodyDef pBodyDef = new BodyDef();
-		pBodyDef.type = BodyType.DYNAMIC;
+		//TODO asteroidInit
 		
-		//Need to multiply pStart by a Physics factor
-		pBodyDef.position.set(pStart.mul(1/Constants.PHYS_RATIO));
+		//Start Vector off screen (This should be random)
+		Vec2 astrStart = new Vec2(900, 50);
 		
-		// Create a testing planetoid and add it to the arraylist
-		Planetoid p = new Planetoid(pStart, new Sprite(20, 20), pBodyDef, world);
-		p.getSprite().addFrame(asteroid);
-		graphics().rootLayer().add(p.getSprite().getImageLayer());
-		planetoids.add(p);
+		//Set up an asteroid
+		BodyDef astrBodyDef = new BodyDef();
+		astrBodyDef.type= BodyType.DYNAMIC;
 		
+		//Initial Position
+		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
+		
+		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y), astrBodyDef, world);
+		astr.getSprite().addFrame(asteroid);
+		
+		//Apply a force to the asteroid
+		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
+		astr.applyThrust(forceDir.mul(0.1f));
+		
+		planetoids.add(astr);
+		graphics().rootLayer().add(astr.getSprite().getImageLayer());
+	
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
 		playerBodyDef.position.set(mousePos.mul(1/Constants.PHYS_RATIO));
@@ -78,8 +87,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void update(float delta) {
 		//Values need playing with, and to be stored
-		world.clearForces();
 		world.step(60, 30, 30);
+		world.clearForces();
 		
 		//player.setPos(mousePos);
 		
