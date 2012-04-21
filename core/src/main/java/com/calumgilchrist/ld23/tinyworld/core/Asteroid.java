@@ -1,5 +1,7 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
+import static playn.core.PlayN.graphics;
+
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -37,5 +39,29 @@ public class Asteroid extends Planetoid {
 		}
 		
 		return dir;
+	}
+	
+	/**
+	 * Get the force vector to fly in
+	 * @param forceFactor
+	 */
+	public Vec2 getThrustForce(float forceFactor) {
+
+		//Apply a force to the asteroid
+		Vec2 forceDir = this.getStartDirVec(graphics().width(), graphics().height());
+		
+		/*
+		 * Generate a nice random vector by multiplying direction by random numbers 
+		 */
+		
+		Random rand = new Random();
+		
+		float xComp = forceDir.x * rand.nextInt((int) forceFactor) / forceFactor;
+		float yComp = forceDir.y * rand.nextInt((int) forceFactor) / forceFactor;
+		
+		//Initial Force, need to randomise
+		Vec2 thrust = new Vec2(xComp, yComp);
+		
+		return thrust;
 	}
 }
