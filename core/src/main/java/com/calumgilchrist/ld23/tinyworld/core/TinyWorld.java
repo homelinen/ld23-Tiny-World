@@ -10,17 +10,12 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
-import playn.core.CanvasLayer;
-import playn.core.Font;
 import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.Layer;
 import playn.core.Pointer;
 import playn.core.Sound;
-import playn.core.TextFormat;
-import playn.core.TextLayout;
 import playn.core.Pointer.Event;
 
 public class TinyWorld implements Game, Pointer.Listener {
@@ -55,7 +50,6 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	public void menuInit() {
 		//clickSound = assets().getSound("sounds/select");
-		
 		Menu mainMenu = new Menu("Tiny World",60);
 		menuLayer = graphics().createGroupLayer();
 		menuLayer.add(mainMenu.getTitle());
@@ -70,8 +64,24 @@ public class TinyWorld implements Game, Pointer.Listener {
 	    }
 	    
 	    graphics().rootLayer().add(menuLayer);
+	}
+	
+	public void creditsMenuInit(){
+		graphics().rootLayer().remove(menuLayer);
+		Menu creditsMenu = new Menu("Credits",60);
+		menuLayer = graphics().createGroupLayer();
+		menuLayer.add(creditsMenu.getTitle());
+		
+		creditsMenu.addMenuItem("Calum Gilchrist");
+		creditsMenu.addMenuItem("Daniel Bell");
+		creditsMenu.addMenuItem("Back");
+		
+		menuItemLayers = creditsMenu.getMenuItems();
+	    for(MenuItem l : menuItemLayers){
+	    	menuLayer.add(l.getLayer());
+	    }
 	    
-		// gameInit();
+	    graphics().rootLayer().add(menuLayer);
 	}
 
 	public void gameInit() {
@@ -188,21 +198,39 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
-		if(state == Constants.STATE_MENU){
-			int mousex = (int) event.x();
-			int mousey = (int) event.y();
-			
+		int mousex = (int) event.x();
+		int mousey = (int) event.y();
+		
+		if(state == Constants.STATE_MENU){			
 			for(MenuItem mi : menuItemLayers){
 				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
 					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
 						if(mi.getText() == "New Game"){
 							gameInit();
 						}
+						else if(mi.getText() == "Credits"){
+							creditsMenuInit();
+						}
+						else if(mi.getText() == "Exit"){
+							System.exit(0);
+						}
 					}
 				}
 			}
 			
 			System.out.println(mousex+ ","+mousey);
+		}
+		else if(state == Constants.STATE_CREDITS){
+			for(MenuItem mi : menuItemLayers){
+				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
+					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
+						if(mi.getText() == "Back"){
+							graphics().rootLayer().remove(menuLayer);
+							menuInit();
+						}
+					}
+				}
+			}
 		}
 	}
 
