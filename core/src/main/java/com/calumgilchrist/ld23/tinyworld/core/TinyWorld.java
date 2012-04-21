@@ -57,7 +57,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//TODO asteroidInit
 		
 		//Start Vector off screen (This should be random)
-		Vec2 astrStart = new Vec2(-10, 50);
+		Vec2 astrStart = new Vec2(900, 50);
 		
 		//Set up an asteroid
 		BodyDef astrBodyDef = new BodyDef();
@@ -70,8 +70,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		astr.getSprite().addFrame(asteroid);
 		
 		//Apply a force to the asteroid
-		Vec2 forceDir = astr.getStartDirVec(graphics().screenWidth(), graphics().screenHeight());
-		astr.applyThrust(forceDir.mul(1));
+		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
+		astr.applyThrust(forceDir.mul(0.1f));
 		
 		System.out.println(astr.getBody().getLinearVelocity());
 		
