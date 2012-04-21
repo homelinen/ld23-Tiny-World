@@ -1,5 +1,5 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
 public class Constants {
-	public static final float PHYS_RATIO = 2;
+	public static final float PHYS_RATIO = 1;
 }

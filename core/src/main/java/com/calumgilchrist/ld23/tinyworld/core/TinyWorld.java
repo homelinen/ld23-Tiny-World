@@ -4,13 +4,11 @@ import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.math.*;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.joints.MouseJoint;
 
 import playn.core.Game;
 import playn.core.GroupLayer;
@@ -27,7 +25,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	Player player;
 	
 	World world;
-	MouseJoint mouseJoint;
 	
 	private boolean upKeyDown;
 	private boolean downKeyDown;
@@ -42,6 +39,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		initKeyboard();
 		
 		planetoids = new ArrayList<Planetoid>();
+		planetoidLayer = graphics().createGroupLayer();
 		
 		pointer().setListener(this);
 		keyboard().setListener(this);
@@ -53,13 +51,11 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		
 		// Load grey asteroid image asset
 		Image asteroid = assets().getImage("images/grey-asteroid.png");
-
-		Vec2 pStart = new Vec2(20,20);
 		
 		//Set up the world
 		world = new World(new Vec2(), false);
 		
-		for (int i=0; i < 20; i++) {
+		for (int i=0; i < 3; i++) {
 			createAsteroid(asteroid);
 		}
 		
@@ -68,8 +64,11 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		playerBodyDef.position.set(new Vec2(60,60).mul(1/Constants.PHYS_RATIO));
 		
 		player = new Player(new Vec2(60,60),new Sprite(100,100), playerBodyDef, world);
-		graphics().rootLayer().add(player.getSprite().getImageLayer());
+		planetoidLayer.add(player.getSprite().getImageLayer());
 		player.getSprite().addFrame(asteroid);
+		
+		graphics().rootLayer().add(planetoidLayer);
+		graphics().rootLayer().setScale(0.5f);
 	}
 
 	public void createAsteroid(Image asteroid) {
@@ -103,11 +102,13 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		float yComp = forceDir.y * rand.nextInt((int) forceFactor) / forceFactor;
 		
 		//Initial Force, need to randomise
-		Vec2 thrust = new Vec2(xComp, yComp);
-		astr.applyThrust(forceDir.mul(0.1f));
+		//Vec2 thrust = new Vec2(xComp, yComp);
+		//astr.applyThrust(forceDir.mul(0.1f));
 		
 		planetoids.add(astr);
-		graphics().rootLayer().add(astr.getSprite().getImageLayer());
+		planetoidLayer.add(astr.getSprite().getImageLayer());
+		
+		graphics().rootLayer().setScale(0.5f);
 	}
 	
 	
@@ -115,6 +116,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	public void paint(float alpha) {
 		// the background automatically paints itself, so no need to do anything
 		// here!
+		
 	}
 
 	@Override
@@ -124,8 +126,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		world.clearForces();
 		
 		handleKeyboard();
-		player.update();
 		cameraFollowPlayer();
+		player.update();
 		
 		// For every planetoid update it's sprite
 		for (Planetoid p : planetoids) {
@@ -139,7 +141,15 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	}
 	
 	public void cameraFollowPlayer(){	
-		graphics().rootLayer().setOrigin( player.getPos().x,player.getPos().y);
+		int tx;
+		tx = (int) (player.getBody().getWorldCenter().x * Constants.PHYS_RATIO);
+		tx = tx - (graphics().width());
+		
+		int ty;
+		ty = (int) (player.getBody().getWorldCenter().y * Constants.PHYS_RATIO);
+		ty = ty - (graphics().height());
+		
+		planetoidLayer.setOrigin(tx,ty);
 	}
 	
 	public void initKeyboard(){
@@ -154,16 +164,16 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		px = py = 0;
 		
 		if(upKeyDown){
-			py = py - 1;
+			py = py - (int) Constants.PHYS_RATIO;
 		}
 		if(downKeyDown){
-			py = py + 1;
+			py = py + (int) Constants.PHYS_RATIO;
 		}
 		if(leftKeyDown){
-			px = px - 1;
+			px = px - (int) Constants.PHYS_RATIO;
 		}
 		if(rightKeyDown){
-			px = px + 1;
+			px = px + (int) Constants.PHYS_RATIO;
 		}
 		player.applyThrust(new Vec2(px,py));
 	}
