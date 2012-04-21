@@ -24,10 +24,4 @@ public class Player extends Planetoid {
 		
 		this.getBody().m_mass = newMass;
 	}
-	
-	public void applyThrust(Vec2 force) {
-		force = force.mul(1/Constants.PHYS_RATIO);
-		this.getBody().applyForce(force, this.getBody().getWorldCenter());
-	}
-
 }
