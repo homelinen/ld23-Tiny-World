@@ -28,60 +28,61 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	private GroupLayer menuLayer;
 	ArrayList<MenuItem> menuItemLayers;
-	
+
 	private GroupLayer planetoidLayer;
-	
+
 	Sound clickSound;
 
 	@Override
 	public void init() {
 		state = Constants.STATE_MENU;
-		
+
 		pointer().setListener(this);
 		keyboard = new KeyboardInput();
-		
+
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
-		
+
 		menuInit();
 	}
 
 	public void menuInit() {
-		//clickSound = assets().getSound("sounds/select");
-		Menu mainMenu = new Menu("Tiny World",60);
+		// clickSound = assets().getSound("sounds/select");
+		Menu mainMenu = new Menu("Tiny World", 60);
 		menuLayer = graphics().createGroupLayer();
 		menuLayer.add(mainMenu.getTitle());
-		
+
 		mainMenu.addMenuItem("New Game");
 		mainMenu.addMenuItem("Credits");
 		mainMenu.addMenuItem("Exit");
-	    
-	    menuItemLayers = mainMenu.getMenuItems();
-	    for(MenuItem l : menuItemLayers){
-	    	menuLayer.add(l.getLayer());
-	    }
-	    
-	    graphics().rootLayer().add(menuLayer);
+
+		menuItemLayers = mainMenu.getMenuItems();
+		for (MenuItem l : menuItemLayers) {
+			menuLayer.add(l.getLayer());
+		}
+
+		graphics().rootLayer().add(menuLayer);
 	}
-	
-	public void creditsMenuInit(){
+
+	public void creditsMenuInit() {
+		state = Constants.STATE_CREDITS;
 		graphics().rootLayer().remove(menuLayer);
-		Menu creditsMenu = new Menu("Credits",60);
+		Menu creditsMenu = new Menu("Credits", 60);
 		menuLayer = graphics().createGroupLayer();
 		menuLayer.add(creditsMenu.getTitle());
-		
+
 		creditsMenu.addMenuItem("Calum Gilchrist");
 		creditsMenu.addMenuItem("Daniel Bell");
 		creditsMenu.addMenuItem("Back");
-		
+
 		menuItemLayers = creditsMenu.getMenuItems();
-	    for(MenuItem l : menuItemLayers){
-	    	menuLayer.add(l.getLayer());
-	    }
-	    
-	    graphics().rootLayer().add(menuLayer);
+		for (MenuItem l : menuItemLayers) {
+			menuLayer.add(l.getLayer());
+		}
+
+		graphics().rootLayer().add(menuLayer);
 	}
 
 	public void gameInit() {
@@ -107,10 +108,11 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
-		
-		playerBodyDef.position.set(playerStart.mul(1/Constants.PHYS_RATIO));
-		
-		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y, planetoidImage), playerBodyDef, world);
+
+		playerBodyDef.position.set(playerStart.mul(1 / Constants.PHYS_RATIO));
+
+		player = new Player(new Sprite((int) playerStart.x,
+				(int) playerStart.y, planetoidImage), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 		planetoidLayer.setScale(0.5f);
@@ -123,16 +125,18 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 		// Set up an asteroid
 		BodyDef astrBodyDef = new BodyDef();
-		astrBodyDef.type= BodyType.DYNAMIC;
-		
-		//Initial Position
-		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
-		
-		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, asteroid), astrBodyDef, world);
-		
-		//Apply a force to the asteroid
-		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
-		
+		astrBodyDef.type = BodyType.DYNAMIC;
+
+		// Initial Position
+		astrBodyDef.position.set(astrStart.mul(1 / Constants.PHYS_RATIO));
+
+		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x,
+				(int) astrStart.y, asteroid), astrBodyDef, world);
+
+		// Apply a force to the asteroid
+		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics()
+				.height());
+
 		/*
 		 * Generate a nice random vector by multiplying direction by random
 		 * numbers
@@ -163,15 +167,15 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	@Override
 	public void update(float delta) {
-		if(state == Constants.STATE_GAME){
+		if (state == Constants.STATE_GAME) {
 			// Values need playing with, and to be stored
 			world.step(60, 6, 3);
 			world.clearForces();
-	
+
 			player.applyThrust(keyboard.getMovement());
 			cameraFollowPlayer();
 			player.update();
-	
+
 			// For every planetoid update it's sprite
 			for (Planetoid p : planetoids) {
 				p.update();
@@ -198,45 +202,35 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
-		int mousex = (int) event.x();
-		int mousey = (int) event.y();
-		
-		if(state == Constants.STATE_MENU){			
-			for(MenuItem mi : menuItemLayers){
-				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
-					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
-						if(mi.getText() == "New Game"){
-							gameInit();
-						}
-						else if(mi.getText() == "Credits"){
-							creditsMenuInit();
-						}
-						else if(mi.getText() == "Exit"){
-							System.exit(0);
-						}
-					}
-				}
-			}
-			
-			System.out.println(mousex+ ","+mousey);
-		}
-		else if(state == Constants.STATE_CREDITS){
-			for(MenuItem mi : menuItemLayers){
-				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
-					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
-						if(mi.getText() == "Back"){
-							graphics().rootLayer().remove(menuLayer);
-							menuInit();
-						}
-					}
-				}
-			}
-		}
 	}
 
 	@Override
 	public void onPointerEnd(playn.core.Pointer.Event event) {
-		
+		int mousex = (int) event.x();
+		int mousey = (int) event.y();
+
+		if (state == Constants.STATE_MENU) {
+			for (MenuItem mi : menuItemLayers) {
+				if (mi.withinBounds(mousex, mousey)) {
+					if (mi.getText() == "New Game") {
+						gameInit();
+					} else if (mi.getText() == "Credits") {
+						creditsMenuInit();
+					} else if (mi.getText() == "Exit") {
+						System.exit(0);
+					}
+				}
+			}
+		} else if (state == Constants.STATE_CREDITS) {
+			for (MenuItem mi : menuItemLayers) {
+				if (mi.withinBounds(mousex, mousey)) {
+					if (mi.getText() == "Back") {
+						graphics().rootLayer().remove(menuLayer);
+						menuInit();
+					}
+				}
+			}
+		}
 	}
 
 	public void movePlayer() {
@@ -287,6 +281,5 @@ public class TinyWorld implements Game, Pointer.Listener {
 	@Override
 	public void onPointerDrag(Event event) {
 		// TODO Auto-generated method stub
-		
 	}
 }
