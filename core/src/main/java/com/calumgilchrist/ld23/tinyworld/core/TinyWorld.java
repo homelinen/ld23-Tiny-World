@@ -28,8 +28,18 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	Vec2 mousePos;
 	MouseJoint mouseJoint;
 	
+	private boolean upKeyDown;
+	private boolean downKeyDown;
+	private boolean leftKeyDown;
+	private boolean rightKeyDown;
+	
 	@Override
 	public void init() {
+		upKeyDown = false;
+		downKeyDown = false;
+		leftKeyDown = false;
+		rightKeyDown = false;
+		
 		planetoids = new ArrayList<Planetoid>();
 		
 		pointer().setListener(this);
@@ -104,17 +114,49 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		for (Planetoid p : planetoids) {
 			p.update();
 		}
+		
+		handleKeyboard();
 	}
 
 	@Override
 	public int updateRate() {
 		return 25;
 	}
+	
+	public void handleKeyboard(){
+		int px, py;
+		px = py = 0;
+		
+		if(upKeyDown){
+			py = py - 1;
+		}
+		if(downKeyDown){
+			py = py + 1;
+		}
+		if(leftKeyDown){
+			px = px - 1;
+		}
+		if(rightKeyDown){
+			px = px + 1;
+		}
+		player.applyThrust(new Vec2(px,py));
+	}
 
 	@Override
 	public void onKeyDown(Event event) {
-		
 		switch (event.key()) {
+		case W:
+			upKeyDown = true;
+			break;
+		case A:
+			leftKeyDown = true;
+			break;
+		case S:
+			downKeyDown = true;
+			break;
+		case D:
+			rightKeyDown = true;
+			break;
 		case ESCAPE:
 			System.exit(0);
 		}
@@ -123,53 +165,39 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void onKeyTyped(TypedEvent event) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onKeyUp(Event event) {
 		// TODO Auto-generated method stub
-		
+		switch (event.key()) {
+		case W:
+			upKeyDown = false;
+			break;
+		case A:
+			leftKeyDown = false;
+			break;
+		case S:
+			downKeyDown = false;
+			break;
+		case D:
+			rightKeyDown = false;
+			break;
+		}
 	}
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
-		mousePos = new Vec2(event.x(),event.y());
-		movePlayer();
 	}
 
 	@Override
 	public void onPointerEnd(playn.core.Pointer.Event event) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onPointerDrag(playn.core.Pointer.Event event) {
-		mousePos = new Vec2(event.x(),event.y());
-		
-		movePlayer();
 	}
 	
 	public void movePlayer(){
-		Vec2 movVector = new Vec2(0,0);
-		
-		if(mousePos.x < player.getPos().x){
-			movVector.x = player.getPos().x - mousePos.x;
-		}
-		else{
-			movVector.x = mousePos.x - player.getPos().x;
-		}
-		
-		if(mousePos.y > player.getPos().y){
-			movVector.y = mousePos.y - player.getPos().y;
-		}
-		else{
-			movVector.y = player.getPos().y - mousePos.y;
-		}
-		
-		
-		player.applyThrust(movVector);
 	}
 }
