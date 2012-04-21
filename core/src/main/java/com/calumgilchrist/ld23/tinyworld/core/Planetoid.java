@@ -51,7 +51,7 @@ public class Planetoid {
 	
 	public void update(){
 		this.getSprite().setX((int) this.getBody().getWorldCenter().x);
-		this.getSprite().setX((int) this.getBody().getWorldCenter().y);
+		this.getSprite().setY((int) this.getBody().getWorldCenter().y);
 		this.getSprite().update();
 	}
 }

@@ -59,10 +59,12 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);
 		
+		// Create the player body definition
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
 		playerBodyDef.position.set(mousePos.mul(1/Constants.PHYS_RATIO));
 		
+		// Create a player planetoid and add it to the root layer
 		player = new Player(mousePos,new Sprite(100,100), playerBodyDef, world);
 		graphics().rootLayer().add(player.getSprite().getImageLayer());
 		player.getSprite().addFrame(asteroid);
@@ -78,10 +80,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void update(float delta) {
 		//Values need playing with, and to be stored
-		world.clearForces();
 		world.step(60, 30, 30);
-		
-		//player.setPos(mousePos);
 		
 		player.update();
 		
@@ -120,7 +119,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
-		System.out.println(event.x() + "," +event.y());
 		
 		
 	}
@@ -134,6 +132,11 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void onPointerDrag(playn.core.Pointer.Event event) {
 		mousePos = new Vec2(event.x(),event.y());
-		player.applyThrust(new Vec2(100,100));
+		
+		Vec2 movVector = mousePos.add(player.getPos());
+		
+		System.out.println(mousePos.x + "," + mousePos.y);
+		
+		player.applyThrust(movVector);
 	}
 }
