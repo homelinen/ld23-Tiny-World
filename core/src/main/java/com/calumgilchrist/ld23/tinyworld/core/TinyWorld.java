@@ -55,20 +55,24 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//Set up the world
 		world = new World(new Vec2(), false);
 		
-		for (int i=0; i < 3; i++) {
+		for (int i=0; i < 30; i++) {
 			createAsteroid(asteroid);
 		}
 		
+		Vec2 playerStart = new Vec2(graphics().width() / 2, graphics().height() / 2);
+		
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
-		playerBodyDef.position.set(new Vec2(60,60).mul(1/Constants.PHYS_RATIO));
 		
-		player = new Player(new Vec2(60,60),new Sprite(100,100), playerBodyDef, world);
+		playerBodyDef.position.set(playerStart.mul(1/Constants.PHYS_RATIO));
+		
+		//TODO Player should be in middle
+		player = new Player(new Vec2(60,60),new Sprite((int) playerStart.x, (int) playerStart.y), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		player.getSprite().addFrame(asteroid);
 		
 		graphics().rootLayer().add(planetoidLayer);
-		graphics().rootLayer().setScale(0.5f);
+		//graphics().rootLayer().setScale(0.5f);
 	}
 
 	public void createAsteroid(Image asteroid) {
@@ -102,13 +106,11 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		float yComp = forceDir.y * rand.nextInt((int) forceFactor) / forceFactor;
 		
 		//Initial Force, need to randomise
-		//Vec2 thrust = new Vec2(xComp, yComp);
-		//astr.applyThrust(forceDir.mul(0.1f));
+		Vec2 thrust = new Vec2(xComp, yComp);
+		astr.applyThrust(thrust);
 		
 		planetoids.add(astr);
 		planetoidLayer.add(astr.getSprite().getImageLayer());
-		
-		graphics().rootLayer().setScale(0.5f);
 	}
 	
 	
@@ -122,7 +124,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void update(float delta) {
 		//Values need playing with, and to be stored
-		world.step(60, 30, 30);
+		world.step(60, 6, 3);
 		world.clearForces();
 		
 		handleKeyboard();
@@ -243,9 +245,10 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	 * @param screenHeight
 	 * @return
 	 */
-	public Vec2 genStartPos(float screenWidth, float screenHeight) {
-		float x = getSpawnBound((int) screenWidth);
-		float y = getSpawnBound((int) screenHeight);
+	public Vec2 genStartPos(int width, int height) {
+		
+		float x = getSpawnBound(-width, width);
+		float y = getSpawnBound(-height, height);
 		
 		Vec2 pos = new Vec2(x, y);
 
@@ -254,10 +257,10 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	
 	/**
 	 * Randomly choose a number NOT between 0 and limit
-	 * @param limit
+	 * @param max
 	 * @return
 	 */
-	private int getSpawnBound(int limit) {
+	private int getSpawnBound(int min, int max) {
 		
 		Random rand = new Random();
 		
@@ -265,12 +268,12 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//Set x
 		boolean belowBound = rand.nextBoolean();
 		
-		int pos = rand.nextInt(spawnBound);
+		int pos = rand.nextInt(spawnBound) + 50;
 		
 		if (belowBound) {
-			pos = -pos;
+			pos = -pos + min;
 		} else {
-			pos += limit;
+			pos += max;
 		}
 		
 		return pos;

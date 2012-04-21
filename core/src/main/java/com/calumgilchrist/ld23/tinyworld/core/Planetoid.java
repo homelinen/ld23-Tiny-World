@@ -9,12 +9,9 @@ public class Planetoid {
 	private Sprite sprite;
 	private Body pBody;
 	
-	private Vec2 pos;
-	
 	public Planetoid(Vec2 startPos, Sprite s, BodyDef bodyDef, World world){
 		//TODO: Need an initial mass
-		
-		this.pos = startPos;
+		//TODO: Startpos unused?
 		
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
@@ -28,25 +25,12 @@ public class Planetoid {
 
 		force = force.mul(1/Constants.PHYS_RATIO);
 		this.getBody().applyForce(force, this.getBody().getWorldCenter());
-		
-		System.out.println(this.getBody().getLinearVelocity());
 	}
 	
 	public Sprite getSprite(){
 		return sprite;
 	}
 
-	public Vec2 getPos() {
-		return pos;
-	}
-
-	public void setPos(Vec2 pos) {
-		this.pos = pos;
-		
-		sprite.setX((int) pos.x);
-		sprite.setY((int) pos.y);
-	}
-	
 	public Body getBody() {
 		return this.pBody;
 	}
