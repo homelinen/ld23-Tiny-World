@@ -58,17 +58,14 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//Initial Position
 		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
 		
-		Asteroid astr = new Asteroid(astrStart, new Sprite(20, 20), astrBodyDef, world);
+		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y), astrBodyDef, world);
 		astr.getSprite().addFrame(asteroid);
 		
 		//Apply a force to the asteroid
 		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
 		astr.applyThrust(forceDir.mul(0.1f));
 		
-		System.out.println(astr.getBody().getLinearVelocity());
-		
 		planetoids.add(astr);
-		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		graphics().rootLayer().add(astr.getSprite().getImageLayer());
 	
 		BodyDef playerBodyDef = new BodyDef();
@@ -90,8 +87,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	@Override
 	public void update(float delta) {
 		//Values need playing with, and to be stored
-		world.clearForces();
 		world.step(60, 30, 30);
+		world.clearForces();
 		
 		//player.setPos(mousePos);
 		
@@ -101,8 +98,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		for (Planetoid p : planetoids) {
 			p.update();
 		}
-		
-		System.out.println("Position: " + planetoids.get(1).getBody().getWorldCenter());
 	}
 
 	@Override
