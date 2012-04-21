@@ -28,7 +28,7 @@ public class Asteroid extends Planetoid {
 			dir.x = 1;
 		} else if (start.x >= screenWidth) {
 			dir.x = -1;
-		}
+		} 
 		
 		if (start.y < 0) {
 			dir.y = 1;
@@ -37,37 +37,5 @@ public class Asteroid extends Planetoid {
 		}
 		
 		return dir;
-	}
-	
-	public Vec2 genStartPos(float screenWidth, float screenHeight) {
-		float x = getSpawnBound((int) screenWidth);
-		float y = getSpawnBound((int) screenHeight);
-		
-		Vec2 pos = new Vec2(x, y);
-
-		return pos;
-	}
-	
-	/**
-	 * Randomly choose a number NOT between 0 and limit
-	 * @param limit
-	 * @return
-	 */
-	private int getSpawnBound(int limit) {
-		
-		Random rand = new Random();
-		
-		int spawnBound = 100;
-		//Set x
-		boolean belowBound = rand.nextBoolean();
-		
-		int pos = rand.nextInt(spawnBound);
-		
-		if (belowBound) {
-			pos = -pos;
-		} 
-		
-		return pos;
-		
 	}
 }
