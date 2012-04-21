@@ -60,9 +60,8 @@ public class TinyWorld implements Game, Pointer.Listener {
 		
 		playerBodyDef.position.set(playerStart.mul(1/Constants.PHYS_RATIO));
 		
-		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y), playerBodyDef, world);
+		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y, planetoidImage), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
-		player.getSprite().addFrame(planetoidImage);
 		
 		graphics().rootLayer().add(planetoidLayer);
 		planetoidLayer.setScale(0.5f);
@@ -77,13 +76,10 @@ public class TinyWorld implements Game, Pointer.Listener {
 		BodyDef astrBodyDef = new BodyDef();
 		astrBodyDef.type= BodyType.DYNAMIC;
 		
-		// Create the player body definition
 		//Initial Position
 		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
 		
-		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y), astrBodyDef, world);
-		astr.getSprite().addFrame(asteroid);
-		
+		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, asteroid), astrBodyDef, world);
 		
 		//Apply a force to the asteroid
 		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
