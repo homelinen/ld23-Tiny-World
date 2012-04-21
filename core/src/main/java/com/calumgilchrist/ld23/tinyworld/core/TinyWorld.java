@@ -3,12 +3,19 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Random;
 
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.contacts.Contact;
 
 import playn.core.Game;
 import playn.core.GroupLayer;
@@ -16,8 +23,10 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Pointer;
 
-public class TinyWorld implements Game, Pointer.Listener {
+public class TinyWorld implements Game, Pointer.Listener, ContactListener {
+
 	ArrayList<Planetoid> planetoids;
+	ArrayList<Body> destroyList;
 	
 	Player player;
 	
@@ -33,6 +42,8 @@ public class TinyWorld implements Game, Pointer.Listener {
 		keyboard = new KeyboardInput();
 		
 		planetoids = new ArrayList<Planetoid>();
+		destroyList = new ArrayList<Body>();
+		
 		planetoidLayer = graphics().createGroupLayer();
 		
 		pointer().setListener(this);
@@ -48,6 +59,7 @@ public class TinyWorld implements Game, Pointer.Listener {
 		
 		//Set up the world
 		world = new World(new Vec2(), false);
+		world.setContactListener(this);
 		
 		for (int i=0; i < 30; i++) {
 			createAsteroid(asteroidImage);
@@ -112,6 +124,12 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	@Override
 	public void update(float delta) {
+		
+		//Destroy bodies to be destroyed
+		for (Body body: destroyList) {
+			world.destroyBody(body);
+		}
+		
 		//Values need playing with, and to be stored
 		world.step(60, 6, 3);
 		world.clearForces();
@@ -196,5 +214,63 @@ public class TinyWorld implements Game, Pointer.Listener {
 		}
 		
 		return pos;
+	}
+
+	@Override
+	public void beginContact(Contact contact) {
+		
+		Body hitter;
+		Planetoid parent;
+		Planetoid planet;
+		
+		Iterator<Planetoid> it;
+		boolean found;
+		
+		//Add a Body to be destroyed on next update
+		if (player.getBody().equals(contact.getFixtureA().m_body)){
+			
+		} else if (player.getBody().equals(contact.getFixtureB().m_body)) {
+			/*
+			 * This will be slow
+			 * TODO: Make a proper search
+			 */
+			found = false;
+			
+			hitter = contact.getFixtureA().m_body;
+				
+			it = planetoids.iterator();
+			
+			while (it.hasNext() && !found) {
+				planet = it.next();
+				
+				if (planet.getBody().equals(hitter)) {
+					found = true;
+					parent = planet;
+				}
+			}
+			hitter.setTransform(genStartPos(graphics().width(), graphics().height()), 0);
+			
+		}
+		
+		
+		
+	}
+
+	@Override
+	public void endContact(Contact contact) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -7,8 +7,6 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
-import pythagoras.d.Circle;
-
 public class Planetoid {
 	private Sprite sprite;
 	private Body pBody;
@@ -30,6 +28,8 @@ public class Planetoid {
 		
 		pBody.createFixture(fixDef);
 	}
+	
+	
 	
 	/**
 	 * Apply force to the center of the planetoid
