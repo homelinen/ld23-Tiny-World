@@ -59,16 +59,20 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 			createAsteroid(asteroid);
 		}
 		
+		Vec2 playerStart = new Vec2(graphics().width() / 2, graphics().height() / 2);
+		
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
-		playerBodyDef.position.set(new Vec2(60,60).mul(1/Constants.PHYS_RATIO));
+		
+		playerBodyDef.position.set(playerStart.mul(1/Constants.PHYS_RATIO));
 		
 		//TODO Player should be in middle
-		player = new Player(new Vec2(60,60),new Sprite(100,100), playerBodyDef, world);
+		player = new Player(new Vec2(60,60),new Sprite((int) playerStart.x, (int) playerStart.y), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		player.getSprite().addFrame(asteroid);
 		
 		graphics().rootLayer().add(planetoidLayer);
+		//graphics().rootLayer().setScale(0.5f);
 	}
 
 	public void createAsteroid(Image asteroid) {
