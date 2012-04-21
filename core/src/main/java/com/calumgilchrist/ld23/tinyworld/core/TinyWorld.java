@@ -102,8 +102,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		float yComp = forceDir.y * rand.nextInt((int) forceFactor) / forceFactor;
 		
 		//Initial Force, need to randomise
-		//Vec2 thrust = new Vec2(xComp, yComp);
-		//astr.applyThrust(forceDir.mul(0.1f));
+		Vec2 thrust = new Vec2(xComp, yComp);
+		astr.applyThrust(thrust);
 		
 		planetoids.add(astr);
 		planetoidLayer.add(astr.getSprite().getImageLayer());
