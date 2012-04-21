@@ -51,6 +51,13 @@ public class Sprite {
 		return y;
 	}
 
+	public float getHeight() {
+		return layer.height();
+	}
+	
+	public float getWidth() {
+		return layer.width();
+	}
 	public int getCurrentFrame() {
 		return currentFrame;
 	}
