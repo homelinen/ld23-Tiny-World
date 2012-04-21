@@ -26,8 +26,8 @@ public class Player extends Planetoid {
 	}
 	
 	public void applyThrust(Vec2 force) {
-		
-		//TODO Need to divide by a PHYS constant 
+
+		force = force.mul(1/Constants.PHYS_RATIO);
 		this.getBody().applyForce(force, this.getBody().getWorldCenter());
 	}
 
