@@ -4,12 +4,18 @@ import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.World;
+
 import playn.core.Game;
 import playn.core.Image;
 import playn.core.ImageLayer;
 
 public class TinyWorld implements Game {
 	ArrayList<Planetoid> planetoids;
+	World world;
 
 	@Override
 	public void init() {
@@ -23,8 +29,20 @@ public class TinyWorld implements Game {
 		// Load grey asteroid image asset
 		Image asteroid = assets().getImage("images/grey-asteroid.png");
 
+		Vec2 pStart = new Vec2(20,20);
+		
+		//Set up the world
+		world = new World(new Vec2(), false);
+		
+		//Body Definition for a planetoid
+		BodyDef pBodyDef = new BodyDef();
+		pBodyDef.type = BodyType.DYNAMIC;
+		
+		//Need to multiply pStart by a Physics factor
+		pBodyDef.position.set(pStart);
+		
 		// Create a testing planetoid and add it to the arraylist
-		Planetoid p = new Planetoid(20, 20, new Sprite(20, 20));
+		Planetoid p = new Planetoid(pStart, new Sprite(20, 20), pBodyDef, world);
 		p.getSprite().addFrame(asteroid);
 		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);

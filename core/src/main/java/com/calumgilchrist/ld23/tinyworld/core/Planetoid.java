@@ -1,5 +1,6 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
@@ -8,34 +9,25 @@ public class Planetoid {
 	private Sprite sprite;
 	private Body pBody;
 	
-	private int x;
-	private int y;
+	private Vec2 pos;
 	
-	public Planetoid(int posX, int posY, Sprite s, BodyDef bodyDef, World world){
-		x = posX;
-		y = posY;
+	public Planetoid(Vec2 startPos, Sprite s, BodyDef bodyDef, World world){
+		this.pos = startPos;
 		
-		sprite = s;
-		pBody = world.createBody(bodyDef);
+		this.sprite = s;
+		this.pBody = world.createBody(bodyDef);
 	}
 	
 	public Sprite getSprite(){
 		return sprite;
 	}
-	
-	public int getX() {
-		return x;
+
+	public Vec2 getPos() {
+		return pos;
+	}
+
+	public void setPos(Vec2 pos) {
+		this.pos = pos;
 	}
 	
-	public void setX(int x) {
-		this.x = x;
-	}
-	
-	public int getY() {
-		return y;
-	}
-	
-	public void setY(int y) {
-		this.y = y;
-	}
 }
