@@ -54,58 +54,23 @@ public class TinyWorld implements Game, Pointer.Listener {
 	public void menuInit() {
 		//clickSound = assets().getSound("sounds/select");
 		
+		Menu mainMenu = new Menu("Tiny World",60);
 		menuLayer = graphics().createGroupLayer();
+		menuLayer.add(mainMenu.getTitle());
 		
-		Font titleFont = graphics().createFont("Courier", Font.Style.BOLD, 32);
-		Font normalFont = graphics().createFont("Courier", Font.Style.BOLD, 24);
-		String text = "Tiny World";
-	    TextLayout layout = graphics().layoutText(
-	      text, new TextFormat().withFont(titleFont).withWrapping(200, TextFormat.Alignment.CENTER).
-	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
-	                             withTextColor(0xFFFFFFFF));
-	    Layer layer = createTextLayer(layout);
-	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 60);
-	    menuLayer.add(layer);
+		mainMenu.addMenuItem("New Game");
+		mainMenu.addMenuItem("Credits");
+		mainMenu.addMenuItem("Exit");
 	    
-	    text = "New Game";
-	    layout = graphics().layoutText(
-	  	      text, new TextFormat().withFont(normalFont).withWrapping(200, TextFormat.Alignment.CENTER).
-	  	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
-	  	                             withTextColor(0xFFFFFFFF));
-	    layer = createTextLayer(layout);
-	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 180);
-	    menuLayer.add(layer);
-	    
-	    text = "Credits";
-	    layout = graphics().layoutText(
-	  	      text, new TextFormat().withFont(normalFont).withWrapping(200, TextFormat.Alignment.CENTER).
-	  	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
-	  	                             withTextColor(0xFFFFFFFF));
-	    layer = createTextLayer(layout);
-	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 260);
-	    menuLayer.add(layer);
-	    
-	    text = "Exit";
-	    layout = graphics().layoutText(
-	  	      text, new TextFormat().withFont(normalFont).withWrapping(200, TextFormat.Alignment.CENTER).
-	  	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
-	  	                             withTextColor(0xFFFFFFFF));
-	    layer = createTextLayer(layout);
-	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 340);
-	    menuLayer.add(layer);
+	    ArrayList<Layer> menuItemLayers = mainMenu.getMenuItemLayers();
+	    for(Layer l : menuItemLayers){
+	    	menuLayer.add(l);
+	    }
 	    
 	    graphics().rootLayer().add(menuLayer);
 	    
 		// gameInit();
 	}
-	
-	protected Layer createTextLayer(TextLayout layout) {
-	    @SuppressWarnings("deprecation")
-		CanvasLayer layer = graphics().createCanvasLayer(
-	      (int)Math.ceil(layout.width()), (int)Math.ceil(layout.height()));
-	    layer.canvas().drawText(layout, 0, 0);
-	    return layer;
-	  }
 
 	public void gameInit() {
 		state = Constants.STATE_GAME;
