@@ -22,7 +22,7 @@ public class TinyWorld implements Game {
 		planetoids = new ArrayList<Planetoid>();
 
 		// create and add background image layer
-		Image bgImage = assets().getImage("images/bg.png");
+		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
