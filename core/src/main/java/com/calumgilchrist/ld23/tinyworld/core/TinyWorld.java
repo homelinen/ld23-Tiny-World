@@ -10,11 +10,17 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
+import playn.core.CanvasLayer;
+import playn.core.Font;
 import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Layer;
 import playn.core.Pointer;
+import playn.core.Sound;
+import playn.core.TextFormat;
+import playn.core.TextLayout;
 import playn.core.Pointer.Event;
 
 public class TinyWorld implements Game, Pointer.Listener {
@@ -25,33 +31,88 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	private KeyboardInput keyboard;
 
+	private GroupLayer menuLayer;
 	private GroupLayer planetoidLayer;
-
-	// TODO remove everything from root layer
+	
+	Sound clickSound;
 
 	@Override
 	public void init() {
 		state = Constants.STATE_MENU;
-		menuInit();
-	}
-
-	public void menuInit() {
-		gameInit();
-	}
-
-	public void gameInit() {
-		state = Constants.STATE_GAME;
-		keyboard = new KeyboardInput();
-
-		planetoids = new ArrayList<Planetoid>();
-		planetoidLayer = graphics().createGroupLayer();
-
+		
 		pointer().setListener(this);
-
+		keyboard = new KeyboardInput();
+		
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
+		
+		menuInit();
+	}
+
+	public void menuInit() {
+		//clickSound = assets().getSound("sounds/select");
+		
+		menuLayer = graphics().createGroupLayer();
+		
+		Font titleFont = graphics().createFont("Courier", Font.Style.BOLD, 32);
+		Font normalFont = graphics().createFont("Courier", Font.Style.BOLD, 24);
+		String text = "Tiny World";
+	    TextLayout layout = graphics().layoutText(
+	      text, new TextFormat().withFont(titleFont).withWrapping(200, TextFormat.Alignment.CENTER).
+	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
+	                             withTextColor(0xFFFFFFFF));
+	    Layer layer = createTextLayer(layout);
+	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 60);
+	    menuLayer.add(layer);
+	    
+	    text = "New Game";
+	    layout = graphics().layoutText(
+	  	      text, new TextFormat().withFont(normalFont).withWrapping(200, TextFormat.Alignment.CENTER).
+	  	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
+	  	                             withTextColor(0xFFFFFFFF));
+	    layer = createTextLayer(layout);
+	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 180);
+	    menuLayer.add(layer);
+	    
+	    text = "Credits";
+	    layout = graphics().layoutText(
+	  	      text, new TextFormat().withFont(normalFont).withWrapping(200, TextFormat.Alignment.CENTER).
+	  	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
+	  	                             withTextColor(0xFFFFFFFF));
+	    layer = createTextLayer(layout);
+	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 260);
+	    menuLayer.add(layer);
+	    
+	    text = "Exit";
+	    layout = graphics().layoutText(
+	  	      text, new TextFormat().withFont(normalFont).withWrapping(200, TextFormat.Alignment.CENTER).
+	  	                             withEffect(TextFormat.Effect.shadow(0x33000000, 2, 2)).
+	  	                             withTextColor(0xFFFFFFFF));
+	    layer = createTextLayer(layout);
+	    layer.setTranslation((graphics().width()/2) - (layout.width()/2), 340);
+	    menuLayer.add(layer);
+	    
+	    graphics().rootLayer().add(menuLayer);
+	    
+		// gameInit();
+	}
+	
+	protected Layer createTextLayer(TextLayout layout) {
+	    @SuppressWarnings("deprecation")
+		CanvasLayer layer = graphics().createCanvasLayer(
+	      (int)Math.ceil(layout.width()), (int)Math.ceil(layout.height()));
+	    layer.canvas().drawText(layout, 0, 0);
+	    return layer;
+	  }
+
+	public void gameInit() {
+		state = Constants.STATE_GAME;
+		graphics().rootLayer().remove(menuLayer);
+
+		planetoids = new ArrayList<Planetoid>();
+		planetoidLayer = graphics().createGroupLayer();
 
 		// Load grey asteroid image asset
 		Image asteroidImage = assets().getImage("images/grey-asteroid.png");
@@ -125,17 +186,19 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	@Override
 	public void update(float delta) {
-		// Values need playing with, and to be stored
-		world.step(60, 6, 3);
-		world.clearForces();
-
-		player.applyThrust(keyboard.getMovement());
-		cameraFollowPlayer();
-		player.update();
-
-		// For every planetoid update it's sprite
-		for (Planetoid p : planetoids) {
-			p.update();
+		if(state == Constants.STATE_GAME){
+			// Values need playing with, and to be stored
+			world.step(60, 6, 3);
+			world.clearForces();
+	
+			player.applyThrust(keyboard.getMovement());
+			cameraFollowPlayer();
+			player.update();
+	
+			// For every planetoid update it's sprite
+			for (Planetoid p : planetoids) {
+				p.update();
+			}
 		}
 	}
 
@@ -158,6 +221,18 @@ public class TinyWorld implements Game, Pointer.Listener {
 
 	@Override
 	public void onPointerStart(playn.core.Pointer.Event event) {
+		if(state == Constants.STATE_MENU){
+			int mousex = (int) event.x();
+			int mousey = (int) event.y();
+			
+			if(mousex > 270 && mousex < 380){
+				if (mousey > 180&& mousey < 205){
+					gameInit();
+				}
+			}
+			
+			System.out.println(mousex+ ","+mousey);
+		}
 	}
 
 	@Override
