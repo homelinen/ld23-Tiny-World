@@ -25,11 +25,11 @@ public class Sprite {
 		frames.add(i);
 	}
 	
-	public void setX(int posX)){
+	public void setX(int posX){
 		x = posX;
 	}
 	
-	public void setY(int posY)){
+	public void setY(int posY){
 		y = posY;
 	}
 	
