@@ -32,6 +32,8 @@ public class TinyWorld implements Game, Pointer.Listener {
 	private KeyboardInput keyboard;
 
 	private GroupLayer menuLayer;
+	ArrayList<MenuItem> menuItemLayers;
+	
 	private GroupLayer planetoidLayer;
 	
 	Sound clickSound;
@@ -62,9 +64,9 @@ public class TinyWorld implements Game, Pointer.Listener {
 		mainMenu.addMenuItem("Credits");
 		mainMenu.addMenuItem("Exit");
 	    
-	    ArrayList<Layer> menuItemLayers = mainMenu.getMenuItemLayers();
-	    for(Layer l : menuItemLayers){
-	    	menuLayer.add(l);
+	    menuItemLayers = mainMenu.getMenuItems();
+	    for(MenuItem l : menuItemLayers){
+	    	menuLayer.add(l.getLayer());
 	    }
 	    
 	    graphics().rootLayer().add(menuLayer);
@@ -190,9 +192,13 @@ public class TinyWorld implements Game, Pointer.Listener {
 			int mousex = (int) event.x();
 			int mousey = (int) event.y();
 			
-			if(mousex > 270 && mousex < 380){
-				if (mousey > 180&& mousey < 205){
-					gameInit();
+			for(MenuItem mi : menuItemLayers){
+				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
+					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
+						if(mi.getText() == "New Game"){
+							gameInit();
+						}
+					}
 				}
 			}
 			

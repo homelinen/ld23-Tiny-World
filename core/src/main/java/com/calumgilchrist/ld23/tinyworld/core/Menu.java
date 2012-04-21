@@ -60,10 +60,12 @@ public class Menu {
 		return layer;
 	}
 
-	public ArrayList<Layer> getMenuItemLayers() {
-		ArrayList<Layer> layers = new ArrayList<Layer>();
+	public ArrayList<MenuItem> getMenuItems() {
+		ArrayList<MenuItem> returnItems = new ArrayList<MenuItem>();
 
 		for (int i = 0; i < menuItems.size(); i++) {
+			int posX, posY;
+			
 			layout = graphics().layoutText(
 					menuItems.get(i),
 					new TextFormat()
@@ -73,12 +75,15 @@ public class Menu {
 									TextFormat.Effect.shadow(0x33000000, 2, 2))
 							.withTextColor(0xFFFFFFFF));
 			layer = createTextLayer(layout);
-			layer.setTranslation((graphics().width() / 2) - (layout.width() / 2),
-					startY + (100 * (i+1)));
-			layers.add(layer);
+			posX = (int) ((graphics().width() / 2) - (layout.width() / 2));
+			posY = startY + (100 * (i+1));
+			layer.setTranslation(posX,posY);
+			
+			MenuItem mi = new MenuItem(posX,posY,layout,layer,menuItems.get(i));
+			returnItems.add(mi);
 		}
 
-		return layers;
+		return returnItems;
 	}
 
 	protected Layer createTextLayer(TextLayout layout) {
