@@ -17,14 +17,17 @@ import playn.core.Pointer;
 import playn.core.Keyboard.Event;
 import playn.core.Keyboard.TypedEvent;
 
-public class TinyWorld implements Game, Keyboard.Listener {
+public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	ArrayList<Planetoid> planetoids;
 	World world;
 
 	@Override
 	public void init() {
 		planetoids = new ArrayList<Planetoid>();
-
+		
+		pointer().setListener(this);
+		keyboard().setListener(this);
+	
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
@@ -50,13 +53,7 @@ public class TinyWorld implements Game, Keyboard.Listener {
 		p.getSprite().addFrame(asteroid);
 		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);
-		
-		// Setup the pointer listener
-		pointer().setListener(new Pointer.Adapter() {
-			public void onPointerStart(Pointer.Event event){
-				System.out.println(event.x() + "," +event.y());
-			}
-		});
+	
 	}
 
 	@Override
@@ -102,6 +99,24 @@ public class TinyWorld implements Game, Keyboard.Listener {
 	@Override
 	public void onKeyUp(Event event) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPointerStart(playn.core.Pointer.Event event) {
+		System.out.println(event.x() + "," +event.y());
+		
+	}
+
+	@Override
+	public void onPointerEnd(playn.core.Pointer.Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPointerDrag(playn.core.Pointer.Event event) {
+		System.out.println(event.x() + "," +event.y());
 		
 	}
 }
