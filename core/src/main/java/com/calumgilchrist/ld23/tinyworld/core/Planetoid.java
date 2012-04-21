@@ -12,6 +12,8 @@ public class Planetoid {
 	private Vec2 pos;
 	
 	public Planetoid(Vec2 startPos, Sprite s, BodyDef bodyDef, World world){
+		//TODO: Need an initial mass
+		
 		this.pos = startPos;
 		
 		this.sprite = s;
@@ -30,4 +32,7 @@ public class Planetoid {
 		this.pos = pos;
 	}
 	
+	public Body getBody() {
+		return this.pBody;
+	}
 }
