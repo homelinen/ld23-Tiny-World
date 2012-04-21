@@ -42,7 +42,7 @@ public class TinyWorld implements Game, Keyboard.Listener {
 		pBodyDef.type = BodyType.DYNAMIC;
 		
 		//Need to multiply pStart by a Physics factor
-		pBodyDef.position.set(pStart);
+		pBodyDef.position.set(pStart.mul(1/Constants.PHYS_RATIO));
 		
 		// Create a testing planetoid and add it to the arraylist
 		Planetoid p = new Planetoid(pStart, new Sprite(20, 20), pBodyDef, world);
