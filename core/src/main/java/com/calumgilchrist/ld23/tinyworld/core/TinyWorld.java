@@ -12,6 +12,7 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.MouseJoint;
 
 import playn.core.Game;
+import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Keyboard;
@@ -25,7 +26,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	Player player;
 	
 	World world;
-	Vec2 mousePos;
 	MouseJoint mouseJoint;
 	
 	private boolean upKeyDown;
@@ -33,19 +33,17 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	private boolean leftKeyDown;
 	private boolean rightKeyDown;
 	
+	private GroupLayer planetoidLayer;
+	// TODO remove everything from root layer
+	
 	@Override
-	public void init() {
-		upKeyDown = false;
-		downKeyDown = false;
-		leftKeyDown = false;
-		rightKeyDown = false;
+	public void init() {		
+		initKeyboard();
 		
 		planetoids = new ArrayList<Planetoid>();
 		
 		pointer().setListener(this);
 		keyboard().setListener(this);
-		
-		mouseJoint = null;
 	
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
@@ -56,7 +54,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		Image asteroid = assets().getImage("images/grey-asteroid.png");
 
 		Vec2 pStart = new Vec2(20,20);
-		mousePos = new Vec2(60,60);
 		
 		//Set up the world
 		world = new World(new Vec2(), false);
@@ -64,7 +61,7 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//TODO asteroidInit
 		
 		//Start Vector off screen (This should be random)
-		Vec2 astrStart = new Vec2(900, 50);
+		Vec2 astrStart = new Vec2(100,100);
 		
 		//Set up an asteroid
 		BodyDef astrBodyDef = new BodyDef();
@@ -78,18 +75,18 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		astr.getSprite().addFrame(asteroid);
 		
 		//Apply a force to the asteroid
-		Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
-		astr.applyThrust(forceDir.mul(0.1f));
+		//Vec2 forceDir = astr.getStartDirVec(graphics().width(), graphics().height());
+		// astr.applyThrust(forceDir.mul(0.1f));
 		
 		planetoids.add(astr);
 		graphics().rootLayer().add(astr.getSprite().getImageLayer());
 	
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
-		playerBodyDef.position.set(mousePos.mul(1/Constants.PHYS_RATIO));
+		playerBodyDef.position.set(new Vec2(60,60).mul(1/Constants.PHYS_RATIO));
 		
 		// Create a player planetoid and add it to the root layer
-		player = new Player(mousePos,new Sprite(100,100), playerBodyDef, world);
+		player = new Player(new Vec2(60,60),new Sprite(100,100), playerBodyDef, world);
 		graphics().rootLayer().add(player.getSprite().getImageLayer());
 		player.getSprite().addFrame(asteroid);
 	}
@@ -98,7 +95,6 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 	public void paint(float alpha) {
 		// the background automatically paints itself, so no need to do anything
 		// here!
-		
 	}
 
 	@Override
@@ -106,21 +102,31 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		//Values need playing with, and to be stored
 		world.step(60, 30, 30);
 		world.clearForces();
-		world.drawDebugData();
 		
+		handleKeyboard();
 		player.update();
+		cameraFollowPlayer();
 		
 		// For every planetoid update it's sprite
 		for (Planetoid p : planetoids) {
 			p.update();
 		}
-		
-		handleKeyboard();
 	}
 
 	@Override
 	public int updateRate() {
 		return 25;
+	}
+	
+	public void cameraFollowPlayer(){	
+		graphics().rootLayer().setOrigin( player.getPos().x,player.getPos().y);
+	}
+	
+	public void initKeyboard(){
+		upKeyDown = false;
+		downKeyDown = false;
+		leftKeyDown = false;
+		rightKeyDown = false;
 	}
 	
 	public void handleKeyboard(){
