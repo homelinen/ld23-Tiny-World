@@ -51,8 +51,33 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		// Create a testing planetoid and add it to the arraylist
 		Planetoid p = new Planetoid(pStart, new Sprite(20, 20), pBodyDef, world);
 		p.getSprite().addFrame(asteroid);
-		graphics().rootLayer().add(p.getSprite().getImageLayer());
 		planetoids.add(p);
+		
+		
+		//TODO asteroidInit
+		
+		//Start Vector off screen (This should be random)
+		Vec2 astrStart = new Vec2(-10, 50);
+		
+		//Set up an asteroid
+		BodyDef astrBodyDef = new BodyDef();
+		astrBodyDef.type= BodyType.DYNAMIC;
+		
+		//Initial Position
+		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
+		
+		Asteroid astr = new Asteroid(astrStart, new Sprite(20, 20), astrBodyDef, world);
+		astr.getSprite().addFrame(asteroid);
+		
+		//Apply a force to the asteroid
+		Vec2 forceDir = astr.getStartDirVec(graphics().screenWidth(), graphics().screenHeight());
+		astr.applyThrust(forceDir.mul(1));
+		
+		System.out.println(astr.getBody().getLinearVelocity());
+		
+		planetoids.add(astr);
+		graphics().rootLayer().add(p.getSprite().getImageLayer());
+		graphics().rootLayer().add(astr.getSprite().getImageLayer());
 	
 	}
 
@@ -73,6 +98,8 @@ public class TinyWorld implements Game, Keyboard.Listener, Pointer.Listener {
 		for (Planetoid p : planetoids) {
 			p.getSprite().update();
 		}
+		
+		System.out.println("Position: " + planetoids.get(1).getBody().getWorldCenter());
 	}
 
 	@Override
