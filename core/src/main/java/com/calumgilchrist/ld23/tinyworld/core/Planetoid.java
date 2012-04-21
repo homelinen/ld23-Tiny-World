@@ -28,6 +28,8 @@ public class Planetoid {
 
 		force = force.mul(1/Constants.PHYS_RATIO);
 		this.getBody().applyForce(force, this.getBody().getWorldCenter());
+		
+		System.out.println(this.getBody().getLinearVelocity());
 	}
 	
 	public Sprite getSprite(){
@@ -50,8 +52,10 @@ public class Planetoid {
 	}
 	
 	public void update(){
-		this.getSprite().setX((int) this.getBody().getWorldCenter().x);
-		this.getSprite().setX((int) this.getBody().getWorldCenter().y);
+		Vec2 center = this.getBody().getWorldCenter().mul(Constants.PHYS_RATIO);
+		
+		this.getSprite().setX((int) center.x);
+		this.getSprite().setY((int) center.y);
 		this.getSprite().update();
 	}
 }
