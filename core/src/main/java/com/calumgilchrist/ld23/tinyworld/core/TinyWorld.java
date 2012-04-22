@@ -36,7 +36,7 @@ public class TinyWorld implements Game {
 
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
-	
+
 	private static GroupLayer planetoidLayer;
 	
 	boolean createAstr;
@@ -100,14 +100,13 @@ public class TinyWorld implements Game {
 		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y, planetoidImage), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
-		//planetoidLayer.setScale(globalScale/2);
 		
 		world.setContactListener(player);
 		setScale(2.0f);
 	}
 	
 	public void setScale(float scale){
-		Globals.globalScale = 1/scale;;
+		Globals.globalScale = 1/scale;
 		player.getSprite().setScale(scale);
 		planetoidLayer.setScale(Globals.globalScale);
 	}
@@ -169,6 +168,4 @@ public class TinyWorld implements Game {
 	public void movePlayer() {
 		//What is this?
 	}
-
-	
 }

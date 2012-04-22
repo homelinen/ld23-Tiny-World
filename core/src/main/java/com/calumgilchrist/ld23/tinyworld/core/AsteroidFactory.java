@@ -4,6 +4,7 @@ import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -11,6 +12,7 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.joints.JointEdge;
 
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -20,10 +22,12 @@ public class  AsteroidFactory{
 	private static World world;
 	private static Image img;
 	private static GroupLayer astrLayer;
+
 	
 	private static ArrayList<Asteroid> instances = new ArrayList<Asteroid>();
 	private static ArrayList<Body> destroyList;
 	
+
 	public AsteroidFactory(World world, Image img, GroupLayer layer) {
 		AsteroidFactory.world = world;
 		AsteroidFactory.img = img;
@@ -72,6 +76,7 @@ public class  AsteroidFactory{
 		
 		destroyList.clear();
 	}
+
 	
 	/**
 	 * Get the starting position of an object
@@ -209,6 +214,8 @@ public class  AsteroidFactory{
 		
 		//Destroy the planet
 		destroyList.add(astr.getBody());
+		
 		astr.getSprite().getImageLayer().destroy();
+		System.out.println(astr.getSprite().getImageLayer().destroyed());
 	}
 }
