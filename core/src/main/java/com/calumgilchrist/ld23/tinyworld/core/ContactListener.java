@@ -23,7 +23,7 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 			
 			hitter = contact.getFixtureA().m_body;
 			player.addMass(hitter.m_mass);
-			AsteroidFactory.removeAstrByBody(hitter);
+			DynamicFactory.removeByBody(hitter);
 		}
 	}
 
@@ -43,5 +43,4 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
 	}
-
 }
