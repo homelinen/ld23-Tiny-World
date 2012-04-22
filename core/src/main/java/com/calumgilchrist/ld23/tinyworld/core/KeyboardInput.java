@@ -14,6 +14,8 @@ public class KeyboardInput implements Keyboard.Listener {
 	private boolean downKeyDown;
 	private boolean leftKeyDown;
 	private boolean rightKeyDown;
+	private boolean spaceDown;
+	
 	
 	public KeyboardInput(){
 		keyboard().setListener(this);
@@ -22,6 +24,7 @@ public class KeyboardInput implements Keyboard.Listener {
 		downKeyDown = false;
 		leftKeyDown = false;
 		rightKeyDown = false;
+		spaceDown  = false;
 	}
 	
 	public Vec2 getMovement(){
@@ -40,10 +43,17 @@ public class KeyboardInput implements Keyboard.Listener {
 		if(rightKeyDown){
 			px = px + (int) Globals.PHYS_RATIO;
 		}
+		if (spaceDown) {
+			px = py = 0;
+		}
 		
 		return new Vec2(px,py);
 	}
-
+	
+	public boolean isSpaceDown() {
+		return spaceDown;
+	}
+	
 	@Override
 	public void onKeyDown(Event event) {
 		switch (event.key()) {
@@ -61,8 +71,11 @@ public class KeyboardInput implements Keyboard.Listener {
 			break;
 		case ESCAPE:
 			System.exit(0);
+			break;
+		case SPACE:
+			spaceDown = true;
+			break;
 		}
-		
 	}
 
 	@Override
@@ -85,6 +98,9 @@ public class KeyboardInput implements Keyboard.Listener {
 		case D:
 			rightKeyDown = false;
 			break;
+		case SPACE:
+			spaceDown = false;
+		break;
 		}
 	}
 }
