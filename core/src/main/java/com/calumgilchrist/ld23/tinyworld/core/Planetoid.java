@@ -19,8 +19,7 @@ public class Planetoid {
 		
 		CircleShape circle = new CircleShape();
 		
-		float magicBoundRatio = 2.2f;
-		circle.m_radius = this.sprite.getWidth() / Globals.PHYS_RATIO / magicBoundRatio;
+		circle.m_radius = this.sprite.getWidth() / Globals.PHYS_RATIO / Globals.magicBoundRatio;
 		
 		FixtureDef fixDef = new FixtureDef();
 		fixDef.shape = circle;

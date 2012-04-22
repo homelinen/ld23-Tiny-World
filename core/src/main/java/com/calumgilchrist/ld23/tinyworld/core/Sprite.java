@@ -64,11 +64,11 @@ public class Sprite {
 	}
 
 	public float getHeight() {
-		return layer.height();
+		return currentImage.height();
 	}
 	
 	public float getWidth() {
-		return layer.width();
+		return currentImage.width();
 	}
 	public int getCurrentFrame() {
 		return currentFrame;

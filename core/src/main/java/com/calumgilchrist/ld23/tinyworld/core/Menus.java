@@ -12,6 +12,7 @@ public class Menus {
 	
 	public void menuInit() {
 		//clickSound = assets().getSound("sounds/select");
+		Globals.state = Globals.STATE_MENU;
 		Menu mainMenu = new Menu("Tiny World",60);
 		menuLayer = graphics().createGroupLayer();
 		menuLayer.add(mainMenu.getTitle());

@@ -8,4 +8,5 @@ public class Globals {
 	
 	public static int state;
 	public static float globalScale;
+	public static float magicBoundRatio = 2.2f;
 }
