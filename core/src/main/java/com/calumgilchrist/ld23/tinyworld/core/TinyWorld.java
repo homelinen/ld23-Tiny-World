@@ -138,15 +138,18 @@ public class TinyWorld implements Game, ContactListener {
 	public int updateRate() {
 		return 25;
 	}
-
+	
+	// Translates the planetoid layer so that the player planet is always centre
 	public void cameraFollowPlayer() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = tx - (graphics().width());
+		tx = (int) (tx - graphics().width() + (player.getSprite().getWidth()));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = ty - (graphics().height());
+		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
+		
+		System.out.println(tx + "," + ty);
 
 		planetoidLayer.setOrigin(tx, ty);
 	}
