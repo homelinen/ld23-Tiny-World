@@ -37,8 +37,14 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 		if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
 			hitter = contact.getFixtureA().m_body;
-			player.addMass(hitter.m_mass);
-			DynamicFactory.removeByBody(hitter);
+			Planetoid planet = DynamicFactory.getFromBody(hitter);
+			
+			if (planet != null) {
+			
+				player.addMass(hitter.m_mass);
+	
+				DynamicFactory.removeByBody(hitter);
+			}
 		}
 	}
 }

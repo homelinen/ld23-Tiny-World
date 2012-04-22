@@ -156,7 +156,11 @@ public class DynamicFactory extends Factory {
 	 */
 	public static void removeByBody(Body body) {
 		Planetoid astr = getFromBody(body);
-		remove(astr);
+		if (astr != null) {
+			remove(astr);
+		} 
+		//TODO if null, should probably mention it
+		
 	}
 	
 	/**

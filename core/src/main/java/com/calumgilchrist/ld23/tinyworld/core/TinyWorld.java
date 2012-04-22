@@ -30,6 +30,8 @@ public class TinyWorld implements Game {
 	DynamicFactory factory;
 	StarFactory starFactory;
 
+	private static final boolean debugPhysics = false;
+	
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
@@ -70,6 +72,8 @@ public class TinyWorld implements Game {
 		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
+		
+		graphics().setSize(1024, 768);
 		
 		menus.menuInit();
 	}
@@ -159,16 +163,23 @@ public class TinyWorld implements Game {
 		// the background automatically paints itself, so no need to do anything
 		// here!
 		if(Globals.state == Globals.STATE_GAME){
-			canv.canvas().clear();
-			world.drawDebugData();
+			
+			if (debugPhysics) {
+				canv.canvas().clear();
+				world.drawDebugData();
+			}
 		}
 	}
 
 	@Override
 	public void update(float delta) {
 		if(Globals.state == Globals.STATE_GAME){
-			world.drawDebugData();
-						
+			
+
+			if (debugPhysics) {
+				world.drawDebugData();
+			}
+			
 			// Values need playing with, and to be stored
 			world.step(30, 6, 3);
 			world.clearForces();

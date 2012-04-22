@@ -36,6 +36,13 @@ public abstract class Planetoid {
 	}
 	
 	/**
+	 * Another Empty Constructor to Not Use
+	 */
+	public Planetoid() {
+		
+	}
+	
+	/**
 	 * Apply force to the center of the planetoid
 	 * @param force
 	 */
