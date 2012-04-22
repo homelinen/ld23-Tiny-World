@@ -191,12 +191,13 @@ public class TinyWorld implements Game {
 				player.getBody().setLinearVelocity(new Vec2());
 			}
 			
-			//Creates an asteroid if one was previosuly destroyed
+			//Creates an asteroid if one was previously destroyed
 			//What happens if two were destroyed?
-			if (createAstr) {
-				factory.getAsteroid();
-				createAstr = false;
+			for (int i = 0; i < contactListner.getCreateCount(); i++) {
+				factory.getComet();
 			}
+			
+			contactListner.clearCreateCount();
 			
 			cameraFollowPlayer();
 			cameraFollowDebug();
