@@ -114,7 +114,7 @@ public class TinyWorld implements Game {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
-		canv = graphics().createImage(640,480);
+		canv = graphics().createImage(graphics().width(),graphics().height());
 				
 		debugDraw.setCanvas(canv);
 		debugDraw.setFlipY(false);
@@ -122,7 +122,7 @@ public class TinyWorld implements Game {
 		debugDraw.setFillAlpha(50);
 		debugDraw.setStrokeWidth(1.0f);
 		debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
-		debugDraw.setCamera(0, 0, 2f); 
+		debugDraw.setCamera(0, 0, Globals.globalScale * Globals.PHYS_RATIO); 
 		
 		world.setDebugDraw(this.debugDraw);
 		
@@ -145,7 +145,7 @@ public class TinyWorld implements Game {
 		// the background automatically paints itself, so no need to do anything
 		// here!
 		if(Globals.state == Globals.STATE_GAME){
-			canv.canvas().clear();
+			debugDraw.clear();
 			world.drawDebugData();
 		}
 	}
