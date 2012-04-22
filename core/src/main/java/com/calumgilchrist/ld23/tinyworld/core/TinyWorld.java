@@ -33,6 +33,8 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	Player player;
 	World world;
 
+	AsteroidFactory astrFactory;
+	
 	private int state;
 
 	private KeyboardInput keyboard;
@@ -115,10 +117,15 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		world = new World(new Vec2(), false);
 		world.setContactListener(this);
 		
+		
+		astrFactory = new AsteroidFactory(world, asteroidImage);
+		Asteroid astr;
 		for (int i = 0; i < 30; i++) {
-			createAsteroid(asteroidImage);
+			astr = AsteroidFactory.getAsteroid(100);
+			planetoidLayer.add(astr.getSprite().getImageLayer());
 		}
-
+		
+		
 		Vec2 playerStart = new Vec2(graphics().width() / 2,
 				graphics().height() / 2);
 
@@ -133,28 +140,6 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		planetoidLayer.setScale(0.5f);
 	}
 
-	public void createAsteroid(Image asteroid) {
-		
-		//TODO: Randomise it!
-		float forceFactor = 100;
-		
-		//Start Vector off screen (This should be random)
-		Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
-
-		// Set up an asteroid
-		BodyDef astrBodyDef = new BodyDef();
-		astrBodyDef.type= BodyType.DYNAMIC;
-		
-		//Initial Position
-		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
-		
-		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, asteroid), astrBodyDef, world);
-		
-		astr.applyThrust(astr.getThrustForce(forceFactor));
-
-		planetoids.add(astr);
-		planetoidLayer.add(astr.getSprite().getImageLayer());
-	}
 
 	@Override
 	public void paint(float alpha) {
@@ -175,14 +160,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 			cameraFollowPlayer();
 			player.update();
 	
-			// For every planetoid update it's sprite
-			for (Planetoid p : planetoids) {
-				p.update();		
-				//Destroy bodies to be destroyed
-				for (Body body: destroyList) {
-					replaceAsteroid(body);
-				}
-			}
+			astrFactory.update();
 		}
 		
 
@@ -251,47 +229,6 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	public void movePlayer() {
 	}
 
-	/**
-	 * Get the starting position of an object
-	 * 
-	 * @param screenWidth
-	 * @param screenHeight
-	 * @return
-	 */
-	public Vec2 genStartPos(int width, int height) {
-
-		float x = getSpawnBound(-width, width);
-		float y = getSpawnBound(-height, height);
-
-		Vec2 pos = new Vec2(x, y);
-
-		return pos;
-	}
-
-	/**
-	 * Randomly choose a number NOT between 0 and limit
-	 * 
-	 * @param max
-	 * @return
-	 */
-	private int getSpawnBound(int min, int max) {
-
-		Random rand = new Random();
-
-		int spawnBound = 100;
-		// Set x
-		boolean belowBound = rand.nextBoolean();
-
-		int pos = rand.nextInt(spawnBound) + 50;
-
-		if (belowBound) {
-			pos = -pos + min;
-		} else {
-			pos += max;
-		}
-
-		return pos;
-	}
 
 	@Override
 	public void beginContact(Contact contact) {
@@ -302,7 +239,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 			
 			hitter = contact.getFixtureA().m_body;
 			player.addMass(contact.getFixtureA().m_body.m_mass);
-			destroyList.add(hitter);
+			astrFactory.removeAstrByBody(hitter);
 		}
 	}
 
@@ -323,40 +260,6 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		// TODO Auto-generated method stub
 	}
 	
-	/**
-	 * Take a body, destroy it and replace it.
-	 * @param body
-	 */
-	public void replaceAsteroid(Body body){
-		boolean found = false;
-		Asteroid planet;
-		
-		Iterator<Asteroid> it = planetoids.iterator();
-		
-		/*
-		 * Slow and awful
-		 * TODO: Use something better than O(n)
-		 */
-		while (it.hasNext() && !found) {
-			planet = it.next();
-			if (planet.getBody().equals(body)) {
-				Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
-				
-				found = true;
-				world.destroyBody(body);
-				
-				//Set up an asteroid
-				BodyDef astrBodyDef = new BodyDef();
-				astrBodyDef.type= BodyType.DYNAMIC;
-				
-				//Initial Position
-				astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
-				
-				planet.newBody(astrBodyDef, world);
-			}
-		}
-	}
-
 	public void onPointerDrag(Event event) {
 		// TODO Auto-generated method stub
 

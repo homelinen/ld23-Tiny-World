@@ -17,8 +17,6 @@ public class Planetoid {
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
 		
-		this.pBody.setAwake(false);
-		
 		CircleShape circle = new CircleShape();
 		
 		float magicBoundRatio = 2.2f;
