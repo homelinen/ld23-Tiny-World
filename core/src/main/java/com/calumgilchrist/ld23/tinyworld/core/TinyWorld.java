@@ -123,7 +123,7 @@ public class TinyWorld implements Game, ContactListener {
 
 		if(Globals.state == Globals.STATE_GAME){
 			// Values need playing with, and to be stored
-			world.step(60, 6, 3);
+			world.step(30, 6, 3);
 			world.clearForces();
 	
 			player.applyThrust(keyboard.getMovement());
