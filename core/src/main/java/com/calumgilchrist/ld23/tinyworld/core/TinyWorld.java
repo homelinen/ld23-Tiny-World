@@ -88,7 +88,6 @@ public class TinyWorld implements Game {
 		Image asteroidImage = assets().getImage("images/bubbly-asteroid.png");
 		Image planetoidImage = assets().getImage("images/planetoid.png");
 
-		System.out.println(asteroidImage);
 		// Set up the world
 		world = new World(new Vec2(), false);
 				
@@ -114,8 +113,8 @@ public class TinyWorld implements Game {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
-		canv = graphics().createImage(graphics().width(),graphics().height());
-				
+		int scaleCanvasSize = 10;
+		canv = graphics().createImage(graphics().width() * scaleCanvasSize,graphics().height() * scaleCanvasSize);
 		debugDraw.setCanvas(canv);
 		debugDraw.setFlipY(false);
 		debugDraw.setStrokeAlpha(100);
@@ -145,7 +144,7 @@ public class TinyWorld implements Game {
 		// the background automatically paints itself, so no need to do anything
 		// here!
 		if(Globals.state == Globals.STATE_GAME){
-			debugDraw.clear();
+			canv.canvas().clear();
 			world.drawDebugData();
 		}
 	}
