@@ -1,5 +1,6 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
+import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 
 import org.jbox2d.common.Vec2;
@@ -16,8 +17,10 @@ public class KeyboardInput implements Keyboard.Listener {
 	private boolean rightKeyDown;
 	private boolean spaceDown;
 	
+	private TinyWorld root;
 	
-	public KeyboardInput(){
+	
+	public KeyboardInput(TinyWorld root){
 		keyboard().setListener(this);
 		
 		upKeyDown = false;
@@ -25,6 +28,8 @@ public class KeyboardInput implements Keyboard.Listener {
 		leftKeyDown = false;
 		rightKeyDown = false;
 		spaceDown  = false;
+		
+		this.root = root;
 	}
 	
 	public Vec2 getMovement(){
@@ -56,25 +61,27 @@ public class KeyboardInput implements Keyboard.Listener {
 	
 	@Override
 	public void onKeyDown(Event event) {
-		switch (event.key()) {
-		case W:
-			upKeyDown = true;
-			break;
-		case A:
-			leftKeyDown = true;
-			break;
-		case S:
-			downKeyDown = true;
-			break;
-		case D:
-			rightKeyDown = true;
-			break;
-		case ESCAPE:
-			System.exit(0);
-			break;
-		case SPACE:
-			spaceDown = true;
-			break;
+		if(Globals.state == Globals.STATE_GAME){
+			switch (event.key()) {
+			case W:
+				upKeyDown = true;
+				break;
+			case A:
+				leftKeyDown = true;
+				break;
+			case S:
+				downKeyDown = true;
+				break;
+			case D:
+				rightKeyDown = true;
+				break;
+			case ESCAPE:
+				System.exit(0);
+				break;
+			case SPACE:
+				spaceDown = true;
+				break;
+			}
 		}
 	}
 
@@ -84,6 +91,64 @@ public class KeyboardInput implements Keyboard.Listener {
 
 	@Override
 	public void onKeyUp(Event event) {
+		if(Globals.state == Globals.STATE_MENU){
+			switch (event.key()) {
+			case W:
+				Globals.currentItem = Globals.currentItem - 1;
+				
+				if(Globals.currentItem < 0){
+					Globals.currentItem = Globals.numOfMenuItems - 1;
+				}
+				
+				break;
+			case S:
+				Globals.currentItem = Globals.currentItem + 1;
+				
+				if(Globals.currentItem > (Globals.numOfMenuItems - 1)){
+					Globals.currentItem = 0;
+				}
+				
+				break;
+			case ENTER:
+				if(root.menus.handleMainMenu(Globals.currentItem)){
+					root.gameInit();
+				}
+				break;
+			case ESCAPE:
+				System.exit(0);
+				break;
+			}
+		}
+		else if(Globals.state == Globals.STATE_CREDITS){
+			switch (event.key()) {
+			case W:
+				Globals.currentItem = Globals.currentItem - 1;
+				
+				if(Globals.currentItem < 0){
+					Globals.currentItem = Globals.numOfMenuItems - 1;
+				}
+				
+				break;
+			case S:
+				Globals.currentItem = Globals.currentItem + 1;
+				
+				if(Globals.currentItem > (Globals.numOfMenuItems - 1)){
+					Globals.currentItem = 0;
+				}
+				
+				break;
+			case ENTER:
+				if(root.menus.handleCreditsMenu(Globals.currentItem)){
+					root.gameInit();
+				}
+				break;
+			case ESCAPE:
+				graphics().rootLayer().remove(root.menus.menuLayer);
+				Globals.state = Globals.STATE_MENU;
+				root.menus.menuInit();
+				break;
+			}
+		}
 		// TODO Auto-generated method stub
 		switch (event.key()) {
 		case W:

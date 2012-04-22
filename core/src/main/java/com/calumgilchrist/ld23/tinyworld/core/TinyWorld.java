@@ -56,7 +56,7 @@ public class TinyWorld implements Game {
 	public void init() {	
 		menus = new Menus();
 		
-		keyboard = new KeyboardInput();
+		keyboard = new KeyboardInput(this);
 		mouse = new MouseInput(this);
 		
 		createAstr = false;
@@ -162,7 +162,22 @@ public class TinyWorld implements Game {
 
 	@Override
 	public void update(float delta) {
-		if(Globals.state == Globals.STATE_GAME){
+		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
+			// X position is the middle of the screen subtract half the width of the title
+			float posX = (graphics().width() / 2) - (menus.menuItemLayers.get(Globals.currentItem).layout.width()/2);
+			float posY = menus.menuItemLayers.get(Globals.currentItem).posY;
+					
+			// Increase the value of menuSin until it reaches 360, then reset
+			if(Globals.menuSin > 360){
+				Globals.menuSin = 0;
+			}
+			else{
+				Globals.menuSin = Globals.menuSin + 0.1f;
+			}
+			
+			menus.menuLayer.get(Globals.currentItem+1).setTranslation(posX,(float) (posY+Math.sin(Globals.menuSin)*10));
+		}
+		else if(Globals.state == Globals.STATE_GAME){
 			world.drawDebugData();
 						
 			// Values need playing with, and to be stored
@@ -176,7 +191,7 @@ public class TinyWorld implements Game {
 				player.getBody().setLinearVelocity(new Vec2());
 			}
 			
-			//Creates an asteroid if one was previosuly destroyed
+			//Creates an asteroid if one was previously destroyed
 			//What happens if two were destroyed?
 			if (createAstr) {
 				factory.getAsteroid(1);

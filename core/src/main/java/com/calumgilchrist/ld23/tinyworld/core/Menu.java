@@ -17,7 +17,7 @@ public class Menu {
 
 	int startY;
 
-	TextLayout layout;
+	public TextLayout layout;
 	Layer layer;
 
 	String titleText;
@@ -56,6 +56,7 @@ public class Menu {
 		layer = createTextLayer(layout);
 		layer.setTranslation((graphics().width() / 2) - (layout.width() / 2),
 				startY);
+		System.out.println(layout.width());
 
 		return layer;
 	}
@@ -82,6 +83,8 @@ public class Menu {
 			MenuItem mi = new MenuItem(posX,posY,layout,layer,menuItems.get(i));
 			returnItems.add(mi);
 		}
+		
+		Globals.numOfMenuItems = returnItems.size();
 
 		return returnItems;
 	}
