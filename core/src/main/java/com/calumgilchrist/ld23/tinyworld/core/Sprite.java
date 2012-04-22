@@ -12,12 +12,15 @@ public class Sprite {
 	
 	private int x;
 	private int y;
+	
+	private float scale;
 
 	public Sprite(int posX, int posY, Image img) {
 		x = posX;
 		y = posY;
 		
 		currentFrame = 0;
+		scale = 1.0f;
 		
 		layer = PlayN.graphics().createImageLayer();
 		frames = new ArrayList<Image>();
@@ -27,6 +30,15 @@ public class Sprite {
 		update();
 	}
 	
+	public float getScale() {
+		return scale;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+		layer.setScale(scale);
+	}
+
 	public ImageLayer getImageLayer(){
 		return layer;
 	}

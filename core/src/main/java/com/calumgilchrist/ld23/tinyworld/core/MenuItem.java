@@ -44,8 +44,6 @@ public class MenuItem {
 		this.posY = posY;
 	}
 
-
-
 	public TextLayout getLayout() {
 		return layout;
 	}
@@ -60,5 +58,14 @@ public class MenuItem {
 
 	public void setLayer(Layer layer) {
 		this.layer = layer;
+	}
+	
+	public boolean withinBounds(int x, int y){
+		if(x > this.getPosX() && x < (this.getPosX() + this.getLayout().width())){
+			if(y > this.getPosY() && y < (this.getPosY() + this.getLayout().height())){
+				return true;
+			}	
+		}
+		return false;
 	}
 }

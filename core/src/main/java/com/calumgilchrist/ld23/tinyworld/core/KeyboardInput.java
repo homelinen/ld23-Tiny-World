@@ -29,16 +29,16 @@ public class KeyboardInput implements Keyboard.Listener {
 		px = py = 0;
 		
 		if(upKeyDown){
-			py = py - (int) Constants.PHYS_RATIO;
+			py = py - (int) Globals.PHYS_RATIO;
 		}
 		if(downKeyDown){
-			py = py + (int) Constants.PHYS_RATIO;
+			py = py + (int) Globals.PHYS_RATIO;
 		}
 		if(leftKeyDown){
-			px = px - (int) Constants.PHYS_RATIO;
+			px = px - (int) Globals.PHYS_RATIO;
 		}
 		if(rightKeyDown){
-			px = px + (int) Constants.PHYS_RATIO;
+			px = px + (int) Globals.PHYS_RATIO;
 		}
 		
 		return new Vec2(px,py);

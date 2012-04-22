@@ -20,7 +20,7 @@ public class Planetoid {
 		CircleShape circle = new CircleShape();
 		
 		float magicBoundRatio = 2.2f;
-		circle.m_radius = this.sprite.getWidth() / Constants.PHYS_RATIO / magicBoundRatio;
+		circle.m_radius = this.sprite.getWidth() / Globals.PHYS_RATIO / magicBoundRatio;
 		
 		FixtureDef fixDef = new FixtureDef();
 		fixDef.shape = circle;
@@ -36,7 +36,7 @@ public class Planetoid {
 	 */
 	public void applyThrust(Vec2 force) {
 
-		force = force.mul(1/Constants.PHYS_RATIO);
+		force = force.mul(1/Globals.PHYS_RATIO);
 		this.getBody().applyForce(force, this.getBody().getWorldCenter());
 	}
 	
@@ -53,7 +53,7 @@ public class Planetoid {
 	}
 	
 	public void update(){
-		Vec2 center = this.getBody().getWorldCenter().mul(Constants.PHYS_RATIO);
+		Vec2 center = this.getBody().getWorldCenter().mul(Globals.PHYS_RATIO);
 		
 		this.getSprite().setX((int) center.x);
 		this.getSprite().setY((int) center.y);
