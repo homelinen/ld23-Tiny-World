@@ -22,7 +22,7 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Sound;
 
-public class TinyWorld implements Game, ContactListener {
+public class TinyWorld implements Game {
 
 	ArrayList<Asteroid> planetoids;
 	ArrayList<Body> destroyList;
@@ -37,7 +37,7 @@ public class TinyWorld implements Game, ContactListener {
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 	
-	private GroupLayer planetoidLayer;
+	private static GroupLayer planetoidLayer;
 	
 	boolean createAstr;
 	
@@ -81,7 +81,6 @@ public class TinyWorld implements Game, ContactListener {
 
 		// Set up the world
 		world = new World(new Vec2(), false);
-		world.setContactListener(this);
 		
 		//Set up the factory and Asteroids
 		astrFactory = new AsteroidFactory(world, asteroidImage, planetoidLayer);
@@ -103,6 +102,7 @@ public class TinyWorld implements Game, ContactListener {
 		graphics().rootLayer().add(planetoidLayer);
 		//planetoidLayer.setScale(globalScale/2);
 		
+		world.setContactListener(player);
 		setScale(2.0f);
 	}
 	
@@ -170,34 +170,5 @@ public class TinyWorld implements Game, ContactListener {
 		//What is this?
 	}
 
-	@Override
-	public void beginContact(Contact contact) {
-		Body hitter;
-		
-		//Fixture A is never the contact, I think
-		if (player.getBody().equals(contact.getFixtureB().m_body)) {
-			
-			hitter = contact.getFixtureA().m_body;
-			player.addMass(hitter.m_mass);
-			astrFactory.removeAstrByBody(hitter);
-			
-//			planetoidLayer.add(astrFactory.getAsteroid(150).getSprite().getImageLayer());
-		}
-	}
-
-	@Override
-	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-		
-	}
-
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
-	}
+	
 }
