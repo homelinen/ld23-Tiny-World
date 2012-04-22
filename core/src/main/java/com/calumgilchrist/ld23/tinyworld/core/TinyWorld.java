@@ -34,18 +34,17 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	World world;
 
 	private KeyboardInput keyboard;
-
-	private GroupLayer menuLayer;
-	ArrayList<MenuItem> menuItemLayers;
 	
 	private GroupLayer planetoidLayer;
 	
+	Menus menus;
+	
 	Sound clickSound;
-	
-	
 
 	@Override
 	public void init() {	
+		menus = new Menus();
+		
 		keyboard = new KeyboardInput();
 		Globals.globalScale = 1.0f;
 				
@@ -61,48 +60,12 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
-		menuInit();
-	}
-
-	public void menuInit() {
-		//clickSound = assets().getSound("sounds/select");
-		Menu mainMenu = new Menu("Tiny World",60);
-		menuLayer = graphics().createGroupLayer();
-		menuLayer.add(mainMenu.getTitle());
-		
-		mainMenu.addMenuItem("New Game");
-		mainMenu.addMenuItem("Credits");
-		mainMenu.addMenuItem("Exit");
-	    
-	    menuItemLayers = mainMenu.getMenuItems();
-	    for(MenuItem l : menuItemLayers){
-	    	menuLayer.add(l.getLayer());
-	    }
-	    
-	    graphics().rootLayer().add(menuLayer);
-	}
-	
-	public void creditsMenuInit(){
-		graphics().rootLayer().remove(menuLayer);
-		Menu creditsMenu = new Menu("Credits",60);
-		menuLayer = graphics().createGroupLayer();
-		menuLayer.add(creditsMenu.getTitle());
-		
-		creditsMenu.addMenuItem("Calum Gilchrist");
-		creditsMenu.addMenuItem("Daniel Bell");
-		creditsMenu.addMenuItem("Back");
-		
-		menuItemLayers = creditsMenu.getMenuItems();
-	    for(MenuItem l : menuItemLayers){
-	    	menuLayer.add(l.getLayer());
-	    }
-	    
-	    graphics().rootLayer().add(menuLayer);
+		menus.menuInit();
 	}
 
 	public void gameInit() {
 		Globals.state = Globals.STATE_GAME;
-		graphics().rootLayer().remove(menuLayer);
+		graphics().rootLayer().remove(menus.menuLayer);
 
 		planetoids = new ArrayList<Asteroid>();
 		destroyList = new ArrayList<Body>();
@@ -193,8 +156,6 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 				}
 			}
 		}
-		
-
 	}
 
 	@Override
@@ -220,35 +181,12 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		int mousey = (int) event.y();
 		
 		if(Globals.state == Globals.STATE_MENU){			
-			for(MenuItem mi : menuItemLayers){
-				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
-					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
-						if(mi.getText() == "New Game"){
-							gameInit();
-						}
-						else if(mi.getText() == "Credits"){
-							creditsMenuInit();
-						}
-						else if(mi.getText() == "Exit"){
-							System.exit(0);
-						}
-					}
-				}
+			if(menus.handleMainMenu(mousex,mousey)){
+				gameInit();
 			}
-			
-			System.out.println(mousex+ ","+mousey);
 		}
 		else if(Globals.state == Globals.STATE_CREDITS){
-			for(MenuItem mi : menuItemLayers){
-				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
-					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
-						if(mi.getText() == "Back"){
-							graphics().rootLayer().remove(menuLayer);
-							menuInit();
-						}
-					}
-				}
-			}
+			menus.handleCreditsMenu(mousex,mousey);
 		}
 	}
 
