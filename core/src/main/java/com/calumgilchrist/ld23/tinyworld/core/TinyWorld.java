@@ -33,8 +33,6 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	Player player;
 	World world;
 
-	private int state;
-
 	private KeyboardInput keyboard;
 
 	private GroupLayer menuLayer;
@@ -44,16 +42,16 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	
 	Sound clickSound;
 	
-	float globalScale;
+	
 
 	@Override
 	public void init() {	
 		keyboard = new KeyboardInput();
-		globalScale = 1.0f;
+		Globals.globalScale = 1.0f;
 				
 		planetoidLayer = graphics().createGroupLayer();
 
-		state = Constants.STATE_MENU;
+		Globals.state = Globals.STATE_MENU;
 		
 		pointer().setListener(this);
 		keyboard = new KeyboardInput();
@@ -103,7 +101,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	}
 
 	public void gameInit() {
-		state = Constants.STATE_GAME;
+		Globals.state = Globals.STATE_GAME;
 		graphics().rootLayer().remove(menuLayer);
 
 		planetoids = new ArrayList<Asteroid>();
@@ -128,7 +126,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
 		
-		playerBodyDef.position.set(playerStart.mul(1/Constants.PHYS_RATIO));
+		playerBodyDef.position.set(playerStart.mul(1/Globals.PHYS_RATIO));
 		
 		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y, planetoidImage), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
@@ -139,9 +137,9 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	}
 	
 	public void setScale(float scale){
-		globalScale = 1/scale;;
+		Globals.globalScale = 1/scale;;
 		player.getSprite().setScale(scale);
-		planetoidLayer.setScale(globalScale);
+		planetoidLayer.setScale(Globals.globalScale);
 	}
 
 	public void createAsteroid(Image asteroid) {
@@ -157,7 +155,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		astrBodyDef.type= BodyType.DYNAMIC;
 		
 		//Initial Position
-		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
+		astrBodyDef.position.set(astrStart.mul(1/Globals.PHYS_RATIO));
 		
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, asteroid), astrBodyDef, world);
 		
@@ -177,7 +175,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 	@Override
 	public void update(float delta) {
 
-		if(state == Constants.STATE_GAME){
+		if(Globals.state == Globals.STATE_GAME){
 			// Values need playing with, and to be stored
 			world.step(60, 6, 3);
 			world.clearForces();
@@ -206,11 +204,11 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 
 	public void cameraFollowPlayer() {
 		int tx;
-		tx = (int) (player.getBody().getWorldCenter().x * Constants.PHYS_RATIO);
+		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
 		tx = tx - (graphics().width());
 
 		int ty;
-		ty = (int) (player.getBody().getWorldCenter().y * Constants.PHYS_RATIO);
+		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
 		ty = ty - (graphics().height());
 
 		planetoidLayer.setOrigin(tx, ty);
@@ -221,7 +219,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		int mousex = (int) event.x();
 		int mousey = (int) event.y();
 		
-		if(state == Constants.STATE_MENU){			
+		if(Globals.state == Globals.STATE_MENU){			
 			for(MenuItem mi : menuItemLayers){
 				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
 					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
@@ -240,7 +238,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 			
 			System.out.println(mousex+ ","+mousey);
 		}
-		else if(state == Constants.STATE_CREDITS){
+		else if(Globals.state == Globals.STATE_CREDITS){
 			for(MenuItem mi : menuItemLayers){
 				if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
 					if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
@@ -358,7 +356,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 				astrBodyDef.type= BodyType.DYNAMIC;
 				
 				//Initial Position
-				astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
+				astrBodyDef.position.set(astrStart.mul(1/Globals.PHYS_RATIO));
 				
 				planet.newBody(astrBodyDef, world);
 			}

@@ -21,7 +21,7 @@ public class Asteroid extends Planetoid {
 	 * @return
 	 */
 	public Vec2 getStartDirVec(float screenWidth, float screenHeight) {
-		Vec2 start = this.getBody().getWorldCenter().mul(Constants.PHYS_RATIO);
+		Vec2 start = this.getBody().getWorldCenter().mul(Globals.PHYS_RATIO);
 		Vec2 dir = new Vec2();
 		
 		//Find where the screen is, so Vec can go through it
