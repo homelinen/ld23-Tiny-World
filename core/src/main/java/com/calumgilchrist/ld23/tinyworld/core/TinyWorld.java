@@ -94,15 +94,10 @@ public class TinyWorld implements Game {
 		//Set up the factory and Asteroids
 		factory = new DynamicFactory(world, planetoidLayer);
 		starFactory = new StarFactory(world,sunImage, planetoidLayer);
-		for (int i = 0; i < 10; i++) {
-			factory.getAsteroid();
-		}
 		
-		for (int i = 0; i < 10; i++) {
-			factory.getComet();
-		}
+		factory.createDebris(5);
 		
-		for (int i = 0; i < 3; i++){
+		for (int i = 0; i < 1; i++){
 			starFactory.getStar(new Vec2(0,0));
 		}
 		
@@ -191,14 +186,8 @@ public class TinyWorld implements Game {
 				player.getBody().setLinearVelocity(new Vec2());
 			}
 			
-			//Creates an asteroid if one was previously destroyed
-			//What happens if two were destroyed?
-			for (int i = 0; i < contactListner.getCreateCount(); i++) {
-				factory.getComet();
-			}
-			
-			contactListner.clearCreateCount();
-			
+			planetoidGenerator();
+
 			cameraFollowPlayer();
 			cameraFollowDebug();
 			
@@ -211,6 +200,18 @@ public class TinyWorld implements Game {
 	@Override
 	public int updateRate() {
 		return 25;
+	}
+	
+	/**
+	 * Generate deleted planetoids and replace them
+	 */
+	public void planetoidGenerator() {
+		
+		//Creates an asteroid if one was previously destroyed
+		//What happens if two were destroyed?
+		factory.createDebris(contactListner.getCreateCount());
+		
+		contactListner.clearCreateCount();
 	}
 	
 	// Translates the planetoid layer so that the player planet is always centre

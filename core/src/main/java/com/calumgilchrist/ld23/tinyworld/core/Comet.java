@@ -9,4 +9,8 @@ public class Comet extends Planetoid{
 		super(s, bodyDef, world, m);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Comet() {
+		super();
+	}
 }
