@@ -3,7 +3,6 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
 
