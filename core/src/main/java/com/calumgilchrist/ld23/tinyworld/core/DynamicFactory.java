@@ -142,7 +142,7 @@ public class DynamicFactory extends Factory {
 	 * @param body - Child body to be destroyed
 	 */
 	public static void removeByBody(Body body) {
-		Asteroid astr = getFromBody(body);
+		Planetoid astr = getFromBody(body);
 		remove(astr);
 	}
 	
@@ -151,9 +151,9 @@ public class DynamicFactory extends Factory {
 	 * @param body
 	 * @return
 	 */
-	public static Asteroid getFromBody(Body body) {
+	public static Planetoid getFromBody(Body body) {
 		boolean found = false;
-		Asteroid planet = null;
+		Planetoid planet = null;
 				
 		Iterator<Planetoid> it = instances.iterator();
 		
@@ -162,7 +162,7 @@ public class DynamicFactory extends Factory {
 		 * TODO: Use something better than O(n)
 		 */
 		while (it.hasNext()) {
-			planet = (Asteroid) it.next();
+			planet = it.next();
 			if (planet.getBody().equals(body)) {
 				
 				found = true;
