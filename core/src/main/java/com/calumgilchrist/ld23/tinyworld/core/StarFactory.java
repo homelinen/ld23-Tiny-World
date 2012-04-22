@@ -2,6 +2,8 @@ package com.calumgilchrist.ld23.tinyworld.core;
 
 import static playn.core.PlayN.graphics;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -14,9 +16,11 @@ import playn.core.Image;
 
 public class StarFactory extends Factory{
 
+	private static ArrayList<Star> instances;
+	
 	public StarFactory(World world, Image img, GroupLayer layer) {
 		super(world, img, layer);
-		// TODO Auto-generated constructor stub
+		instances = new ArrayList<Star>();
 	}
 	
 	public Star getStar(Vec2 startPosition) {
@@ -92,5 +96,29 @@ public class StarFactory extends Factory{
 		}
 
 		return pos;
+	}
+	
+	/**
+	 * Return the heat from the stars at point
+	 */
+	public static float getHeat(Vec2 point) {
+		float thermalConstant = 1E6f;
+		float heatTotal = 0;
+		
+		//Get from sun
+		float heatSource = 0;
+		float distance;
+		
+		
+		for (Star star : instances) {
+			heatSource = star.getTemp();
+			distance = star.getBody().getPosition().mul(Globals.PHYS_RATIO).sub(point).lengthSquared();
+			
+			//Constant * heatSource
+			//			 distance^2  		
+			heatTotal += thermalConstant * (heatSource / (distance * distance));
+		}
+		
+		return heatTotal;
 	}
 }

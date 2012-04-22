@@ -16,15 +16,7 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	
 	@Override
 	public void beginContact(Contact contact) {
-		Body hitter;
 		
-		//Fixture A is never the contact, I think
-		if (player.getBody().equals(contact.getFixtureB().m_body)) {
-			
-			hitter = contact.getFixtureA().m_body;
-			player.addMass(hitter.m_mass);
-			DynamicFactory.removeByBody(hitter);
-		}
 	}
 
 	@Override
@@ -39,6 +31,14 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
+		Body hitter;
+		
+		//Fixture A is never the contact, I think
+		if (player.getBody().equals(contact.getFixtureB().m_body)) {
+			
+			hitter = contact.getFixtureA().m_body;
+			player.addMass(hitter.m_mass);
+			DynamicFactory.removeByBody(hitter);
+		}
 	}
 }

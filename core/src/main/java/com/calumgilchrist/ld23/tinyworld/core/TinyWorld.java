@@ -121,6 +121,8 @@ public class TinyWorld implements Game {
 		setScale(2.0f);
 		
 		debugInit();
+		
+		System.out.println("Heat: " + StarFactory.getHeat(new Vec2(100,100)));
 	}
 	
 	public void debugInit() {
