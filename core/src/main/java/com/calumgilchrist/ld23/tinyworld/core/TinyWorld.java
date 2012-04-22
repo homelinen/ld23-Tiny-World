@@ -39,6 +39,8 @@ public class TinyWorld implements Game, ContactListener {
 	
 	private GroupLayer planetoidLayer;
 	
+	boolean createAstr;
+	
 	Menus menus;
 	
 	Sound clickSound;
@@ -49,6 +51,8 @@ public class TinyWorld implements Game, ContactListener {
 		
 		keyboard = new KeyboardInput();
 		mouse = new MouseInput(this);
+		
+		createAstr = false;
 		
 		Globals.globalScale = 1.0f;
 				
@@ -72,7 +76,6 @@ public class TinyWorld implements Game, ContactListener {
 		destroyList = new ArrayList<Body>();
 		planetoidLayer = graphics().createGroupLayer();
 
-		// Load grey asteroid image asset
 		Image asteroidImage = assets().getImage("images/bubbly-asteroid.png");
 		Image planetoidImage = assets().getImage("images/planetoid.png");
 
@@ -80,15 +83,13 @@ public class TinyWorld implements Game, ContactListener {
 		world = new World(new Vec2(), false);
 		world.setContactListener(this);
 		
-		
-		astrFactory = new AsteroidFactory(world, asteroidImage);
-		Asteroid astr;
-		for (int i = 0; i < 30; i++) {
-			astr = AsteroidFactory.getAsteroid(100);
-			planetoidLayer.add(astr.getSprite().getImageLayer());
+		//Set up the factory and Asteroids
+		astrFactory = new AsteroidFactory(world, asteroidImage, planetoidLayer);
+		for (int i = 0; i < 10; i++) {
+			astrFactory.getAsteroid(10);
 		}
 		
-		
+		//Set up player
 		Vec2 playerStart = new Vec2(graphics().width() / 2,
 				graphics().height() / 2);
 
@@ -126,7 +127,20 @@ public class TinyWorld implements Game, ContactListener {
 			world.step(30, 6, 3);
 			world.clearForces();
 	
-			player.applyThrust(keyboard.getMovement());
+			if (!keyboard.isSpaceDown()) {
+				player.applyThrust(keyboard.getMovement());
+			} else {
+				//When space is pressed, set Velocity to 0
+				player.getBody().setLinearVelocity(new Vec2());
+			}
+			
+			//Creates an asteroid if one was previosuly destroyed
+			//What happens if two were destroyed?
+			if (createAstr) {
+				astrFactory.getAsteroid(1);
+				createAstr = false;
+			}
+			
 			cameraFollowPlayer();
 			player.update();
 	
@@ -149,12 +163,11 @@ public class TinyWorld implements Game, ContactListener {
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
 		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
 		
-		System.out.println(tx + "," + ty);
-
 		planetoidLayer.setOrigin(tx, ty);
 	}
 
 	public void movePlayer() {
+		//What is this?
 	}
 
 	@Override
@@ -165,8 +178,10 @@ public class TinyWorld implements Game, ContactListener {
 		if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
 			hitter = contact.getFixtureA().m_body;
-			player.addMass(contact.getFixtureA().m_body.m_mass);
+			player.addMass(hitter.m_mass);
 			astrFactory.removeAstrByBody(hitter);
+			
+//			planetoidLayer.add(astrFactory.getAsteroid(150).getSprite().getImageLayer());
 		}
 	}
 
@@ -178,7 +193,6 @@ public class TinyWorld implements Game, ContactListener {
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
 		
 	}
 
