@@ -9,6 +9,7 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+
 import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
@@ -29,6 +30,8 @@ public class TinyWorld implements Game {
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
+	private ContactListener contactListner;
+	
 	private static GroupLayer planetoidLayer;
 	Image planetoidImage;
 	
@@ -104,6 +107,9 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 		
+		contactListner = new ContactListener(player);
+		world.setContactListener(contactListner);
+
 		setScale(2.0f);
 	}
 	

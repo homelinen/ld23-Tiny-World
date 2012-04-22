@@ -141,7 +141,7 @@ public class DynamicFactory extends Factory {
 	 * Find the Asteroid then tell it to be removed
 	 * @param body - Child body to be destroyed
 	 */
-	public void removeFromBody(Body body) {
+	public static void removeByBody(Body body) {
 		Asteroid astr = getFromBody(body);
 		remove(astr);
 	}
@@ -151,7 +151,7 @@ public class DynamicFactory extends Factory {
 	 * @param body
 	 * @return
 	 */
-	public Asteroid getFromBody(Body body) {
+	public static Asteroid getFromBody(Body body) {
 		boolean found = false;
 		Asteroid planet = null;
 				
@@ -176,7 +176,7 @@ public class DynamicFactory extends Factory {
 		}
 	}
 
-	private void remove(Planetoid astr) {
+	private static void remove(Planetoid astr) {
 		
 		instances.remove(astr);
 		
