@@ -24,6 +24,10 @@ public class TinyWorld implements Game {
 	ArrayList<Asteroid> planetoids;
 	ArrayList<Body> destroyList;
 
+	int frameCount;
+	int fps;
+	long oldTime;
+	
 	Player player;
 	World world;
 
@@ -43,8 +47,6 @@ public class TinyWorld implements Game {
 	private static GroupLayer planetoidLayer;
 	Image planetoidImage;
 	
-	boolean createAstr;
-	
 	Menus menus;
 	
 	Sound clickSound;
@@ -56,10 +58,13 @@ public class TinyWorld implements Game {
 		keyboard = new KeyboardInput();
 		mouse = new MouseInput(this);
 		
-		createAstr = false;
-		
 		Globals.globalScale = 1.0f;
-				
+		
+		//FPS
+		frameCount = 0;
+		fps = 0;
+		oldTime = System.nanoTime();
+		
 		planetoidLayer = graphics().createGroupLayer();
 		
 		planetoidImage = assets().getImage("images/planetoid.png");
@@ -127,7 +132,7 @@ public class TinyWorld implements Game {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
-		int scaleCanvasSize = 10;
+		int scaleCanvasSize = 1;
 		canv = graphics().createImage(graphics().width() * scaleCanvasSize,graphics().height() * scaleCanvasSize);
 		debugDraw.setCanvas(canv);
 		debugDraw.setFlipY(false);
@@ -160,6 +165,15 @@ public class TinyWorld implements Game {
 			canv.canvas().clear();
 			world.drawDebugData();
 		}
+		
+		frameCount++;
+		
+		if (frameCount>100) {
+			int time = (int) ((System.nanoTime() - oldTime) / (long) 1E9f); 
+			fps =  frameCount /  time;
+			System.out.println("FPS: " + fps);
+			frameCount -= 50;
+		}
 	}
 
 	@Override
@@ -180,10 +194,22 @@ public class TinyWorld implements Game {
 			
 			//Creates an asteroid if one was previosuly destroyed
 			//What happens if two were destroyed?
-			if (createAstr) {
-				factory.getAsteroid(1);
-				createAstr = false;
+			for (int i = 0; i < contactListner.getCreateCount(); i++) {
+				factory.getComet(1);
+				System.out.println("Create Asteroid?");
 			}
+			
+			System.out.println("Frame: " + frameCount);
+			if (frameCount > 300) {
+				while (world.getBodyCount() > 0) {
+					System.out.println("Rem");
+					DynamicFactory.removeByBody(world.getBodyList());
+				}
+				frameCount = 0;
+				System.out.println("Destryoed!");
+			}
+			
+			contactListner.resetCreateCount();
 			
 			cameraFollowPlayer();
 			cameraFollowDebug();
