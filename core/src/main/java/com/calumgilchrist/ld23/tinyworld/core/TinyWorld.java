@@ -3,8 +3,6 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 
 import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.common.Vec2;
@@ -12,7 +10,6 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.contacts.Contact;
 
 import playn.core.CanvasImage;
 import playn.core.DebugDrawBox2D;
@@ -118,6 +115,15 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 		
+		contactListner = new ContactListener(player);
+		world.setContactListener(contactListner);
+
+		setScale(2.0f);
+		
+		debugInit();
+	}
+	
+	public void debugInit() {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
@@ -137,12 +143,8 @@ public class TinyWorld implements Game {
 		debugLayer.setImage(canv);
 		
 		graphics().rootLayer().add(debugLayer);
-
-		contactListner = new ContactListener(player);
-		world.setContactListener(contactListner);
-
-		setScale(2.0f);
 	}
+	
 	
 	public void setScale(float scale){
 		Globals.globalScale = 1/scale;

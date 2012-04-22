@@ -30,8 +30,6 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	@Override
 	public void endContact(Contact contact) {
 		// TODO Auto-generated method stub
-		contact.getFixtureB().m_body.setLinearVelocity(new Vec2 (0,0));
-		
 	}
 
 	@Override
