@@ -25,7 +25,7 @@ import playn.core.Pointer;
 import playn.core.Sound;
 import playn.core.Pointer.Event;
 
-public class TinyWorld implements Game, Pointer.Listener, ContactListener {
+public class TinyWorld implements Game, ContactListener {
 
 	ArrayList<Asteroid> planetoids;
 	ArrayList<Body> destroyList;
@@ -52,7 +52,7 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 
 		Globals.state = Globals.STATE_MENU;
 		
-		pointer().setListener(this);
+		
 		keyboard = new KeyboardInput();
 		
 		// create and add background image layer
@@ -175,26 +175,6 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 		planetoidLayer.setOrigin(tx, ty);
 	}
 
-	@Override
-	public void onPointerStart(playn.core.Pointer.Event event) {
-		int mousex = (int) event.x();
-		int mousey = (int) event.y();
-		
-		if(Globals.state == Globals.STATE_MENU){			
-			if(menus.handleMainMenu(mousex,mousey)){
-				gameInit();
-			}
-		}
-		else if(Globals.state == Globals.STATE_CREDITS){
-			menus.handleCreditsMenu(mousex,mousey);
-		}
-	}
-
-	@Override
-	public void onPointerEnd(playn.core.Pointer.Event event) {
-		
-	}
-
 	/**
 	 * Get the starting position of an object
 	 * 
@@ -299,10 +279,5 @@ public class TinyWorld implements Game, Pointer.Listener, ContactListener {
 				planet.newBody(astrBodyDef, world);
 			}
 		}
-	}
-
-	public void onPointerDrag(Event event) {
-		// TODO Auto-generated method stub
-
 	}
 }
