@@ -12,29 +12,33 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
+import playn.core.GroupLayer;
 import playn.core.Image;
 
 public class  AsteroidFactory{
 
 	static World world;
 	static Image img;
+	GroupLayer astrLayer;
 	
 	private static ArrayList<Asteroid> instances = new ArrayList<Asteroid>();
 	private ArrayList<Body> destroyList;
 	
-	public AsteroidFactory(World world, Image img) {
+	public AsteroidFactory(World world, Image img, GroupLayer layer) {
 		AsteroidFactory.world = world;
 		AsteroidFactory.img = img;
+		astrLayer = layer;
+		
 		destroyList = new ArrayList<Body>();
 	}
 	
-	public static Asteroid getAsteroid(float forceFactor) {
+	public Asteroid getAsteroid(float forceFactor) {
 		
 		//TODO: Randomise Force
 		
 		//Start Vector off screen (This should be random)
 		Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
-
+		
 		// Set up an asteroid
 		BodyDef astrBodyDef = new BodyDef();
 		astrBodyDef.type= BodyType.DYNAMIC;
@@ -47,15 +51,15 @@ public class  AsteroidFactory{
 		astr.applyThrust(astr.getThrustForce(forceFactor));
 		
 		instances.add(astr);
-		return astr;
+		astrLayer.add(astr.getSprite().getImageLayer());
 		
+		return astr;
 	}
 
 	public void update() {		
 		//Destroy bodies to be destroyed
 		for (Body body: destroyList) {
-			world.destroyBody(body);	
-			getAsteroid(150);
+			world.destroyBody(body);
 		}
 		
 		// For every planetoid update it's sprite
@@ -65,7 +69,6 @@ public class  AsteroidFactory{
 		}
 		
 		destroyList.clear();
-		
 	}
 	
 	/**
