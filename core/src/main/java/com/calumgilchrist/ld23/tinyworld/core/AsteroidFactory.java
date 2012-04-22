@@ -52,8 +52,6 @@ public class  AsteroidFactory{
 		
 		astr.applyThrust(astr.getThrustForce(forceFactor));
 		
-		System.out.println("astrPos: " + astr.getBody().getWorldCenter());
-		
 		instances.add(astr);
 		astrLayer.add(astr.getSprite().getImageLayer());
 		
