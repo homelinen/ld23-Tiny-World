@@ -91,11 +91,11 @@ public class TinyWorld implements Game {
 		factory = new DynamicFactory(world, planetoidLayer);
 		starFactory = new StarFactory(world,sunImage, planetoidLayer);
 		for (int i = 0; i < 10; i++) {
-			factory.getAsteroid(10);
+			factory.getAsteroid();
 		}
 		
 		for (int i = 0; i < 10; i++) {
-			factory.getComet(10);
+			factory.getComet();
 		}
 		
 		for (int i = 0; i < 3; i++){
@@ -137,7 +137,7 @@ public class TinyWorld implements Game {
 		debugDraw.setFillAlpha(50);
 		debugDraw.setStrokeWidth(1.0f);
 		debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
-		debugDraw.setCamera(0, 0, Globals.globalScale * Globals.PHYS_RATIO); 
+		debugDraw.setCamera(0, 0, 2); 
 		
 		world.setDebugDraw(this.debugDraw);
 		
@@ -183,7 +183,7 @@ public class TinyWorld implements Game {
 			//Creates an asteroid if one was previosuly destroyed
 			//What happens if two were destroyed?
 			if (createAstr) {
-				factory.getAsteroid(1);
+				factory.getAsteroid();
 				createAstr = false;
 			}
 			
