@@ -37,7 +37,7 @@ public class TinyWorld implements Game, ContactListener {
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 	
-	private GroupLayer planetoidLayer;
+	public GroupLayer planetoidLayer;
 	
 	Menus menus;
 	
@@ -81,7 +81,7 @@ public class TinyWorld implements Game, ContactListener {
 		world.setContactListener(this);
 		
 		
-		astrFactory = new AsteroidFactory(world, asteroidImage);
+		astrFactory = new AsteroidFactory(world, asteroidImage,this);
 		Asteroid astr;
 		for (int i = 0; i < 30; i++) {
 			astr = AsteroidFactory.getAsteroid(100);
@@ -100,13 +100,12 @@ public class TinyWorld implements Game, ContactListener {
 		player = new Player(new Sprite((int) playerStart.x, (int) playerStart.y, planetoidImage), playerBodyDef, world);
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
-		//planetoidLayer.setScale(globalScale/2);
 		
 		setScale(2.0f);
 	}
 	
 	public void setScale(float scale){
-		Globals.globalScale = 1/scale;;
+		Globals.globalScale = 1/scale;
 		player.getSprite().setScale(scale);
 		planetoidLayer.setScale(Globals.globalScale);
 	}
@@ -149,8 +148,6 @@ public class TinyWorld implements Game, ContactListener {
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
 		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
 		
-		System.out.println(tx + "," + ty);
-
 		planetoidLayer.setOrigin(tx, ty);
 	}
 
@@ -163,7 +160,6 @@ public class TinyWorld implements Game, ContactListener {
 		
 		//Fixture A is never the contact, I think
 		if (player.getBody().equals(contact.getFixtureB().m_body)) {
-			
 			hitter = contact.getFixtureA().m_body;
 			player.addMass(contact.getFixtureA().m_body.m_mass);
 			astrFactory.removeAstrByBody(hitter);

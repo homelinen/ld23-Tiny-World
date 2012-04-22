@@ -4,6 +4,7 @@ import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -11,21 +12,24 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.joints.JointEdge;
 
 import playn.core.Image;
 
 public class  AsteroidFactory{
 
 	static World world;
+	private static TinyWorld root;
 	static Image img;
 	
 	private static ArrayList<Asteroid> instances = new ArrayList<Asteroid>();
 	private ArrayList<Body> destroyList;
 	
-	public AsteroidFactory(World world, Image img) {
+	public AsteroidFactory(World world, Image img, TinyWorld root) {
 		AsteroidFactory.world = world;
 		AsteroidFactory.img = img;
 		destroyList = new ArrayList<Body>();
+		this.root = root;
 	}
 	
 	public static Asteroid getAsteroid(float forceFactor) {
@@ -45,17 +49,24 @@ public class  AsteroidFactory{
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, img), astrBodyDef, world);
 		
 		astr.applyThrust(astr.getThrustForce(forceFactor));
+		root.planetoidLayer.add(astr.getSprite().getImageLayer());
 		
 		instances.add(astr);
-		return astr;
 		
+		return astr;
 	}
 
 	public void update() {		
 		//Destroy bodies to be destroyed
-		for (Body body: destroyList) {
-			world.destroyBody(body);	
-			getAsteroid(150);
+		if(!world.isLocked()){
+			for (Body body: destroyList) {
+				
+				body.destroyFixture(body.getFixtureList());
+				
+				world.destroyBody(body);	
+				// getAsteroid(150);
+				body = null;
+			}
 		}
 		
 		// For every planetoid update it's sprite
@@ -67,6 +78,7 @@ public class  AsteroidFactory{
 		destroyList.clear();
 		
 	}
+
 	
 	/**
 	 * Get the starting position of an object
@@ -181,6 +193,9 @@ public class  AsteroidFactory{
 		
 		//Destroy the planet
 		destroyList.add(astr.getBody());
+		
+		root.planetoidLayer.remove(astr.getSprite().getImageLayer());
 		astr.getSprite().getImageLayer().destroy();
+		System.out.println(astr.getSprite().getImageLayer().destroyed());
 	}
 }
