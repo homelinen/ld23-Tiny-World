@@ -24,8 +24,8 @@ public class StarFactory extends Factory{
 	}
 	
 	public Star getStar(Vec2 startPosition) {
-		//TODO: Randomise Force
 		
+		int starWeight = 100000;
 		//Start Vector off screen (This should be random)
 		startPosition = genStartPos(graphics().width(), graphics().height());
 		
@@ -38,7 +38,7 @@ public class StarFactory extends Factory{
 		
 		startPosition.mulLocal(Globals.globalScale);
 		
-		Star star = new Star(new Sprite((int) startPosition.x, (int) startPosition.y, img), astrBodyDef, world);
+		Star star = new Star(new Sprite((int) startPosition.x, (int) startPosition.y, img), astrBodyDef, world, starWeight);
 		
 		instances.add(star);
 		layer.add(star.getSprite().getImageLayer());

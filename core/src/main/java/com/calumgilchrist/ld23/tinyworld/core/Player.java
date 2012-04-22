@@ -5,7 +5,7 @@ import org.jbox2d.dynamics.World;
 
 public class Player extends Planetoid {
 	public Player(Sprite s, BodyDef bodyDef, World world) {
-		super(s, bodyDef, world);
+		super(s, bodyDef, world, 1);
 
 	}
 

@@ -29,6 +29,15 @@ public class Sprite {
 		//Need to do this to initialise the imageLayer
 		update();
 	}
+
+	/**
+	 * Empty Constructor
+	 * 
+	 * Really, don't use it
+	 */
+	public Sprite() {
+		
+	}
 	
 	public float getScale() {
 		return scale;
