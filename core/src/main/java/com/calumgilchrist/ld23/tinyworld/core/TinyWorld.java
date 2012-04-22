@@ -21,9 +21,7 @@ import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.Pointer;
 import playn.core.Sound;
-import playn.core.Pointer.Event;
 
 public class TinyWorld implements Game, ContactListener {
 
@@ -34,6 +32,7 @@ public class TinyWorld implements Game, ContactListener {
 	World world;
 
 	private KeyboardInput keyboard;
+	private MouseInput mouse;
 	
 	private GroupLayer planetoidLayer;
 	
@@ -46,15 +45,14 @@ public class TinyWorld implements Game, ContactListener {
 		menus = new Menus();
 		
 		keyboard = new KeyboardInput();
+		mouse = new MouseInput(this);
+		
 		Globals.globalScale = 1.0f;
 				
 		planetoidLayer = graphics().createGroupLayer();
 
 		Globals.state = Globals.STATE_MENU;
-		
-		
-		keyboard = new KeyboardInput();
-		
+				
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
