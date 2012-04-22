@@ -11,6 +11,7 @@ public class Player extends Planetoid {
 	
 	}
 	
+	//TODO: Score or counter for mass (Increase in size would suffice
 	/**
 	 * Add mass to the object
 	 * @param mass
@@ -21,5 +22,7 @@ public class Player extends Planetoid {
 		float newMass = oldMass + mass;
 		
 		this.getBody().m_mass = newMass;
+		
+		System.out.println("Mass: " + newMass);
 	}
 }
