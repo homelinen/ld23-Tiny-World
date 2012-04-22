@@ -40,7 +40,7 @@ public class  AsteroidFactory{
 		astrBodyDef.type= BodyType.DYNAMIC;
 		
 		//Initial Position
-		astrBodyDef.position.set(astrStart.mul(1/Constants.PHYS_RATIO));
+		astrBodyDef.position.set(astrStart.mul(1/Globals.PHYS_RATIO));
 		
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, img), astrBodyDef, world);
 		
