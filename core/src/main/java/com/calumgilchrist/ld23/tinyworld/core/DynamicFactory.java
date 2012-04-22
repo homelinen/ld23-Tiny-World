@@ -24,7 +24,7 @@ public class DynamicFactory extends Factory {
 		super(world, 
 				layer);
 		asteroidImage = assets().getImage("images/bubbly-asteroid.png");
-		planetoidImage = assets().getImage("images/planetoid.png");
+		planetoidImage = assets().getImage("images/comet.png");
 	}
 
 	public Asteroid getAsteroid(float forceFactor) {
