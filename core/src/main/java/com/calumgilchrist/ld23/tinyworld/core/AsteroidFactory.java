@@ -51,6 +51,8 @@ public class  AsteroidFactory{
 		//Initial Position
 		astrBodyDef.position.set(astrStart.mul(1/Globals.PHYS_RATIO));
 		
+		astrStart.mulLocal(Globals.globalScale);
+		
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x, (int) astrStart.y, img), astrBodyDef, world);
 		
 		astr.applyThrust(astr.getThrustForce(forceFactor));
@@ -85,9 +87,32 @@ public class  AsteroidFactory{
 	 * @return
 	 */
 	private static Vec2 genStartPos(int width, int height) {
-
-		float x = getSpawnBound(-width, width);
-		float y = getSpawnBound(-height, height);
+		
+		Random rand = new Random();
+		float x = 0;
+		float y = 0;
+		
+		int maxRand = 0;
+		
+		boolean xOffScreen = rand.nextBoolean();
+		
+		//Select a position off screen, and any other position
+		//Between min and max (-height, height for y)
+		if (xOffScreen) {
+			x = getSpawnBound(-width, width);
+			
+			maxRand = height * 2; 
+			
+			//Get position between height and -height
+			y = rand.nextInt(maxRand) - height;
+		} else {
+			y = getSpawnBound(-height, height);
+			
+			maxRand = height * 2; 
+			
+			//Get position between width and -width
+			x = rand.nextInt(maxRand) - width;
+		}
 
 		Vec2 pos = new Vec2(x, y);
 
