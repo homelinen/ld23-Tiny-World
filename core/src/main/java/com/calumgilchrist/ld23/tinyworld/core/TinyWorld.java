@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -16,11 +17,15 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import playn.core.CanvasImage;
+import playn.core.CanvasLayer;
+import playn.core.DebugDrawBox2D;
 import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Sound;
+import playn.core.SurfaceLayer;
 
 public class TinyWorld implements Game {
 
@@ -38,6 +43,10 @@ public class TinyWorld implements Game {
 	private MouseInput mouse;
 
 	private static GroupLayer planetoidLayer;
+	private ImageLayer debugLayer;
+	
+	private DebugDrawBox2D debugDraw;
+	private CanvasImage canv;
 	
 	boolean createAstr;
 	
@@ -79,9 +88,10 @@ public class TinyWorld implements Game {
 		Image asteroidImage = assets().getImage("images/bubbly-asteroid.png");
 		Image planetoidImage = assets().getImage("images/planetoid.png");
 
+		System.out.println(asteroidImage);
 		// Set up the world
 		world = new World(new Vec2(), false);
-		
+				
 		//Set up the factory and Asteroids
 		astrFactory = new AsteroidFactory(world, asteroidImage, planetoidLayer);
 		for (int i = 0; i < 10; i++) {
@@ -101,6 +111,25 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 		
+		//Debug stuff
+		debugDraw = new DebugDrawBox2D();
+		
+		canv = graphics().createImage(640,480);
+				
+		debugDraw.setCanvas(canv);
+		debugDraw.setFlipY(false);
+		debugDraw.setStrokeAlpha(100);
+		debugDraw.setFillAlpha(50);
+		debugDraw.setStrokeWidth(1.0f);
+		debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
+		debugDraw.setCamera(0, 0, 2f); 
+		
+		world.setDebugDraw(this.debugDraw);
+		
+		debugLayer = graphics().createImageLayer();
+		debugLayer.setImage(canv);
+		
+		graphics().rootLayer().add(debugLayer);
 		world.setContactListener(player);
 		setScale(2.0f);
 	}
@@ -115,16 +144,22 @@ public class TinyWorld implements Game {
 	public void paint(float alpha) {
 		// the background automatically paints itself, so no need to do anything
 		// here!
-
+		if(Globals.state == Globals.STATE_GAME){
+			canv.canvas().clear();
+			world.drawDebugData();
+		}
 	}
 
 	@Override
 	public void update(float delta) {
-
+		
 		if(Globals.state == Globals.STATE_GAME){
+			world.drawDebugData();
+						
 			// Values need playing with, and to be stored
 			world.step(30, 6, 3);
 			world.clearForces();
+			
 	
 			if (!keyboard.isSpaceDown()) {
 				player.applyThrust(keyboard.getMovement());
@@ -141,6 +176,8 @@ public class TinyWorld implements Game {
 			}
 			
 			cameraFollowPlayer();
+			cameraFollowDebug();
+			
 			player.update();
 	
 			astrFactory.update();
@@ -163,6 +200,18 @@ public class TinyWorld implements Game {
 		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
 		
 		planetoidLayer.setOrigin(tx, ty);
+	}
+	
+	public void cameraFollowDebug() {
+		int tx;
+		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
+		tx = (int) (tx - graphics().width()/2);
+
+		int ty;
+		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
+		ty = (int) (ty - graphics().height()/2);
+		
+		debugLayer.setOrigin(tx, ty);
 	}
 
 	public void movePlayer() {
