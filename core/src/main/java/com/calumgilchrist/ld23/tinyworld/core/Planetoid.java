@@ -60,7 +60,7 @@ public abstract class Planetoid {
 		
 CircleShape circle = new CircleShape();
 		
-		circle.m_radius = this.sprite.getWidth() * Globals.globalScale / Globals.PHYS_RATIO / Globals.magicBoundRatio;
+		circle.m_radius = this.sprite.getWidth() / Globals.PHYS_RATIO / Globals.magicBoundRatio;
 		
 		this.getSprite().setX((int) center.x);
 		this.getSprite().setY((int) center.y);
