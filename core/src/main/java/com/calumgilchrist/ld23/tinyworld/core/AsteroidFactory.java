@@ -17,12 +17,12 @@ import playn.core.Image;
 
 public class  AsteroidFactory{
 
-	static World world;
-	static Image img;
-	GroupLayer astrLayer;
+	private static World world;
+	private static Image img;
+	private static GroupLayer astrLayer;
 	
 	private static ArrayList<Asteroid> instances = new ArrayList<Asteroid>();
-	private ArrayList<Body> destroyList;
+	private static ArrayList<Body> destroyList;
 	
 	public AsteroidFactory(World world, Image img, GroupLayer layer) {
 		AsteroidFactory.world = world;
@@ -32,7 +32,7 @@ public class  AsteroidFactory{
 		destroyList = new ArrayList<Body>();
 	}
 	
-	public Asteroid getAsteroid(float forceFactor) {
+	public static Asteroid getAsteroid(float forceFactor) {
 		
 		//TODO: Randomise Force
 		
@@ -164,7 +164,7 @@ public class  AsteroidFactory{
 	 * Find the Asteroid then tell it to be removed
 	 * @param body - Child body to be destroyed
 	 */
-	public void removeAstrByBody(Body body) {
+	public static void removeAstrByBody(Body body) {
 		Asteroid astr = getAstrFromBody(body);
 		removeAstr(astr);
 	}
@@ -174,7 +174,7 @@ public class  AsteroidFactory{
 	 * @param body
 	 * @return
 	 */
-	public Asteroid getAstrFromBody(Body body) {
+	public static Asteroid getAstrFromBody(Body body) {
 		boolean found = false;
 		Asteroid planet = null;
 				
@@ -203,7 +203,7 @@ public class  AsteroidFactory{
 	 * Remove all instances of Asteroid
 	 * @param astr
 	 */
-	private void removeAstr(Asteroid astr) {
+	private static void removeAstr(Asteroid astr) {
 		
 		instances.remove(astr);
 		
