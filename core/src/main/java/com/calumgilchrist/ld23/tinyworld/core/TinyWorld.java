@@ -3,18 +3,12 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 
-import org.jbox2d.callbacks.ContactImpulse;
-import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.contacts.Contact;
 
 import playn.core.Game;
 import playn.core.GroupLayer;
@@ -37,6 +31,8 @@ public class TinyWorld implements Game {
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
+	private ContactListener contactListner;
+	
 	private static GroupLayer planetoidLayer;
 	
 	boolean createAstr;
@@ -101,7 +97,8 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 		
-		world.setContactListener(player);
+		contactListner = new ContactListener(player);
+		world.setContactListener(contactListner);
 		setScale(2.0f);
 	}
 	
