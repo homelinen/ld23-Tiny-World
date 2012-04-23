@@ -155,7 +155,9 @@ public class TinyWorld implements Game {
 
 		setScale(4.0f);
 		
-		debugInit();
+		if (debugPhysics) {
+			debugInit();
+		}
 		
 		if (showFps) {
 			initFPSCounter();
@@ -241,10 +243,6 @@ public class TinyWorld implements Game {
 		else if(Globals.state == Globals.STATE_GAME){
 			//setScale(player.getMass());
 
-			if (debugPhysics) {
-				world.drawDebugData();
-			}
-
 			// Values need playing with, and to be stored
 			world.step(30, 6, 3);
 			world.clearForces();
@@ -261,7 +259,11 @@ public class TinyWorld implements Game {
 			spawnBodies();
 			
 			cameraFollowPlayer();
-			cameraFollowDebug();
+			
+			if (debugPhysics) {
+				world.drawDebugData();
+				cameraFollowDebug();
+			}
 			
 			player.update();
 	
