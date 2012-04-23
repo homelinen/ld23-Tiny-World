@@ -73,11 +73,11 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	// Work out whether the collision is with a comet or asteroid and apply the correct rule
 	public void discernCollisionType(Planetoid planet){
 		if (planet.getClass().equals((new Asteroid().getClass()))){
-			// System.out.println("Asteroid collision");
+			//System.out.println("Asteroid collision");
 			player.setAtmosphere(player.getAtmosphere()-10);
 		}
 		else{
-			// System.out.println("Comet collision");
+			//System.out.println("Comet collision");
 			player.setAtmosphere(player.getAtmosphere()+5);
 		}
 	}

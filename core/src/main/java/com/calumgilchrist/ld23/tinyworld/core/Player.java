@@ -6,13 +6,13 @@ import org.jbox2d.dynamics.World;
 public class Player extends Planetoid {
 	
 	private int atmosphere;
-	private int heat;
+	private float heat;
 
 	public Player(Sprite s, BodyDef bodyDef, World world) {
 		super(s, bodyDef, world, 1);
 
 		setAtmosphere(0);
-		setHeat(0);
+		heat = 0;
 	}
 
 	// TODO: Score or counter for mass (Increase in size would suffice
@@ -41,11 +41,11 @@ public class Player extends Planetoid {
 		this.atmosphere = atmosphere;
 	}
 	
-	public int getHeat() {
+	public float getHeat() {
 		return heat;
 	}
 
-	public void setHeat(int heat) {
-		this.heat = heat;
+	public void updateHeat() {
+		this.heat = StarFactory.getHeat(this.getBody().getWorldCenter());
 	}
 }

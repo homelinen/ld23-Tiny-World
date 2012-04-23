@@ -112,7 +112,7 @@ public class StarFactory extends Factory{
 		
 		for (Star star : instances) {
 			heatSource = star.getTemp();
-			distance = star.getBody().getPosition().mul(Globals.PHYS_RATIO).sub(point).lengthSquared();
+			distance = star.getBody().getPosition().sub(point).length();
 			
 			//Constant * heatSource
 			//			 distance^2  		
