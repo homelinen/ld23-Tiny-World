@@ -24,18 +24,34 @@ public class TextHandler {
 	private TextFormat textFormat;
 	private CanvasImage canv;
 	private ImageLayer iLayer;
-	private TextLayout textLayer;
+	private TextLayout textLayout;
 	private String message;
 	private Font textFont;
 	
 	private Vec2 pos;
 	
-	public TextHandler(String message, Vec2 pos) {
+	/**
+	 * Create a pre-formatted, white text in Courier 
+	 * message at 12 points
+	 * 
+	 * @param message
+	 * @param pos
+	 */
+	public TextHandler(String message, Vec2 pos, ImageLayer textLayer) {
 		setText(message);
 		
-		textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
+		textFont = graphics().createFont("Courier", Font.Style.PLAIN, 12);
 		textFormat = new TextFormat(textFont, 100, Alignment.LEFT, Color.rgb(255, 255,255), new TextFormat().effect);
-		textLayer = graphics().layoutText("" + message, textFormat);
+		textLayout = graphics().layoutText("" + message, textFormat);
+		
+		iLayer = textLayer;
+	}
+	
+	public TextHandler(String message, Vec2 pos, Font textFont, int color, ImageLayer textLayer) {
+		textFormat = new TextFormat(textFont, 100, Alignment.LEFT, color, new TextFormat().effect);
+		textLayout = graphics().layoutText("" + message, textFormat);
+		
+		iLayer = textLayer;
 	}
 	
 	/**
@@ -44,8 +60,8 @@ public class TextHandler {
 	public void initText() {
 		
 		//TODO: Tweak size
-		canv = graphics().createImage((int) textLayer.width() + 50, (int) textLayer.width() + 50);
-		canv.canvas().drawText(textLayer, 20, 20);
+		canv = graphics().createImage((int) textLayout.width() + 50, (int) textLayout.width() + 50);
+		canv.canvas().drawText(textLayout, 20, 20);
 		iLayer = graphics().createImageLayer(canv);
 		
 		graphics().rootLayer().add(iLayer);
@@ -53,9 +69,9 @@ public class TextHandler {
 	
 	public void drawFpsCounter() {
 		canv.canvas().clear();
-		textLayer = graphics().layoutText("" + message, textFormat);
+		textLayout = graphics().layoutText("" + message, textFormat);
 		
-		canv.canvas().drawText(textLayer, 20, 20);
+		canv.canvas().drawText(textLayout, 20, 20);
 	}
 	
 	public void setText(String text) {
