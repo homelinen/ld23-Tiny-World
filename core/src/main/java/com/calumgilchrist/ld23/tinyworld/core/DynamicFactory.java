@@ -134,7 +134,7 @@ public class DynamicFactory extends Factory {
 	 * @param max
 	 * @return
 	 */
-	private static int getSpawnBound(int min, int max) {
+	private int getSpawnBound(int min, int max) {
 
 		Random rand = new Random();
 
@@ -157,7 +157,7 @@ public class DynamicFactory extends Factory {
 	 * Find the Asteroid then tell it to be removed
 	 * @param body - Child body to be destroyed
 	 */
-	public static void removeByBody(Body body) {
+	public void removeByBody(Body body) {
 		Planetoid astr = getFromBody(body);
 		
 		astr.getBody().destroyFixture(astr.getBody().m_fixtureList);
@@ -173,32 +173,53 @@ public class DynamicFactory extends Factory {
 	 * @param body
 	 * @return
 	 */
-	public static Planetoid getFromBody(Body body) {
-		boolean found = false;
+	public Planetoid getFromBody(Body body) {
 		Planetoid planet = null;
-				
-		Iterator<Planetoid> it = instances.iterator();
 		
 		/*
 		 * Slow and awful
 		 * TODO: Use something better than O(n)
 		 */
-		while (it.hasNext()) {
-			planet = it.next();
-			if (planet.getBody().equals(body)) {
-				
-				found = true;
+		for (Planetoid p : instances) {
+
+			if (p.getBody().equals(body)) {
+				planet = p;
 			}
 		}
 		
-		if (found) {
-			return planet;
-		} else {
-			return null;
-		}
+		return planet;
 	}
 
-	private static void remove(Planetoid astr) {
+//	Old buggy code
+//
+//	public Planetoid getFromBody(Body body) {
+//		boolean found = false;
+//		Planetoid planet = null;
+//
+//		Iterator<Planetoid> it = instances.iterator();
+//
+//		/*
+//		 * Slow and awful TODO: Use something better than O(n)
+//		 */
+//		while (it.hasNext()) {
+//			planet = it.next();
+//			if (planet.getBody().equals(body)) {
+//
+//				found = true;
+//			}
+//		}
+//		if (found) {
+//			return planet;
+//		} else {
+//			return null;
+//		}
+//		return planet;
+//	}
+
+
+               
+		
+	private void remove(Planetoid astr) {
 		
 		if (astr.getClass().equals(new Comet().getClass())) {
 			//Remove a comet from list
@@ -211,6 +232,8 @@ public class DynamicFactory extends Factory {
 		destroyList.add(astr.getBody());
 		
 		astr.getSprite().getImageLayer().destroy();
+		
+		System.out.println(astr.getSprite().getImageLayer());
 	}
 	
 	/**
@@ -233,5 +256,9 @@ public class DynamicFactory extends Factory {
 			}
 			int j=0;
 		}
+	}
+	
+	public void clearAsteroids() {
+		instances.clear();
 	}
 }

@@ -36,7 +36,6 @@ public class Sprite {
 	 * Really, don't use it
 	 */
 	public Sprite() {
-		
 	}
 	
 	public float getScale() {
@@ -71,7 +70,7 @@ public class Sprite {
 	public int getY(){
 		return y;
 	}
-
+	
 	public float getHeight() {
 		return currentImage.height();
 	}

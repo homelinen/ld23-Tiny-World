@@ -153,7 +153,7 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 
-		contactListner = new ContactListener(player);
+		contactListner = new ContactListener(player, factory);
 		world.setContactListener(contactListner);
 
 		setScale(2.0f);
@@ -286,6 +286,12 @@ public class TinyWorld implements Game {
 			} else {
 				// When space is pressed, set Velocity to 0
 				player.getBody().setLinearVelocity(new Vec2());
+			}
+			
+			if (keyboard.ispKeyDown()) {
+				while(world.getBodyList() != null) {
+					factory.clearAsteroids();
+				}
 			}
 
 			planetoidGenerator();

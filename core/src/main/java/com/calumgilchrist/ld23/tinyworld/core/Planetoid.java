@@ -53,7 +53,7 @@ public abstract class Planetoid {
 	public Sprite getSprite(){
 		return sprite;
 	}
-
+	
 	public Body getBody() {
 		return this.pBody;
 	}
