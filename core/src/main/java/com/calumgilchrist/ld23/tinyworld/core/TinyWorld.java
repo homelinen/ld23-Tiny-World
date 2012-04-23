@@ -86,7 +86,7 @@ public class TinyWorld implements Game {
 		graphics().rootLayer().add(bgLayer);
 		
 		graphics().setSize(1336, 768);
-		
+
 		menus.menuInit();
 	}
 
@@ -259,11 +259,11 @@ public class TinyWorld implements Game {
 	public void cameraFollowPlayer() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - ((graphics().width()/2) * (1/Globals.globalScale)) + (player.getSprite().getWidth()));
+		tx = (int) (tx - ((graphics().width()/2) * (1/Globals.globalScale)) + (player.getSprite().getWidth() / 2));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - ((graphics().height()/2) * (1/Globals.globalScale)) + (player.getSprite().getHeight()));
+		ty = (int) (ty - ((graphics().height()/2) * (1/Globals.globalScale)) + (player.getSprite().getHeight() / 2));
 		
 		planetoidLayer.setOrigin(tx, ty);
 	}
