@@ -315,11 +315,11 @@ public class TinyWorld implements Game {
 	public void cameraFollowDebug() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - graphics().width()/2);
+		tx = (int) (tx - (graphics().width()/2) * (1/Globals.globalScale));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - graphics().height()/2);
+		ty = (int) (ty - (graphics().height()/2) * (1/Globals.globalScale));
 		
 		debugLayer.setOrigin(tx, ty);
 	}
