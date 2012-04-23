@@ -38,9 +38,8 @@ public class TinyWorld implements Game {
 	
 	private static final float nanoToSecs = 1E9f;
 
-	private static final int spawnIntervalSecs = 4;
+	private static final int spawnIntervalSecs = 1;
 	private long lastSpawnTime;
-	
 	
 	private static final boolean debugPhysics = false;
 	
@@ -69,15 +68,9 @@ public class TinyWorld implements Game {
 	int frameCount;
 	int fps;
 	long oldTime;
-	private static final boolean showFps = true; 
+	private static final boolean showFps = false; 
 	
 	private TextHandler fpsHandler;
-	
-	//FPS Text Stuff
-	private CanvasImage fpsTextImage;
-	private ImageLayer fpsTextLayer;
-	private TextLayout fpsTextLayout;
-	private TextFormat fpsTextformat;
 	
 	@Override
 	public void init() {	
@@ -174,7 +167,7 @@ public class TinyWorld implements Game {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
-		int scaleCanvasSize = 10;
+		int scaleCanvasSize = 1;
 		canv = graphics().createImage(graphics().width() * scaleCanvasSize,graphics().height() * scaleCanvasSize);
 		debugDraw.setCanvas(canv);
 		debugDraw.setFlipY(false);
@@ -182,12 +175,12 @@ public class TinyWorld implements Game {
 		debugDraw.setFillAlpha(50);
 		debugDraw.setStrokeWidth(1.0f);
 		debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
-		debugDraw.setCamera(0, 0, 2); 
+		debugDraw.setCamera(0, 0, 1f); 
 		
 		world.setDebugDraw(this.debugDraw);
 		
 		debugLayer = graphics().createImageLayer(canv);
-		
+		debugLayer.setTranslation(Globals.PHYS_RATIO, Globals.PHYS_RATIO);
 		graphics().rootLayer().add(debugLayer);
 	}
 	
@@ -330,7 +323,7 @@ public class TinyWorld implements Game {
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
 		ty = (int) (ty - (graphics().height()/2) * (1/Globals.globalScale));
 		
-		debugLayer.setOrigin(tx, ty);
+		//debugLayer.setOrigin(tx, ty);
 	}
 	
 	/**
@@ -338,7 +331,6 @@ public class TinyWorld implements Game {
 	 */
 	public void initFPSCounter() {
 		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
-		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(255, 247, 50), new TextFormat().effect);
 		
 		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20), textFont, Color.rgb(255, 247, 50));
 		

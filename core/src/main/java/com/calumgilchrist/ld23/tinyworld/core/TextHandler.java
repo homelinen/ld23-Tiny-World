@@ -50,6 +50,14 @@ public class TextHandler {
 		this.iLayer = graphics().createImageLayer(canv);
 	}
 	
+	/**
+	 * Create text with message, font and color
+	 * 
+	 * @param message
+	 * @param pos
+	 * @param textFont
+	 * @param color
+	 */
 	public TextHandler(String message, Vec2 pos, Font textFont, int color) {
 		setText(message);
 		
