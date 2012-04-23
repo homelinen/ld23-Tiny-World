@@ -9,5 +9,3 @@
 * Player should be able to receive damage
 * Sound effects
 * Sound options
-* FPS should show on screen
-* FPS should be toggle-able

@@ -41,7 +41,6 @@ public class TinyWorld implements Game {
 	private static final int spawnIntervalSecs = 4;
 	private long lastSpawnTime;
 	
-	
 	private static final boolean debugPhysics = false;
 	
 	MusicPlayer music;
@@ -72,12 +71,6 @@ public class TinyWorld implements Game {
 	private static final boolean showFps = true; 
 	
 	private TextHandler fpsHandler;
-	
-	//FPS Text Stuff
-	private CanvasImage fpsTextImage;
-	private ImageLayer fpsTextLayer;
-	private TextLayout fpsTextLayout;
-	private TextFormat fpsTextformat;
 	
 	@Override
 	public void init() {	
@@ -343,7 +336,6 @@ public class TinyWorld implements Game {
 	 */
 	public void initFPSCounter() {
 		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
-		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(255, 247, 50), new TextFormat().effect);
 		
 		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20), textFont, Color.rgb(255, 247, 50));
 		
