@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import playn.core.GroupLayer;
 
 public class Menus {
+	public ArrayList<Menu> menus;
+	
 	public ArrayList<MenuItem> menuItemLayers;
 	public GroupLayer menuLayer;
 	
 	public void menuInit() {
+		menus = new ArrayList<Menu>();
+		
 		//clickSound = assets().getSound("sounds/select");
 		Globals.currentItem = 0;
 		Globals.menuSin = 0;
