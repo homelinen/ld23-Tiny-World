@@ -9,7 +9,7 @@ public class Player extends Planetoid {
 	private float heat;
 
 	public Player(Sprite s, BodyDef bodyDef, World world) {
-		super(s, bodyDef, world, 1);
+		super(s, bodyDef, world, 1, 1E4f);
 
 		setAtmosphere(0);
 		heat = 0;

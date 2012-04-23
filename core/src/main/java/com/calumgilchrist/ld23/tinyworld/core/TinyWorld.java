@@ -36,10 +36,10 @@ public class TinyWorld implements Game {
 	DynamicFactory factory;
 	StarFactory starFactory;
 
-	private static final float nanoToSecs = 1E9f;
+	private static final float nanoToSecs = 1E3f;
 
 	private static final int spawnIntervalSecs = 1;
-	private long lastSpawnTime;
+	private double lastSpawnTime;
 
 	private static final boolean debugPhysics = false;
 
@@ -65,9 +65,9 @@ public class TinyWorld implements Game {
 	Sound clickSound;
 
 	// FPS
-	int frameCount;
+	double frameCount;
 	int fps;
-	long oldTime;
+	double oldTime;
 	private static final boolean showFps = false;
 
 	private TextHandler fpsHandler;
@@ -89,9 +89,9 @@ public class TinyWorld implements Game {
 		// Set up FPS
 		frameCount = 0;
 		fps = 0;
-		oldTime = System.nanoTime();
-		lastSpawnTime = System.nanoTime();
-
+		oldTime = currentTime();
+		lastSpawnTime = currentTime();
+		
 		planetoidLayer = graphics().createGroupLayer();
 
 		planetoidImage = assets().getImage("images/planetoid.png");
@@ -135,6 +135,7 @@ public class TinyWorld implements Game {
 
 		factory.createDebris(5);
 
+		//TODO: Eh...
 		for (int i = 0; i < 1; i++) {
 			starFactory.getStar(new Vec2(0, 0));
 		}
@@ -213,11 +214,11 @@ public class TinyWorld implements Game {
 				// Calculate FPS
 				frameCount++;
 				if (frameCount > 50) {
-					float curTime = System.nanoTime();
+					double curTime = currentTime();
 
-					float dTime = (curTime - oldTime) / nanoToSecs;
+					double dTime = (curTime - oldTime) / nanoToSecs;
 
-					oldTime = (long) curTime;
+					oldTime = curTime;
 					fps = (int) (frameCount / dTime);
 					frameCount = 0;
 
@@ -321,8 +322,8 @@ public class TinyWorld implements Game {
 	 * Spawn bodies after spawnIntervale frames
 	 */
 	public void spawnBodies() {
-		long curTime = System.nanoTime();
-		long dTime = (long) ((curTime - lastSpawnTime) / nanoToSecs);
+		double curTime = currentTime();
+		double dTime = ((curTime - lastSpawnTime) / nanoToSecs);
 
 		if (dTime > spawnIntervalSecs) {
 			factory.createDebris(1);
