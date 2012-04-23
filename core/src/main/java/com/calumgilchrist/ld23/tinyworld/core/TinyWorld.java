@@ -30,7 +30,14 @@ public class TinyWorld implements Game {
 	DynamicFactory factory;
 	StarFactory starFactory;
 
+	private static final int spawnInterval = 50;
+	
 	private static final boolean debugPhysics = false;
+	
+	//FPS
+	int frameCount;
+	int fps;
+	long oldTime;
 	
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
@@ -62,6 +69,11 @@ public class TinyWorld implements Game {
 		
 		Globals.globalScale = 1.0f;
 				
+		//Set up FPS
+		frameCount = 0;
+		fps = 0;
+		oldTime = System.nanoTime();
+		
 		planetoidLayer = graphics().createGroupLayer();
 		
 		planetoidImage = assets().getImage("images/planetoid.png");
@@ -163,6 +175,19 @@ public class TinyWorld implements Game {
 				canv.canvas().clear();
 				world.drawDebugData();
 			}
+		}
+		
+		//Calculate FPS
+		frameCount++;
+		if (frameCount > 100) {
+			float curTime = System.nanoTime();
+			
+			float dTime = (curTime - oldTime) / 1E9f;
+			
+			oldTime = (long) curTime;
+			fps = (int) (frameCount / dTime);
+			frameCount = 0;
+			System.out.println(fps + " fps");
 		}
 	}
 
