@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import playn.core.GroupLayer;
 
 public class Menus {
-	ArrayList<MenuItem> menuItemLayers;
+	public ArrayList<MenuItem> menuItemLayers;
 	public GroupLayer menuLayer;
 	
 	public void menuInit() {
 		//clickSound = assets().getSound("sounds/select");
+		Globals.currentItem = 0;
+		Globals.menuSin = 0;
 		Globals.state = Globals.STATE_MENU;
-		Menu mainMenu = new Menu("Tiny World",60);
+		Menu mainMenu = new Menu("Tiny World",60 * (graphics().height() / 480));
 		menuLayer = graphics().createGroupLayer();
 		menuLayer.add(mainMenu.getTitle());
 		
@@ -29,7 +31,7 @@ public class Menus {
 	    graphics().rootLayer().add(menuLayer);
 	}
 	
-	public boolean handleMainMenu(int mousex, int mousey){
+	public boolean handleMainMenu(int mousex, int mousey){			
 		for(MenuItem mi : menuItemLayers){
 			if(mousex > mi.getPosX() && mousex < (mi.getPosX() + mi.getLayout().width())){
 				if(mousey > mi.getPosY() && mousey < (mi.getPosY() + mi.getLayout().height())){
@@ -49,7 +51,21 @@ public class Menus {
 		return false;
 	}
 	
+	public boolean handleMainMenu(int index){
+		if(index == 0){
+			return true;
+		}else if(index == 1){
+			creditsMenuInit();
+		}else if(index == 2){
+			System.exit(0);
+		}
+		
+		return false;
+	}
+	
 	public void creditsMenuInit(){
+		Globals.state = Globals.STATE_CREDITS;
+		Globals.currentItem = 0;
 		graphics().rootLayer().remove(menuLayer);
 		Menu creditsMenu = new Menu("Credits",60);
 		menuLayer = graphics().createGroupLayer();
@@ -65,6 +81,15 @@ public class Menus {
 	    }
 	    
 	    graphics().rootLayer().add(menuLayer);
+	}
+	
+	public boolean handleCreditsMenu(int index){
+		if(index == 2){
+			graphics().rootLayer().remove(menuLayer);
+			menuInit();
+		}
+		
+		return false;
 	}
 	
 	public void handleCreditsMenu(int mousex, int mousey){

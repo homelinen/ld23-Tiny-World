@@ -44,6 +44,8 @@ public class TinyWorld implements Game {
 	
 	private static final boolean debugPhysics = false;
 	
+	MusicPlayer music;
+
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
@@ -81,7 +83,7 @@ public class TinyWorld implements Game {
 	public void init() {	
 		menus = new Menus();
 		
-		keyboard = new KeyboardInput();
+		keyboard = new KeyboardInput(this);
 		mouse = new MouseInput(this);
 		
 		createAstr = false;
@@ -107,6 +109,10 @@ public class TinyWorld implements Game {
 		
 		graphics().setSize(1024, 768);
 		
+		music = new MusicPlayer();
+		music.add("music/e");
+		music.start();
+
 		menus.menuInit();
 		
 		if (showFps) {
@@ -115,6 +121,7 @@ public class TinyWorld implements Game {
 	}
 
 	public void gameInit() {
+		Globals.state = Globals.STATE_GAME;
 		graphics().rootLayer().remove(menus.menuLayer);
 
 		planetoids = new ArrayList<Asteroid>();
@@ -154,7 +161,13 @@ public class TinyWorld implements Game {
 
 		setScale(2.0f);
 		
-		debugInit();
+		if (debugPhysics) {
+			debugInit();
+		}
+		
+		if (showFps) {
+			initFPSCounter();
+		}
 	}
 	
 	public void debugInit() {
@@ -217,13 +230,27 @@ public class TinyWorld implements Game {
 
 	@Override
 	public void update(float delta) {
-		if(Globals.state == Globals.STATE_GAME){
-			
+		
+		music.update();
 
-			if (debugPhysics) {
-				world.drawDebugData();
+		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
+			// X position is the middle of the screen subtract half the width of the title
+			float posX = (graphics().width() / 2) - (menus.menuItemLayers.get(Globals.currentItem).layout.width()/2);
+			float posY = menus.menuItemLayers.get(Globals.currentItem).posY;
+					
+			// Increase the value of menuSin until it reaches 360, then reset
+			if(Globals.menuSin > 360){
+				Globals.menuSin = 0;
+			}
+			else{
+				Globals.menuSin = Globals.menuSin + 0.1f;
 			}
 			
+			menus.menuLayer.get(Globals.currentItem+1).setTranslation(posX,(float) (posY+Math.sin(Globals.menuSin)*10));
+		}
+		else if(Globals.state == Globals.STATE_GAME){
+			//setScale(player.getMass());
+
 			// Values need playing with, and to be stored
 			world.step(30, 6, 3);
 			world.clearForces();
@@ -240,7 +267,11 @@ public class TinyWorld implements Game {
 			spawnBodies();
 			
 			cameraFollowPlayer();
-			cameraFollowDebug();
+			
+			if (debugPhysics) {
+				world.drawDebugData();
+				cameraFollowDebug();
+			}
 			
 			player.update();
 	
@@ -314,7 +345,7 @@ public class TinyWorld implements Game {
 		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
 		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(255, 247, 50), new TextFormat().effect);
 		
-		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20));
+		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20), textFont, Color.rgb(255, 247, 50));
 		
 //		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
 		

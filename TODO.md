@@ -7,9 +7,7 @@
   * sprite
 
 * Player should be able to receive damage
-* Implement Scaling
 * Sound effects
 * Sound options
 * FPS should show on screen
 * FPS should be toggle-able
-

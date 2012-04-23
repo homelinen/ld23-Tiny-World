@@ -17,7 +17,7 @@ public class Menu {
 
 	int startY;
 
-	TextLayout layout;
+	public TextLayout layout;
 	Layer layer;
 
 	String titleText;
@@ -56,6 +56,7 @@ public class Menu {
 		layer = createTextLayer(layout);
 		layer.setTranslation((graphics().width() / 2) - (layout.width() / 2),
 				startY);
+		System.out.println(layout.width());
 
 		return layer;
 	}
@@ -76,12 +77,14 @@ public class Menu {
 							.withTextColor(0xFFFFFFFF));
 			layer = createTextLayer(layout);
 			posX = (int) ((graphics().width() / 2) - (layout.width() / 2));
-			posY = startY + (100 * (i+1));
+			posY = startY + (100 * (((graphics().height() - 480)/480)+1) * (i+1));
 			layer.setTranslation(posX,posY);
 			
 			MenuItem mi = new MenuItem(posX,posY,layout,layer,menuItems.get(i));
 			returnItems.add(mi);
 		}
+		
+		Globals.numOfMenuItems = returnItems.size();
 
 		return returnItems;
 	}
