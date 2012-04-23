@@ -46,7 +46,7 @@ public class TextHandler {
 		
 		this.pos = pos;
 		
-		canv = graphics().createImage((int) textLayout.width() + 50, (int) textLayout.height() + 50);
+		canv = graphics().createImage((int) graphics().width(), (int) graphics().height());
 		this.iLayer = graphics().createImageLayer(canv);
 	}
 	
@@ -66,7 +66,7 @@ public class TextHandler {
 		textFormat = new TextFormat(textFont, 100, Alignment.LEFT, color, new TextFormat().effect);
 		textLayout = graphics().layoutText("" + message, textFormat);
 		
-		canv = graphics().createImage((int) textLayout.width() + 50, (int) textLayout.width() + 50);
+		canv = graphics().createImage((int) graphics().width(), (int) graphics().height());
 		this.iLayer = graphics().createImageLayer(canv);
 	}
 	
