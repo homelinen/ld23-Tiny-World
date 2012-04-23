@@ -38,7 +38,6 @@ public abstract class Factory {
 		//Destroy bodies to be destroyed
 		for (Body body: destroyList) {
 			world.destroyBody(body);
-			int k;
 		}
 		
 		// For every planetoid update it's sprite

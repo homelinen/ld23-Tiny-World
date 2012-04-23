@@ -237,13 +237,6 @@ public class TinyWorld implements Game {
 			// Update the heat value on screen
 			heatHandler.setText("H: " + player.getHeat());
 			heatHandler.update();
-			
-			if (keyboard.ispKeyDown()) {
-				while(world.getBodyList() != null) {
-					world.destroyBody(world.getBodyList());
-					System.out.println("World Count: " + world.getBodyCount());
-				}
-			}
 		}
 	}
 
@@ -293,6 +286,12 @@ public class TinyWorld implements Game {
 			} else {
 				// When space is pressed, set Velocity to 0
 				player.getBody().setLinearVelocity(new Vec2());
+			}
+			
+			if (keyboard.ispKeyDown()) {
+				while(world.getBodyList() != null) {
+					factory.clearAsteroids();
+				}
 			}
 
 			planetoidGenerator();

@@ -174,7 +174,6 @@ public class DynamicFactory extends Factory {
 	 * @return
 	 */
 	public Planetoid getFromBody(Body body) {
-		boolean found = false;
 		Planetoid planet = null;
 		
 		/*
@@ -190,6 +189,35 @@ public class DynamicFactory extends Factory {
 		
 		return planet;
 	}
+
+//	Old buggy code
+//
+//	public Planetoid getFromBody(Body body) {
+//		boolean found = false;
+//		Planetoid planet = null;
+//
+//		Iterator<Planetoid> it = instances.iterator();
+//
+//		/*
+//		 * Slow and awful TODO: Use something better than O(n)
+//		 */
+//		while (it.hasNext()) {
+//			planet = it.next();
+//			if (planet.getBody().equals(body)) {
+//
+//				found = true;
+//			}
+//		}
+//		if (found) {
+//			return planet;
+//		} else {
+//			return null;
+//		}
+//		return planet;
+//	}
+
+
+               
 		
 	private void remove(Planetoid astr) {
 		
@@ -204,7 +232,6 @@ public class DynamicFactory extends Factory {
 		destroyList.add(astr.getBody());
 		
 		astr.getSprite().getImageLayer().destroy();
-		astr.setSprite(new Sprite());
 		
 		System.out.println(astr.getSprite().getImageLayer());
 	}
