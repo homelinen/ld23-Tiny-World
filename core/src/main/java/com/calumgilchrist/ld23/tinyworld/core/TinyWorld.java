@@ -69,7 +69,9 @@ public class TinyWorld implements Game {
 	int frameCount;
 	int fps;
 	long oldTime;
-	private static final boolean showFps = false; 
+	private static final boolean showFps = true; 
+	
+	private TextHandler fpsHandler;
 	
 	//FPS Text Stuff
 	private CanvasImage fpsTextImage;
@@ -105,13 +107,17 @@ public class TinyWorld implements Game {
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
-		graphics().setSize(1336, 768);
+		graphics().setSize(1024, 768);
 		
 		music = new MusicPlayer();
 		music.add("music/e");
 		music.start();
 
 		menus.menuInit();
+		
+		if (showFps) {
+			initFPSCounter();
+		}
 	}
 
 	public void gameInit() {
@@ -153,7 +159,7 @@ public class TinyWorld implements Game {
 		contactListner = new ContactListener(player);
 		world.setContactListener(contactListner);
 
-		setScale(4.0f);
+		setScale(2.0f);
 		
 		if (debugPhysics) {
 			debugInit();
@@ -202,20 +208,22 @@ public class TinyWorld implements Game {
 				canv.canvas().clear();
 				world.drawDebugData();
 			}
-		}
-		
-		if (showFps) {
-			//Calculate FPS
-			frameCount++;
-			if (frameCount > 50) {
-				float curTime = System.nanoTime();
-				
-				float dTime = (curTime - oldTime) / nanoToSecs;
-				
-				oldTime = (long) curTime;
-				fps = (int) (frameCount / dTime);
-				frameCount = 0;
-				drawFpsCounter();
+			
+			if (showFps) {
+				//Calculate FPS
+				frameCount++;
+				if (frameCount > 50) {
+					float curTime = System.nanoTime();
+					
+					float dTime = (curTime - oldTime) / nanoToSecs;
+					
+					oldTime = (long) curTime;
+					fps = (int) (frameCount / dTime);
+					frameCount = 0;
+					
+					fpsHandler.setText("" + fps);
+					fpsHandler.update();
+				}
 			}
 		}
 	}
@@ -305,11 +313,11 @@ public class TinyWorld implements Game {
 	public void cameraFollowPlayer() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - ((graphics().width()/2) * (1/Globals.globalScale)) + (player.getSprite().getWidth() / 2));
+		tx = (int) (tx - graphics().width() + (player.getSprite().getWidth()));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - ((graphics().height()/2) * (1/Globals.globalScale)) + (player.getSprite().getHeight() / 2));
+		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
 		
 		planetoidLayer.setOrigin(tx, ty);
 	}
@@ -337,20 +345,15 @@ public class TinyWorld implements Game {
 		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
 		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(255, 247, 50), new TextFormat().effect);
 		
-		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
+		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20), textFont, Color.rgb(255, 247, 50));
 		
-		//TODO: Tweak size
-		fpsTextImage = graphics().createImage((int) fpsTextLayout.width() + 50, (int) fpsTextLayout.width() + 50);
-		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
-		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
+//		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
 		
-		graphics().rootLayer().add(fpsTextLayer);
-	}
-	
-	public void drawFpsCounter() {
-		fpsTextImage.canvas().clear();
-		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
+//		//TODO: Tweak size
+//		fpsTextImage = graphics().createImage((int) fpsTextLayout.width() + 50, (int) fpsTextLayout.width() + 50);
+//		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
+//		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
 		
-		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
+		graphics().rootLayer().add(fpsHandler.getTextLayer());
 	}
 }
