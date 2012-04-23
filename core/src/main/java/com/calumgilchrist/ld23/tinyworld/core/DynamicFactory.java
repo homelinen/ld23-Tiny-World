@@ -176,28 +176,21 @@ public class DynamicFactory extends Factory {
 	public Planetoid getFromBody(Body body) {
 		boolean found = false;
 		Planetoid planet = null;
-				
-		Iterator<Planetoid> it = instances.iterator();
 		
 		/*
 		 * Slow and awful
 		 * TODO: Use something better than O(n)
 		 */
-		while (it.hasNext()) {
-			planet = it.next();
-			if (planet.getBody().equals(body)) {
-				
-				found = true;
+		for (Planetoid p : instances) {
+
+			if (p.getBody().equals(body)) {
+				planet = p;
 			}
 		}
 		
-		if (found) {
-			return planet;
-		} else {
-			return null;
-		}
+		return planet;
 	}
-
+		
 	private void remove(Planetoid astr) {
 		
 		if (astr.getClass().equals(new Comet().getClass())) {
@@ -211,6 +204,9 @@ public class DynamicFactory extends Factory {
 		destroyList.add(astr.getBody());
 		
 		astr.getSprite().getImageLayer().destroy();
+		astr.setSprite(new Sprite());
+		
+		System.out.println(astr.getSprite().getImageLayer());
 	}
 	
 	/**
@@ -233,5 +229,9 @@ public class DynamicFactory extends Factory {
 			}
 			int j=0;
 		}
+	}
+	
+	public void clearAsteroids() {
+		instances.clear();
 	}
 }
