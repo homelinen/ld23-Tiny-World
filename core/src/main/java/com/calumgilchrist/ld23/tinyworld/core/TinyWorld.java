@@ -169,8 +169,6 @@ public class TinyWorld implements Game {
 		if (showFps) {
 			initFPSCounter();
 		}
-
-		
 	}
 
 	public void debugInit() {
@@ -237,7 +235,7 @@ public class TinyWorld implements Game {
 			massHandler.update();
 
 			// Update the heat value on screen
-			heatHandler.setText("H: " + player.getHeat());
+			heatHandler.setText("H: " + (int) player.getHeat());
 			heatHandler.update();
 		}
 	}
