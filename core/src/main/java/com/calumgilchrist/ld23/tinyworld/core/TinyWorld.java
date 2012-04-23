@@ -3,8 +3,6 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 
 import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.common.Vec2;
@@ -12,7 +10,6 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.contacts.Contact;
 
 import playn.core.CanvasImage;
 import playn.core.DebugDrawBox2D;
@@ -33,6 +30,8 @@ public class TinyWorld implements Game {
 	DynamicFactory factory;
 	StarFactory starFactory;
 
+	private static final boolean debugPhysics = false;
+	
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
@@ -74,6 +73,8 @@ public class TinyWorld implements Game {
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
+		graphics().setSize(1336, 768);
+		
 		menus.menuInit();
 	}
 
@@ -94,11 +95,11 @@ public class TinyWorld implements Game {
 		factory = new DynamicFactory(world, planetoidLayer);
 		starFactory = new StarFactory(world,sunImage, planetoidLayer);
 		for (int i = 0; i < 10; i++) {
-			factory.getAsteroid(10);
+			factory.getAsteroid();
 		}
 		
 		for (int i = 0; i < 10; i++) {
-			factory.getComet(10);
+			factory.getComet();
 		}
 		
 		for (int i = 0; i < 3; i++){
@@ -118,6 +119,17 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 		
+		contactListner = new ContactListener(player);
+		world.setContactListener(contactListner);
+
+		setScale(2.0f);
+		
+		debugInit();
+		
+		System.out.println("Heat: " + StarFactory.getHeat(new Vec2(100,100)));
+	}
+	
+	public void debugInit() {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
@@ -129,7 +141,7 @@ public class TinyWorld implements Game {
 		debugDraw.setFillAlpha(50);
 		debugDraw.setStrokeWidth(1.0f);
 		debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
-		debugDraw.setCamera(0, 0, Globals.globalScale * Globals.PHYS_RATIO); 
+		debugDraw.setCamera(0, 0, 2); 
 		
 		world.setDebugDraw(this.debugDraw);
 		
@@ -137,12 +149,8 @@ public class TinyWorld implements Game {
 		debugLayer.setImage(canv);
 		
 		graphics().rootLayer().add(debugLayer);
-
-		contactListner = new ContactListener(player);
-		world.setContactListener(contactListner);
-
-		setScale(2.0f);
 	}
+	
 	
 	public void setScale(float scale){
 		Globals.globalScale = 1/scale;
@@ -155,13 +163,17 @@ public class TinyWorld implements Game {
 		// the background automatically paints itself, so no need to do anything
 		// here!
 		if(Globals.state == Globals.STATE_GAME){
-			canv.canvas().clear();
-			world.drawDebugData();
+			
+			if (debugPhysics) {
+				canv.canvas().clear();
+				world.drawDebugData();
+			}
 		}
 	}
 
 	@Override
 	public void update(float delta) {
+
 		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
 			// X position is the middle of the screen subtract half the width of the title
 			float posX = (graphics().width() / 2) - (menus.menuItemLayers.get(Globals.currentItem).layout.width()/2);
@@ -178,8 +190,12 @@ public class TinyWorld implements Game {
 			menus.menuLayer.get(Globals.currentItem+1).setTranslation(posX,(float) (posY+Math.sin(Globals.menuSin)*10));
 		}
 		else if(Globals.state == Globals.STATE_GAME){
-			world.drawDebugData();
-						
+			//setScale(player.getMass());
+
+			if (debugPhysics) {
+				world.drawDebugData();
+			}
+
 			// Values need playing with, and to be stored
 			world.step(30, 6, 3);
 			world.clearForces();
@@ -194,7 +210,7 @@ public class TinyWorld implements Game {
 			//Creates an asteroid if one was previously destroyed
 			//What happens if two were destroyed?
 			if (createAstr) {
-				factory.getAsteroid(1);
+				factory.getAsteroid();
 				createAstr = false;
 			}
 			

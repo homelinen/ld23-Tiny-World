@@ -15,7 +15,7 @@ public abstract class Planetoid {
 	private Sprite sprite;
 	private Body pBody;
 	
-	public Planetoid(Sprite s, BodyDef bodyDef, World world){
+	public Planetoid(Sprite s, BodyDef bodyDef, World world, float mass){
 		//TODO: Need an initial mass
 		
 		System.out.println("Planetoid created");
@@ -28,9 +28,18 @@ public abstract class Planetoid {
 		circle.m_radius = this.sprite.getWidth() / Globals.PHYS_RATIO / Globals.magicBoundRatio;
 		
 		FixtureDef fixDef = new FixtureDef();
+	
 		fixDef.shape = circle;
 		
 		pBody.createFixture(fixDef);
+		pBody.m_mass = mass;
+	}
+	
+	/**
+	 * Another Empty Constructor to Not Use
+	 */
+	public Planetoid() {
+		
 	}
 	
 	/**
@@ -57,6 +66,10 @@ public abstract class Planetoid {
 	
 	public void update(){
 		Vec2 center = this.getBody().getWorldCenter().mul(Globals.PHYS_RATIO);
+		
+CircleShape circle = new CircleShape();
+		
+		circle.m_radius = this.sprite.getWidth() * Globals.globalScale / Globals.PHYS_RATIO / Globals.magicBoundRatio;
 		
 		this.getSprite().setX((int) center.x);
 		this.getSprite().setY((int) center.y);

@@ -27,9 +27,15 @@ public class DynamicFactory extends Factory {
 		planetoidImage = assets().getImage("images/comet.png");
 	}
 
-	public Asteroid getAsteroid(float forceFactor) {
-		// TODO: Randomise Force
+	public Asteroid getAsteroid() {
+		Random rand = new Random();
 
+		int asteroidMaxWeight = 20;
+		int asteroidMaxForce = 100 / 2;
+		float forceFactor = rand.nextInt(asteroidMaxForce) + asteroidMaxForce;
+		
+		float astrWeight = rand.nextInt(asteroidMaxWeight);
+		
 		// Start Vector off screen (This should be random)
 		Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
 
@@ -43,7 +49,7 @@ public class DynamicFactory extends Factory {
 		astrStart.mulLocal(Globals.globalScale);
 
 		Asteroid astr = new Asteroid(astrStart, new Sprite((int) astrStart.x,
-				(int) astrStart.y, asteroidImage), astrBodyDef, world);
+				(int) astrStart.y, asteroidImage), astrBodyDef, world, astrWeight);
 
 		astr.applyThrust(astr.getThrustForce(forceFactor));
 
@@ -53,9 +59,16 @@ public class DynamicFactory extends Factory {
 		return astr;
 	}
 
-	public Comet getComet(float forceFactor) {
-		// TODO: Randomise Force
+	public Comet getComet() {
 
+		Random rand = new Random();
+
+		int cometMaxWeight = 10;
+		int cometMaxForce = 75 / 2;
+		float forceFactor = rand.nextInt(cometMaxForce) + cometMaxForce;
+		
+		float  cometWeight = rand.nextInt(cometMaxWeight);
+		
 		// Start Vector off screen (This should be random)
 		Vec2 cometStart = genStartPos(graphics().width(), graphics().height());
 
@@ -69,7 +82,7 @@ public class DynamicFactory extends Factory {
 		cometStart.mulLocal(Globals.globalScale);
 
 		Comet comet = new Comet(new Sprite((int) cometStart.x,
-				(int) cometStart.y, planetoidImage), cometBodyDef, world);
+				(int) cometStart.y, planetoidImage), cometBodyDef, world, cometWeight);
 
 		comet.applyThrust(comet.getThrustForce(forceFactor));
 
@@ -143,7 +156,11 @@ public class DynamicFactory extends Factory {
 	 */
 	public static void removeByBody(Body body) {
 		Planetoid astr = getFromBody(body);
-		remove(astr);
+		if (astr != null) {
+			remove(astr);
+		} 
+		//TODO if null, should probably mention it
+		
 	}
 	
 	/**

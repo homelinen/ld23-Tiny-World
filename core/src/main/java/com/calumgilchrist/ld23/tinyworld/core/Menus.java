@@ -15,7 +15,7 @@ public class Menus {
 		Globals.currentItem = 0;
 		Globals.menuSin = 0;
 		Globals.state = Globals.STATE_MENU;
-		Menu mainMenu = new Menu("Tiny World",60);
+		Menu mainMenu = new Menu("Tiny World",60 * (graphics().height() / 480));
 		menuLayer = graphics().createGroupLayer();
 		menuLayer.add(mainMenu.getTitle());
 		

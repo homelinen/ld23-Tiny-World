@@ -5,7 +5,7 @@ import org.jbox2d.dynamics.World;
 
 public class Player extends Planetoid {
 	public Player(Sprite s, BodyDef bodyDef, World world) {
-		super(s, bodyDef, world);
+		super(s, bodyDef, world, 1);
 
 	}
 
@@ -23,5 +23,9 @@ public class Player extends Planetoid {
 		this.getBody().m_mass = newMass;
 
 		System.out.println("Mass: " + newMass);
+	}
+	
+	public float getMass(){
+		return this.getBody().m_mass;
 	}
 }
