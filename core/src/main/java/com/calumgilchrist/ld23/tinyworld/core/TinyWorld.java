@@ -153,7 +153,7 @@ public class TinyWorld implements Game {
 		planetoidLayer.add(player.getSprite().getImageLayer());
 		graphics().rootLayer().add(planetoidLayer);
 
-		contactListner = new ContactListener(player);
+		contactListner = new ContactListener(player, factory);
 		world.setContactListener(contactListner);
 
 		setScale(2.0f);
@@ -237,6 +237,13 @@ public class TinyWorld implements Game {
 			// Update the heat value on screen
 			heatHandler.setText("H: " + player.getHeat());
 			heatHandler.update();
+			
+			if (keyboard.ispKeyDown()) {
+				while(world.getBodyList() != null) {
+					world.destroyBody(world.getBodyList());
+					System.out.println("World Count: " + world.getBodyCount());
+				}
+			}
 		}
 	}
 

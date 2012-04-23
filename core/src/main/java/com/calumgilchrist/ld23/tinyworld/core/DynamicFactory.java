@@ -134,7 +134,7 @@ public class DynamicFactory extends Factory {
 	 * @param max
 	 * @return
 	 */
-	private static int getSpawnBound(int min, int max) {
+	private int getSpawnBound(int min, int max) {
 
 		Random rand = new Random();
 
@@ -157,7 +157,7 @@ public class DynamicFactory extends Factory {
 	 * Find the Asteroid then tell it to be removed
 	 * @param body - Child body to be destroyed
 	 */
-	public static void removeByBody(Body body) {
+	public void removeByBody(Body body) {
 		Planetoid astr = getFromBody(body);
 		
 		astr.getBody().destroyFixture(astr.getBody().m_fixtureList);
@@ -173,7 +173,7 @@ public class DynamicFactory extends Factory {
 	 * @param body
 	 * @return
 	 */
-	public static Planetoid getFromBody(Body body) {
+	public Planetoid getFromBody(Body body) {
 		boolean found = false;
 		Planetoid planet = null;
 				
@@ -198,7 +198,7 @@ public class DynamicFactory extends Factory {
 		}
 	}
 
-	private static void remove(Planetoid astr) {
+	private void remove(Planetoid astr) {
 		
 		if (astr.getClass().equals(new Comet().getClass())) {
 			//Remove a comet from list

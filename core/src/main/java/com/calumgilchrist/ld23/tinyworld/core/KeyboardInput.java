@@ -18,6 +18,7 @@ public class KeyboardInput implements Keyboard.Listener {
 	private boolean spaceDown;
 	
 	private TinyWorld root;
+	private boolean pKeyDown;
 	
 	
 	public KeyboardInput(TinyWorld root){
@@ -59,6 +60,10 @@ public class KeyboardInput implements Keyboard.Listener {
 		return spaceDown;
 	}
 	
+	public boolean ispKeyDown() {
+		return pKeyDown;
+	}
+
 	@Override
 	public void onKeyDown(Event event) {
 		if(Globals.state == Globals.STATE_GAME){
@@ -80,6 +85,9 @@ public class KeyboardInput implements Keyboard.Listener {
 				break;
 			case SPACE:
 				spaceDown = true;
+				break;
+			case P:
+				pKeyDown = true;
 				break;
 			}
 		}
@@ -166,6 +174,9 @@ public class KeyboardInput implements Keyboard.Listener {
 		case SPACE:
 			spaceDown = false;
 		break;
+		case P:
+			pKeyDown = false;
+			break;
 		}
 	}
 }

@@ -10,10 +10,13 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 
 	private Player player;
 	int createCount;
+	DynamicFactory dynamicFactory;
 	
-	public ContactListener(Player player) {
+	public ContactListener(Player player, DynamicFactory dynamicFactory) {
 		this.player = player;
 		createCount = 0;
+		
+		this.dynamicFactory = dynamicFactory;
 	}
 	
 	@Override
@@ -40,26 +43,26 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 		if (player.getBody().equals(contact.getFixtureA().m_body)) {
 			
 			hitter = contact.getFixtureB().m_body;
-			Planetoid planet = DynamicFactory.getFromBody(hitter);
+			Planetoid planet = dynamicFactory.getFromBody(hitter);
 			
 			if (planet != null) {
 				discernCollisionType(planet);
 				player.addMass(hitter.m_mass);
 	
-				DynamicFactory.removeByBody(hitter);
+				dynamicFactory.removeByBody(hitter);
 				createCount++;
 				System.out.println("Knock B");
 			}
 		} if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
 			hitter = contact.getFixtureA().m_body;
-			Planetoid planet = DynamicFactory.getFromBody(hitter);
+			Planetoid planet = dynamicFactory.getFromBody(hitter);
 			
 			if (planet != null) {
 				discernCollisionType(planet);
 				player.addMass(hitter.m_mass);
 	
-				DynamicFactory.removeByBody(hitter);
+				dynamicFactory.removeByBody(hitter);
 				createCount++;
 				System.out.println("Knock A");
 			}

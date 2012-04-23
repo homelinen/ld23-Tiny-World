@@ -15,8 +15,8 @@ public abstract class Factory {
 	
 	private static int cometCount;
 	
-	protected static ArrayList<Planetoid> instances = new ArrayList<Planetoid>();
-	protected static ArrayList<Body> destroyList;
+	protected ArrayList<Planetoid> instances = new ArrayList<Planetoid>();
+	protected ArrayList<Body> destroyList;
 	
 	public Factory(World world, Image img, GroupLayer layer){
 		this.world = world;
@@ -49,15 +49,15 @@ public abstract class Factory {
 		destroyList.clear();
 	}
 	
-	protected static int getCometCount() {
+	protected int getCometCount() {
 		return cometCount;
 	}
 	
-	protected static void setCometCount(int newCount) {
+	protected void setCometCount(int newCount) {
 		cometCount = newCount;
 	}
 	
-	protected static int getAsteroidCount() {
+	protected int getAsteroidCount() {
 		return (instances.size() - getCometCount());
 	}
 }
