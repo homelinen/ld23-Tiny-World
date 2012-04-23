@@ -4,9 +4,13 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
 public class Player extends Planetoid {
+	
+	private int atmosphere; 	
+	
 	public Player(Sprite s, BodyDef bodyDef, World world) {
 		super(s, bodyDef, world, 1);
 
+		setAtmosphere(0);
 	}
 
 	// TODO: Score or counter for mass (Increase in size would suffice
@@ -27,5 +31,13 @@ public class Player extends Planetoid {
 	
 	public float getMass(){
 		return this.getBody().m_mass;
+	}
+
+	public int getAtmosphere() {
+		return atmosphere;
+	}
+
+	public void setAtmosphere(int atmosphere) {
+		this.atmosphere = atmosphere;
 	}
 }
