@@ -216,9 +216,6 @@ public class DynamicFactory extends Factory {
 //		return planet;
 //	}
 
-
-               
-		
 	private void remove(Planetoid astr) {
 		
 		if (astr.getClass().equals(new Comet().getClass())) {

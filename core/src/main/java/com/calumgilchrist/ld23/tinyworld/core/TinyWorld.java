@@ -161,14 +161,16 @@ public class TinyWorld implements Game {
 		if (debugPhysics) {
 			debugInit();
 		}
-
+		
+		initHeatCounter();
+		initAtmosphereCounter();
+		initMassCounter();
+		
 		if (showFps) {
 			initFPSCounter();
 		}
 
-		initAtmosphereCounter();
-		initMassCounter();
-		initHeatCounter();
+		
 	}
 
 	public void debugInit() {
@@ -306,6 +308,8 @@ public class TinyWorld implements Game {
 			}
 
 			player.update();
+			player.updateHeat();
+			
 			factory.update();
 		}
 	}
@@ -364,7 +368,7 @@ public class TinyWorld implements Game {
 
 		// debugLayer.setOrigin(tx, ty);
 	}
-
+	
 	/**
 	 * Render text to show an FPS Counter
 	 */
@@ -403,7 +407,8 @@ public class TinyWorld implements Game {
 
 		heatHandler = new TextHandler("H: " + player.getHeat(),
 				new Vec2(20, 80), textFont, Color.rgb(255, 247, 50));
-
+		
+		heatHandler.getPos();
 		graphics().rootLayer().add(heatHandler.getTextLayer());
 	}
 }
