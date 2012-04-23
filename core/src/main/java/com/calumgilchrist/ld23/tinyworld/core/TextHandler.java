@@ -62,17 +62,6 @@ public class TextHandler {
 		this.iLayer = graphics().createImageLayer(canv);
 	}
 	
-	/**
-	 * Render text to show an FPS Counter
-	 */
-	public void initText() {
-		
-//		canv.canvas().drawText(textLayout, 20, 20);
-		iLayer = graphics().createImageLayer(canv);
-		
-		
-	}
-	
 	public void update() {
 		canv.canvas().clear();
 		textLayout = graphics().layoutText("" + message, textFormat);

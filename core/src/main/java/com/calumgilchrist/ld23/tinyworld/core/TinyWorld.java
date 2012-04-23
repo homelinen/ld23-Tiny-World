@@ -347,13 +347,6 @@ public class TinyWorld implements Game {
 		
 		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20), textFont, Color.rgb(255, 247, 50));
 		
-//		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
-		
-//		//TODO: Tweak size
-//		fpsTextImage = graphics().createImage((int) fpsTextLayout.width() + 50, (int) fpsTextLayout.width() + 50);
-//		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
-//		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
-		
 		graphics().rootLayer().add(fpsHandler.getTextLayer());
 	}
 }
