@@ -9,9 +9,11 @@ import org.jbox2d.dynamics.contacts.Contact;
 public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 
 	private Player player;
+	int createCount;
 	
 	public ContactListener(Player player) {
 		this.player = player;
+		createCount = 0;
 	}
 	
 	@Override
@@ -44,7 +46,16 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 				player.addMass(hitter.m_mass);
 	
 				DynamicFactory.removeByBody(hitter);
+				createCount++;
 			}
 		}
+	}
+		
+	public int getCreateCount() {
+		return createCount;
+	}
+	
+	public void clearCreateCount() {
+		createCount = 0;
 	}
 }

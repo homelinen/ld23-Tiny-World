@@ -6,6 +6,9 @@ public class Globals {
 	public static final int STATE_GAME = 1;
 	public static final int STATE_CREDITS = 2;
 	
+	public static final float asteroidRatio = 0.3f;
+	public static final float cometRatio = 0.7f;
+	
 	public static int state;
 	public static float globalScale;
 

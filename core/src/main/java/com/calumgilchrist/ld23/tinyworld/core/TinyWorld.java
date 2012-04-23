@@ -30,7 +30,14 @@ public class TinyWorld implements Game {
 	DynamicFactory factory;
 	StarFactory starFactory;
 
+	private static final int spawnInterval = 50;
+	
 	private static final boolean debugPhysics = false;
+	
+	//FPS
+	int frameCount;
+	int fps;
+	long oldTime;
 	
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
@@ -62,6 +69,11 @@ public class TinyWorld implements Game {
 		
 		Globals.globalScale = 1.0f;
 				
+		//Set up FPS
+		frameCount = 0;
+		fps = 0;
+		oldTime = System.nanoTime();
+		
 		planetoidLayer = graphics().createGroupLayer();
 		
 		planetoidImage = assets().getImage("images/planetoid.png");
@@ -94,15 +106,10 @@ public class TinyWorld implements Game {
 		//Set up the factory and Asteroids
 		factory = new DynamicFactory(world, planetoidLayer);
 		starFactory = new StarFactory(world,sunImage, planetoidLayer);
-		for (int i = 0; i < 10; i++) {
-			factory.getAsteroid();
-		}
 		
-		for (int i = 0; i < 10; i++) {
-			factory.getComet();
-		}
+		factory.createDebris(5);
 		
-		for (int i = 0; i < 3; i++){
+		for (int i = 0; i < 1; i++){
 			starFactory.getStar(new Vec2(0,0));
 		}
 		
@@ -122,7 +129,7 @@ public class TinyWorld implements Game {
 		contactListner = new ContactListener(player);
 		world.setContactListener(contactListner);
 
-		setScale(2.0f);
+		setScale(4.0f);
 		
 		debugInit();
 		
@@ -169,6 +176,19 @@ public class TinyWorld implements Game {
 				world.drawDebugData();
 			}
 		}
+		
+		//Calculate FPS
+		frameCount++;
+		if (frameCount > 100) {
+			float curTime = System.nanoTime();
+			
+			float dTime = (curTime - oldTime) / 1E9f;
+			
+			oldTime = (long) curTime;
+			fps = (int) (frameCount / dTime);
+			frameCount = 0;
+			System.out.println(fps + " fps");
+		}
 	}
 
 	@Override
@@ -207,13 +227,8 @@ public class TinyWorld implements Game {
 				player.getBody().setLinearVelocity(new Vec2());
 			}
 			
-			//Creates an asteroid if one was previously destroyed
-			//What happens if two were destroyed?
-			if (createAstr) {
-				factory.getAsteroid();
-				createAstr = false;
-			}
-			
+			planetoidGenerator();
+
 			cameraFollowPlayer();
 			cameraFollowDebug();
 			
@@ -228,15 +243,27 @@ public class TinyWorld implements Game {
 		return 25;
 	}
 	
+	/**
+	 * Generate deleted planetoids and replace them
+	 */
+	public void planetoidGenerator() {
+		
+		//Creates an asteroid if one was previously destroyed
+		//What happens if two were destroyed?
+		factory.createDebris(contactListner.getCreateCount());
+		
+		contactListner.clearCreateCount();
+	}
+	
 	// Translates the planetoid layer so that the player planet is always centre
 	public void cameraFollowPlayer() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - graphics().width() + (player.getSprite().getWidth()));
+		tx = (int) (tx - ((graphics().width()/2) * (1/Globals.globalScale)) + (player.getSprite().getWidth()));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
+		ty = (int) (ty - ((graphics().height()/2) * (1/Globals.globalScale)) + (player.getSprite().getHeight()));
 		
 		planetoidLayer.setOrigin(tx, ty);
 	}

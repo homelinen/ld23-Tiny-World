@@ -87,8 +87,10 @@ public class DynamicFactory extends Factory {
 		comet.applyThrust(comet.getThrustForce(forceFactor));
 
 		instances.add(comet);
+		setCometCount(getCometCount() + 1);
+		
 		layer.add(comet.getSprite().getImageLayer());
-
+		
 		return comet;
 	}
 
@@ -195,12 +197,41 @@ public class DynamicFactory extends Factory {
 
 	private static void remove(Planetoid astr) {
 		
+		if (astr.getClass().equals(new Comet().getClass())) {
+			//Remove a comet from list
+			setCometCount(getCometCount() - 1);
+		}
+		
 		instances.remove(astr);
+		
+		System.out.println("Comets: " + getCometCount() + "  Astrs: " + getAsteroidCount());
 		
 		//Destroy the planet
 		destroyList.add(astr.getBody());
 		
 		astr.getSprite().getImageLayer().destroy();
 		System.out.println(astr.getSprite().getImageLayer().destroyed());
+	}
+	
+	/**
+	 * Generate an equal ratio of asteroids and comets
+	 */
+	public void createDebris(int count) {
+		Random rand = new Random();
+		
+		float ratio = 0;
+		
+		for (int i=0; i < count; i++) {
+			ratio = (float) rand.nextInt(100) / 100;
+			
+			if (ratio < Globals.asteroidRatio) {
+				getAsteroid();
+			} else if (ratio < Globals.cometRatio) {
+				getComet();
+			} else {
+				i--;
+			}
+			int j=0;
+		}
 	}
 }
