@@ -44,11 +44,6 @@ public class TinyWorld implements Game {
 	
 	private static final boolean debugPhysics = false;
 	
-	//FPS
-	int frameCount;
-	int fps;
-	long oldTime;
-	
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
@@ -67,6 +62,12 @@ public class TinyWorld implements Game {
 	Menus menus;
 	
 	Sound clickSound;
+	
+	//FPS
+	int frameCount;
+	int fps;
+	long oldTime;
+	private static final boolean showFps = false; 
 	
 	//FPS Text Stuff
 	private CanvasImage fpsTextImage;
@@ -150,7 +151,9 @@ public class TinyWorld implements Game {
 		
 		debugInit();
 		
-		initFPSCounter();
+		if (showFps) {
+			initFPSCounter();
+		}
 	}
 	
 	public void debugInit() {
@@ -193,17 +196,19 @@ public class TinyWorld implements Game {
 			}
 		}
 		
-		//Calculate FPS
-		frameCount++;
-		if (frameCount > 100) {
-			float curTime = System.nanoTime();
-			
-			float dTime = (curTime - oldTime) / nanoToSecs;
-			
-			oldTime = (long) curTime;
-			fps = (int) (frameCount / dTime);
-			frameCount = 0;
-			drawFpsCounter();
+		if (showFps) {
+			//Calculate FPS
+			frameCount++;
+			if (frameCount > 50) {
+				float curTime = System.nanoTime();
+				
+				float dTime = (curTime - oldTime) / nanoToSecs;
+				
+				oldTime = (long) curTime;
+				fps = (int) (frameCount / dTime);
+				frameCount = 0;
+				drawFpsCounter();
+			}
 		}
 	}
 
@@ -304,11 +309,12 @@ public class TinyWorld implements Game {
 	 */
 	public void initFPSCounter() {
 		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
-		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(50, 255, 247), new TextFormat().effect);
+		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(255, 247, 50), new TextFormat().effect);
 		
 		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
 		
-		fpsTextImage = graphics().createImage(100, 100);
+		//TODO: Tweak size
+		fpsTextImage = graphics().createImage((int) fpsTextLayout.width() + 50, (int) fpsTextLayout.width() + 50);
 		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
 		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
 		
