@@ -27,6 +27,15 @@ import playn.core.TextFormat;
 import playn.core.TextFormat.Alignment;
 import playn.core.TextLayout;
 
+/**
+ * 
+ * @author Calum Gilchrist and Dan Bell
+ * 
+ * Special thanks to brandon75689
+ * For the music: http://opengameart.org/content/last-stand-in-space
+ * Which doesn't play
+ * 
+ */
 public class TinyWorld implements Game {
 
 	ArrayList<Asteroid> planetoids;
@@ -45,7 +54,7 @@ public class TinyWorld implements Game {
 
 	private static final boolean debugPhysics = false;
 
-	// MusicPlayer music;
+	MusicPlayer music;
 
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
@@ -112,9 +121,9 @@ public class TinyWorld implements Game {
 		graphics().rootLayer().add(bgLayer);
 
 
-		// music = new MusicPlayer();
-		// music.add("music/e");
-		// music.start();
+		 music = new MusicPlayer();
+		 music.add("music/e");
+		 music.start();
 
 		menus.menuInit();
 
