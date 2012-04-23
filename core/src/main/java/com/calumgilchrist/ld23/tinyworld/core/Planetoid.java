@@ -65,9 +65,8 @@ public abstract class Planetoid {
 	public void update(){
 		Vec2 center = this.getBody().getWorldCenter().mul(Globals.PHYS_RATIO);
 		
-CircleShape circle = new CircleShape();
-		
-		circle.m_radius = this.sprite.getWidth() * Globals.globalScale / Globals.PHYS_RATIO / Globals.magicBoundRatio;
+		// CircleShape circle = new CircleShape();
+		// circle.m_radius = this.sprite.getWidth() * Globals.globalScale / Globals.PHYS_RATIO / Globals.magicBoundRatio;
 		
 		this.getSprite().setX((int) center.x);
 		this.getSprite().setY((int) center.y);

@@ -43,7 +43,7 @@ public class TinyWorld implements Game {
 	
 	private static final boolean debugPhysics = false;
 	
-	MusicPlayer music;
+	// MusicPlayer music;
 
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
@@ -102,9 +102,9 @@ public class TinyWorld implements Game {
 		
 		graphics().setSize(1024, 768);
 		
-		music = new MusicPlayer();
-		music.add("music/e");
-		music.start();
+		// music = new MusicPlayer();
+		// music.add("music/e");
+		// music.start();
 
 		menus.menuInit();
 		
@@ -196,7 +196,6 @@ public class TinyWorld implements Game {
 		// the background automatically paints itself, so no need to do anything
 		// here!
 		if(Globals.state == Globals.STATE_GAME){
-			
 			if (debugPhysics) {
 				canv.canvas().clear();
 				world.drawDebugData();
@@ -224,7 +223,7 @@ public class TinyWorld implements Game {
 	@Override
 	public void update(float delta) {
 		
-		music.update();
+		// music.update();
 
 		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
 			// X position is the middle of the screen subtract half the width of the title
@@ -318,17 +317,13 @@ public class TinyWorld implements Game {
 	public void cameraFollowDebug() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - graphics().width()/2);
+		tx = (int) (tx - (graphics().width()/2) * (1/Globals.globalScale));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - graphics().height()/2);
+		ty = (int) (ty - (graphics().height()/2) * (1/Globals.globalScale));
 		
 		debugLayer.setOrigin(tx, ty);
-	}
-
-	public void movePlayer() {
-		//What is this?
 	}
 	
 	/**
