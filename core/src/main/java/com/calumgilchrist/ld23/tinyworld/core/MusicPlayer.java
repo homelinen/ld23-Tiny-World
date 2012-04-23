@@ -24,14 +24,15 @@ public class MusicPlayer {
 	}
 	
 	public void start(){
-		int currentTrack = r.nextInt();
+		currentTrack = r.nextInt(tracks.size());
 	}
 	
 	public void update(){		
 		if(currentTrack != -1){
 			if(!tracks.get(currentTrack).isPlaying()){
-				int i = r.nextInt();
+				int i = r.nextInt(tracks.size());
 				currentTrack = i;
+				tracks.get(currentTrack).play();
 			}	
 		}
 	}
