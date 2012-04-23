@@ -36,7 +36,21 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 		Body hitter;
 		
 		//Fixture A is never the contact, I think
-		if (player.getBody().equals(contact.getFixtureB().m_body)) {
+		
+		if (player.getBody().equals(contact.getFixtureA().m_body)) {
+			
+			hitter = contact.getFixtureB().m_body;
+			Planetoid planet = DynamicFactory.getFromBody(hitter);
+			
+			if (planet != null) {
+			
+				player.addMass(hitter.m_mass);
+	
+				DynamicFactory.removeByBody(hitter);
+				createCount++;
+				System.out.println("Knock B");
+			}
+		} if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
 			hitter = contact.getFixtureA().m_body;
 			Planetoid planet = DynamicFactory.getFromBody(hitter);
@@ -47,8 +61,10 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	
 				DynamicFactory.removeByBody(hitter);
 				createCount++;
+				System.out.println("Knock A");
 			}
 		}
+		
 	}
 		
 	public int getCreateCount() {
