@@ -9,4 +9,8 @@ public class Asteroid extends Planetoid {
 	public Asteroid(Vec2 startPos, Sprite s, BodyDef bodyDef, World world, float m) {
 		super(s, bodyDef, world, m);
 	}
+	
+	public Asteroid(){
+		
+	}
 }
