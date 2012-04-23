@@ -11,6 +11,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
+import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Color;
 import playn.core.DebugDrawBox2D;
@@ -20,6 +21,7 @@ import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Layer;
+import playn.core.Pattern;
 import playn.core.Sound;
 import playn.core.TextFormat;
 import playn.core.TextFormat.Alignment;
@@ -97,13 +99,19 @@ public class TinyWorld implements Game {
 		planetoidImage = assets().getImage("images/planetoid.png");
 
 		Globals.state = Globals.STATE_MENU;
+		
+		graphics().setSize(1336, 768);
 
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
-		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
+		Pattern bgPattern = graphics().createPattern(bgImage);
+		CanvasImage bgCanvas = graphics().createImage(graphics().width(), graphics().height());
+		bgCanvas.canvas().setFillPattern(bgPattern);
+		bgCanvas.canvas().fillRect(0f, 0f, graphics().width(), graphics().height());
+		ImageLayer bgLayer = graphics().createImageLayer(bgCanvas);
 		graphics().rootLayer().add(bgLayer);
 
-		graphics().setSize(1336, 768);
+		
 
 		// music = new MusicPlayer();
 		// music.add("music/e");
