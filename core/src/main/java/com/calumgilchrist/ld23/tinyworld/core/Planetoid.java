@@ -18,8 +18,6 @@ public abstract class Planetoid {
 	
 	public Planetoid(Sprite s, BodyDef bodyDef, World world, float mass){
 		
-		System.out.println("Planetoid created");
-		
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
 		

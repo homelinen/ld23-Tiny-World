@@ -1,6 +1,8 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
-import static playn.core.PlayN.*;
+import static playn.core.PlayN.assets;
+import static playn.core.PlayN.currentTime;
+import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
 
@@ -11,7 +13,6 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
-import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Color;
 import playn.core.DebugDrawBox2D;
@@ -20,12 +21,8 @@ import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.Layer;
 import playn.core.Pattern;
 import playn.core.Sound;
-import playn.core.TextFormat;
-import playn.core.TextFormat.Alignment;
-import playn.core.TextLayout;
 
 /**
  * 

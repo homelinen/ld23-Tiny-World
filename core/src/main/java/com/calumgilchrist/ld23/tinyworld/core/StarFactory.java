@@ -3,7 +3,6 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.graphics;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;

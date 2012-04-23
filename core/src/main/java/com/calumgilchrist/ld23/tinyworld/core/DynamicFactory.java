@@ -3,7 +3,6 @@ package com.calumgilchrist.ld23.tinyworld.core;
 import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
-import java.util.Iterator;
 import java.util.Random;
 
 import org.jbox2d.common.Vec2;
@@ -229,8 +228,6 @@ public class DynamicFactory extends Factory {
 		destroyList.add(astr.getBody());
 		
 		astr.getSprite().getImageLayer().destroy();
-		
-		System.out.println(astr.getSprite().getImageLayer());
 	}
 	
 	/**
@@ -251,7 +248,6 @@ public class DynamicFactory extends Factory {
 			} else {
 				i--;
 			}
-			int j=0;
 		}
 	}
 	

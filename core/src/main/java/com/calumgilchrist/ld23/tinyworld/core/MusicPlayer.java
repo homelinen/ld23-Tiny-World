@@ -1,9 +1,10 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
-import java.util.Random;
-import java.util.ArrayList;
+import static playn.core.PlayN.assets;
 
-import static playn.core.PlayN.*;
+import java.util.ArrayList;
+import java.util.Random;
+
 import playn.core.Sound;
 
 public class MusicPlayer {

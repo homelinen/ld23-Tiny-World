@@ -1,7 +1,10 @@
 package com.calumgilchrist.ld23.tinyworld.core;
 
 import java.util.ArrayList;
-import playn.core.*;
+
+import playn.core.Image;
+import playn.core.ImageLayer;
+import playn.core.PlayN;
 
 public class Sprite {
 

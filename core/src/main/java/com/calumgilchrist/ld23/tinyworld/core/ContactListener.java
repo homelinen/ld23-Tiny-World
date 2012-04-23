@@ -2,7 +2,6 @@ package com.calumgilchrist.ld23.tinyworld.core;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.collision.Manifold;
-import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.contacts.Contact;
 
@@ -51,7 +50,6 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	
 				dynamicFactory.removeByBody(hitter);
 				createCount++;
-				System.out.println("Knock B");
 			}
 		} if (player.getBody().equals(contact.getFixtureB().m_body)) {
 			
@@ -64,7 +62,6 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	
 				dynamicFactory.removeByBody(hitter);
 				createCount++;
-				System.out.println("Knock A");
 			}
 		}
 		
@@ -73,11 +70,9 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 	// Work out whether the collision is with a comet or asteroid and apply the correct rule
 	public void discernCollisionType(Planetoid planet){
 		if (planet.getClass().equals((new Asteroid().getClass()))){
-			//System.out.println("Asteroid collision");
 			player.setAtmosphere(player.getAtmosphere()-10);
 		}
 		else{
-			//System.out.println("Comet collision");
 			player.setAtmosphere((int) (player.getAtmosphere()+5));
 		}
 	}
