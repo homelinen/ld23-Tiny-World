@@ -81,7 +81,7 @@ public class KeyboardInput implements Keyboard.Listener {
 				rightKeyDown = true;
 				break;
 			case ESCAPE:
-				System.exit(0);
+//				System.exit(0);
 				break;
 			case SPACE:
 				spaceDown = true;
@@ -123,7 +123,7 @@ public class KeyboardInput implements Keyboard.Listener {
 				}
 				break;
 			case ESCAPE:
-				System.exit(0);
+//				System.exit(0);
 				break;
 			}
 		}

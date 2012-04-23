@@ -46,7 +46,7 @@ public class Menus {
 						creditsMenuInit();
 					}
 					else if(mi.getText() == "Exit"){
-						System.exit(0);
+//						System.exit(0);
 					}
 				}
 			}
@@ -61,7 +61,7 @@ public class Menus {
 		}else if(index == 1){
 			creditsMenuInit();
 		}else if(index == 2){
-			System.exit(0);
+//			System.exit(0);
 		}
 		
 		return false;
