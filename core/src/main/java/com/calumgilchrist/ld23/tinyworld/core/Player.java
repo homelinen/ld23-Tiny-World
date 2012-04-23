@@ -5,7 +5,7 @@ import org.jbox2d.dynamics.World;
 
 public class Player extends Planetoid {
 	
-	private int atmosphere;
+	private float atmosphere;
 	private float heat;
 
 	public Player(Sprite s, BodyDef bodyDef, World world) {
@@ -33,11 +33,11 @@ public class Player extends Planetoid {
 		return this.getBody().m_mass;
 	}
 
-	public int getAtmosphere() {
+	public float getAtmosphere() {
 		return atmosphere;
 	}
 
-	public void setAtmosphere(int atmosphere) {
+	public void setAtmosphere(float atmosphere) {
 		this.atmosphere = atmosphere;
 	}
 	
@@ -47,5 +47,6 @@ public class Player extends Planetoid {
 
 	public void updateHeat() {
 		this.heat = StarFactory.getHeat(this.getBody().getWorldCenter());
+		this.atmosphere = this.atmosphere - StarFactory.getAtmosphereDrain(this.getBody().getWorldCenter());
 	}
 }

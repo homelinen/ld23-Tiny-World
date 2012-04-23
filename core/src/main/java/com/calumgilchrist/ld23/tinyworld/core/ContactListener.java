@@ -78,7 +78,7 @@ public class ContactListener implements org.jbox2d.callbacks.ContactListener {
 		}
 		else{
 			//System.out.println("Comet collision");
-			player.setAtmosphere(player.getAtmosphere()+5);
+			player.setAtmosphere((int) (player.getAtmosphere()+5));
 		}
 	}
 		

@@ -11,6 +11,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
+import playn.core.Canvas;
 import playn.core.CanvasImage;
 import playn.core.Color;
 import playn.core.DebugDrawBox2D;
@@ -20,6 +21,7 @@ import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.Layer;
+import playn.core.Pattern;
 import playn.core.Sound;
 import playn.core.TextFormat;
 import playn.core.TextFormat.Alignment;
@@ -97,13 +99,18 @@ public class TinyWorld implements Game {
 		planetoidImage = assets().getImage("images/planetoid.png");
 
 		Globals.state = Globals.STATE_MENU;
+		
+		graphics().setSize(1336, 768);
 
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
-		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
+		Pattern bgPattern = graphics().createPattern(bgImage);
+		CanvasImage bgCanvas = graphics().createImage(graphics().width(), graphics().height());
+		bgCanvas.canvas().setFillPattern(bgPattern);
+		bgCanvas.canvas().fillRect(0f, 0f, graphics().width(), graphics().height());
+		ImageLayer bgLayer = graphics().createImageLayer(bgCanvas);
 		graphics().rootLayer().add(bgLayer);
 
-		graphics().setSize(1024, 768);
 
 		// music = new MusicPlayer();
 		// music.add("music/e");
@@ -135,7 +142,6 @@ public class TinyWorld implements Game {
 
 		factory.createDebris(5);
 
-		//TODO: Eh...
 		for (int i = 0; i < 1; i++) {
 			starFactory.getStar(new Vec2(0, 0));
 		}
@@ -147,7 +153,7 @@ public class TinyWorld implements Game {
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
 
-		playerBodyDef.position.set(playerStart.mul(1 / Globals.PHYS_RATIO));
+		playerBodyDef.position.set(playerStart.mul(1/Globals.PHYS_RATIO));
 
 		player = new Player(new Sprite((int) playerStart.x,
 				(int) playerStart.y, planetoidImage), playerBodyDef, world);
@@ -157,7 +163,7 @@ public class TinyWorld implements Game {
 		contactListner = new ContactListener(player, factory);
 		world.setContactListener(contactListner);
 
-		setScale(2.0f);
+		// setScale(1.0f);
 
 		if (debugPhysics) {
 			debugInit();
@@ -347,11 +353,11 @@ public class TinyWorld implements Game {
 	public void cameraFollowPlayer() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - graphics().width() + (player.getSprite().getWidth()));
+		tx = (int) (tx - (graphics().width()/2) + (player.getSprite().getWidth()/2));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
+		ty = (int) (ty - (graphics().height()/2) - (player.getSprite().getHeight()/2));
 
 		planetoidLayer.setOrigin(tx, ty);
 	}
@@ -359,13 +365,13 @@ public class TinyWorld implements Game {
 	public void cameraFollowDebug() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - (graphics().width() / 2) * (1 / Globals.globalScale));
+		tx = (int) (tx - (graphics().width()));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - (graphics().height() / 2) * (1 / Globals.globalScale));
+		ty = (int) (ty + (graphics().height()));
 
-		// debugLayer.setOrigin(tx, ty);
+		debugLayer.setOrigin(tx, ty);
 	}
 	
 	/**
