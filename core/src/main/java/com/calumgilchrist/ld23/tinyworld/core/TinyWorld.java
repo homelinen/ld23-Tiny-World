@@ -71,6 +71,7 @@ public class TinyWorld implements Game {
 	private static final boolean showFps = false; 
 	
 	private TextHandler fpsHandler;
+	private TextHandler atmosphereHandler;
 	
 	@Override
 	public void init() {	
@@ -161,6 +162,8 @@ public class TinyWorld implements Game {
 		if (showFps) {
 			initFPSCounter();
 		}
+		
+		initAtmosphereCounter();
 	}
 	
 	public void debugInit() {
@@ -213,10 +216,14 @@ public class TinyWorld implements Game {
 					fps = (int) (frameCount / dTime);
 					frameCount = 0;
 					
-					fpsHandler.setText("" + fps);
+					fpsHandler.setText("Atmosphere: " + fps);
 					fpsHandler.update();
 				}
 			}
+			
+			// Update the atmosphere value on screen
+			atmosphereHandler.setText("" + player.getAtmosphere());
+			atmosphereHandler.update();
 		}
 	}
 
@@ -225,6 +232,7 @@ public class TinyWorld implements Game {
 		
 		// music.update();
 
+		// MENU STATE
 		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
 			// X position is the middle of the screen subtract half the width of the title
 			float posX = (graphics().width() / 2) - (menus.menuItemLayers.get(Globals.currentItem).layout.width()/2);
@@ -240,7 +248,17 @@ public class TinyWorld implements Game {
 			
 			menus.menuLayer.get(Globals.currentItem+1).setTranslation(posX,(float) (posY+Math.sin(Globals.menuSin)*10));
 		}
+		
+		// GAME STATE
 		else if(Globals.state == Globals.STATE_GAME){
+			// Bounds for atmosphere value
+			if(player.getAtmosphere() > 100){
+				player.setAtmosphere(100);
+			}
+			else if (player.getAtmosphere() < 0){
+				player.setAtmosphere(0);
+			}
+			
 			//setScale(player.getMass());
 
 			// Values need playing with, and to be stored
@@ -266,7 +284,6 @@ public class TinyWorld implements Game {
 			}
 			
 			player.update();
-	
 			factory.update();
 		}
 	}
@@ -335,5 +352,14 @@ public class TinyWorld implements Game {
 		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20), textFont, Color.rgb(255, 247, 50));
 		
 		graphics().rootLayer().add(fpsHandler.getTextLayer());
+	}
+	
+	// Render text to show an atmosphere counter
+	public void initAtmosphereCounter(){
+		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
+		
+		atmosphereHandler = new TextHandler("A:" + player.getAtmosphere(), new Vec2(20, 40), textFont, Color.rgb(255, 247, 50));
+		
+		graphics().rootLayer().add(atmosphereHandler.getTextLayer());
 	}
 }
