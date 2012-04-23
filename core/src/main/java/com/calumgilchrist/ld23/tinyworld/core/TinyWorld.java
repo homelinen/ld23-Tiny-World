@@ -268,8 +268,8 @@ public class TinyWorld implements Game {
 		// GAME STATE
 		else if (Globals.state == Globals.STATE_GAME) {
 			// Bounds for atmosphere value
-			if (player.getAtmosphere() > 100) {
-				player.setAtmosphere(100);
+			if (player.getAtmosphere() > 100f) {
+				player.setAtmosphere(100f);
 			} else if (player.getAtmosphere() < 0) {
 				player.setAtmosphere(0);
 			}

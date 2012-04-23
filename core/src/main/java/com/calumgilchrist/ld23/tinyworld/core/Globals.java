@@ -17,4 +17,6 @@ public class Globals {
 	public static int currentItem;
 	public static float menuSin;
 	public static int numOfMenuItems;
+	
+	public static float thermalConstant = 1E3f;
 }
