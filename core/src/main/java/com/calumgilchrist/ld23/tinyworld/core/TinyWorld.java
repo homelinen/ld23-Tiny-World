@@ -72,6 +72,7 @@ public class TinyWorld implements Game {
 	
 	private TextHandler fpsHandler;
 	private TextHandler atmosphereHandler;
+	private TextHandler massHandler;
 	
 	@Override
 	public void init() {	
@@ -164,6 +165,7 @@ public class TinyWorld implements Game {
 		}
 		
 		initAtmosphereCounter();
+		initMassCounter();
 	}
 	
 	public void debugInit() {
@@ -222,8 +224,12 @@ public class TinyWorld implements Game {
 			}
 			
 			// Update the atmosphere value on screen
-			atmosphereHandler.setText("" + player.getAtmosphere());
+			atmosphereHandler.setText("A: " + player.getAtmosphere());
 			atmosphereHandler.update();
+						
+			// Update the mass value on screen
+			massHandler.setText("M: " + player.getMass());
+			massHandler.update();
 		}
 	}
 
@@ -361,5 +367,14 @@ public class TinyWorld implements Game {
 		atmosphereHandler = new TextHandler("A:" + player.getAtmosphere(), new Vec2(20, 40), textFont, Color.rgb(255, 247, 50));
 		
 		graphics().rootLayer().add(atmosphereHandler.getTextLayer());
+	}
+	
+	// Render text to show an atmosphere counter
+	public void initMassCounter(){
+		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
+		
+		massHandler = new TextHandler("M:" + player.getMass(), new Vec2(20, 60), textFont, Color.rgb(255, 247, 50));
+		
+		graphics().rootLayer().add(massHandler.getTextLayer());
 	}
 }
