@@ -12,7 +12,7 @@ public class Globals {
 	public static int state;
 	public static float globalScale;
 
-	public static float magicBoundRatio = 2.2f;
+	public static float magicBoundRatio = 2.5f;
 	
 	public static int currentItem;
 	public static float menuSin;

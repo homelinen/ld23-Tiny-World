@@ -44,7 +44,7 @@ public class TinyWorld implements Game {
 	
 	private static final boolean debugPhysics = false;
 	
-	MusicPlayer music;
+	// MusicPlayer music;
 
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
@@ -105,13 +105,13 @@ public class TinyWorld implements Game {
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 		
-		graphics().setSize(1336, 768);
+		graphics().setSize(640, 480);
 		
 		// music = new MusicPlayer();
 		// music.add("music/e");
 		// music.start();
 
-		// menus.menuInit();
+		menus.menuInit();
 	}
 
 	public void gameInit() {
@@ -153,7 +153,7 @@ public class TinyWorld implements Game {
 		contactListner = new ContactListener(player);
 		world.setContactListener(contactListner);
 
-		setScale(4.0f);
+		setScale(2.0f);
 		
 		if (debugPhysics) {
 			debugInit();
@@ -197,7 +197,6 @@ public class TinyWorld implements Game {
 		// the background automatically paints itself, so no need to do anything
 		// here!
 		if(Globals.state == Globals.STATE_GAME){
-			
 			if (debugPhysics) {
 				canv.canvas().clear();
 				world.drawDebugData();
@@ -324,10 +323,6 @@ public class TinyWorld implements Game {
 		ty = (int) (ty - (graphics().height()/2) * (1/Globals.globalScale));
 		
 		debugLayer.setOrigin(tx, ty);
-	}
-
-	public void movePlayer() {
-		//What is this?
 	}
 	
 	/**
