@@ -68,7 +68,7 @@ public class TinyWorld implements Game {
 	int frameCount;
 	int fps;
 	long oldTime;
-	private static final boolean showFps = true; 
+	private static final boolean showFps = false; 
 	
 	private TextHandler fpsHandler;
 	
@@ -167,7 +167,7 @@ public class TinyWorld implements Game {
 		//Debug stuff
 		debugDraw = new DebugDrawBox2D();
 		
-		int scaleCanvasSize = 10;
+		int scaleCanvasSize = 1;
 		canv = graphics().createImage(graphics().width() * scaleCanvasSize,graphics().height() * scaleCanvasSize);
 		debugDraw.setCanvas(canv);
 		debugDraw.setFlipY(false);
@@ -175,12 +175,12 @@ public class TinyWorld implements Game {
 		debugDraw.setFillAlpha(50);
 		debugDraw.setStrokeWidth(1.0f);
 		debugDraw.setFlags(DebugDraw.e_shapeBit | DebugDraw.e_jointBit);
-		debugDraw.setCamera(0, 0, 2); 
+		debugDraw.setCamera(0, 0, 1f); 
 		
 		world.setDebugDraw(this.debugDraw);
 		
 		debugLayer = graphics().createImageLayer(canv);
-		
+		debugLayer.setTranslation(Globals.PHYS_RATIO, Globals.PHYS_RATIO);
 		graphics().rootLayer().add(debugLayer);
 	}
 	
@@ -323,7 +323,7 @@ public class TinyWorld implements Game {
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
 		ty = (int) (ty - (graphics().height()/2) * (1/Globals.globalScale));
 		
-		debugLayer.setOrigin(tx, ty);
+		//debugLayer.setOrigin(tx, ty);
 	}
 	
 	/**

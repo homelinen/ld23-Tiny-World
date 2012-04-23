@@ -159,11 +159,13 @@ public class DynamicFactory extends Factory {
 	 */
 	public static void removeByBody(Body body) {
 		Planetoid astr = getFromBody(body);
+		
+		astr.getBody().destroyFixture(astr.getBody().m_fixtureList);
+		
 		if (astr != null) {
 			remove(astr);
 		} 
 		//TODO if null, should probably mention it
-		
 	}
 	
 	/**
@@ -204,8 +206,6 @@ public class DynamicFactory extends Factory {
 		}
 		
 		instances.remove(astr);
-		
-		System.out.println("Comets: " + getCometCount() + "  Astrs: " + getAsteroidCount());
 		
 		//Destroy the planet
 		destroyList.add(astr.getBody());
