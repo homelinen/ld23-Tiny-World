@@ -27,8 +27,6 @@ public class Player extends Planetoid {
 		float newMass = oldMass + mass;
 
 		this.getBody().m_mass = newMass;
-
-		System.out.println("Mass: " + newMass);
 	}
 	
 	public float getMass(){

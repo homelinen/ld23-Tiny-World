@@ -234,7 +234,7 @@ public class TinyWorld implements Game {
 			massHandler.setText("M: " + player.getMass());
 			massHandler.update();
 
-			// Update the mass value on screen
+			// Update the heat value on screen
 			heatHandler.setText("H: " + player.getHeat());
 			heatHandler.update();
 		}
