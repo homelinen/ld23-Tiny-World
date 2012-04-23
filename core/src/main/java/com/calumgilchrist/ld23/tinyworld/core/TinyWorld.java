@@ -12,12 +12,18 @@ import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
 
 import playn.core.CanvasImage;
+import playn.core.Color;
 import playn.core.DebugDrawBox2D;
+import playn.core.Font;
 import playn.core.Game;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
+import playn.core.Layer;
 import playn.core.Sound;
+import playn.core.TextFormat;
+import playn.core.TextFormat.Alignment;
+import playn.core.TextLayout;
 
 public class TinyWorld implements Game {
 
@@ -61,7 +67,13 @@ public class TinyWorld implements Game {
 	Menus menus;
 	
 	Sound clickSound;
-
+	
+	//FPS Text Stuff
+	private CanvasImage fpsTextImage;
+	private ImageLayer fpsTextLayer;
+	private TextLayout fpsTextLayout;
+	private TextFormat fpsTextformat;
+	
 	@Override
 	public void init() {	
 		menus = new Menus();
@@ -138,7 +150,7 @@ public class TinyWorld implements Game {
 		
 		debugInit();
 		
-		System.out.println("Heat: " + StarFactory.getHeat(new Vec2(100,100)));
+		initFPSCounter();
 	}
 	
 	public void debugInit() {
@@ -157,8 +169,7 @@ public class TinyWorld implements Game {
 		
 		world.setDebugDraw(this.debugDraw);
 		
-		debugLayer = graphics().createImageLayer();
-		debugLayer.setImage(canv);
+		debugLayer = graphics().createImageLayer(canv);
 		
 		graphics().rootLayer().add(debugLayer);
 	}
@@ -192,7 +203,7 @@ public class TinyWorld implements Game {
 			oldTime = (long) curTime;
 			fps = (int) (frameCount / dTime);
 			frameCount = 0;
-			System.out.println(fps + " fps");
+			drawFpsCounter();
 		}
 	}
 
@@ -286,5 +297,28 @@ public class TinyWorld implements Game {
 
 	public void movePlayer() {
 		//What is this?
+	}
+	
+	/**
+	 * Render text to show an FPS Counter
+	 */
+	public void initFPSCounter() {
+		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
+		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(50, 255, 247), new TextFormat().effect);
+		
+		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
+		
+		fpsTextImage = graphics().createImage(100, 100);
+		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
+		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
+		
+		graphics().rootLayer().add(fpsTextLayer);
+	}
+	
+	public void drawFpsCounter() {
+		fpsTextImage.canvas().clear();
+		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
+		
+		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
 	}
 }
