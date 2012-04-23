@@ -41,7 +41,7 @@ public class TinyWorld implements Game {
 	private static final int spawnIntervalSecs = 1;
 	private long lastSpawnTime;
 
-	private static final boolean debugPhysics = false;
+	private static final boolean debugPhysics = true;
 
 	// MusicPlayer music;
 
@@ -68,7 +68,7 @@ public class TinyWorld implements Game {
 	int frameCount;
 	int fps;
 	long oldTime;
-	private static final boolean showFps = false;
+	private static final boolean showFps = true;
 
 	private TextHandler fpsHandler;
 	private TextHandler atmosphereHandler;
@@ -103,7 +103,7 @@ public class TinyWorld implements Game {
 		ImageLayer bgLayer = graphics().createImageLayer(bgImage);
 		graphics().rootLayer().add(bgLayer);
 
-		graphics().setSize(1024, 768);
+		graphics().setSize(1336, 768);
 
 		// music = new MusicPlayer();
 		// music.add("music/e");
@@ -146,7 +146,7 @@ public class TinyWorld implements Game {
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyType.DYNAMIC;
 
-		playerBodyDef.position.set(playerStart.mul(1 / Globals.PHYS_RATIO));
+		playerBodyDef.position.set(playerStart.mul(1/Globals.PHYS_RATIO));
 
 		player = new Player(new Sprite((int) playerStart.x,
 				(int) playerStart.y, planetoidImage), playerBodyDef, world);
@@ -156,11 +156,11 @@ public class TinyWorld implements Game {
 		contactListner = new ContactListener(player, factory);
 		world.setContactListener(contactListner);
 
-		setScale(2.0f);
+		// setScale(1.0f);
 
-		if (debugPhysics) {
+		//if (debugPhysics) {
 			debugInit();
-		}
+		//}
 
 		if (showFps) {
 			initFPSCounter();
@@ -175,9 +175,9 @@ public class TinyWorld implements Game {
 		// Debug stuff
 		debugDraw = new DebugDrawBox2D();
 
-		int scaleCanvasSize = 1;
-		canv = graphics().createImage(graphics().width() * scaleCanvasSize,
-				graphics().height() * scaleCanvasSize);
+		// float scaleCanvasSize = 1/Globals.globalScale;
+		canv = graphics().createImage((int) (graphics().width()),
+				(int) (graphics().height()));
 		debugDraw.setCanvas(canv);
 		debugDraw.setFlipY(false);
 		debugDraw.setStrokeAlpha(100);
@@ -301,7 +301,6 @@ public class TinyWorld implements Game {
 			cameraFollowPlayer();
 
 			if (debugPhysics) {
-				world.drawDebugData();
 				cameraFollowDebug();
 			}
 
@@ -344,25 +343,29 @@ public class TinyWorld implements Game {
 	public void cameraFollowPlayer() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - graphics().width() + (player.getSprite().getWidth()));
+		tx = (int) (tx - (graphics().width()/2) + (player.getSprite().getWidth()/2));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - graphics().height() + (player.getSprite().getHeight()));
+		ty = (int) (ty - (graphics().height()/2) - (player.getSprite().getHeight()/2));
 
+		System.out.println("nondebug: "+tx+","+ty);
+		
 		planetoidLayer.setOrigin(tx, ty);
 	}
 
 	public void cameraFollowDebug() {
 		int tx;
 		tx = (int) (player.getBody().getWorldCenter().x * Globals.PHYS_RATIO);
-		tx = (int) (tx - (graphics().width() / 2) * (1 / Globals.globalScale));
+		tx = (int) (tx - (graphics().width()));
 
 		int ty;
 		ty = (int) (player.getBody().getWorldCenter().y * Globals.PHYS_RATIO);
-		ty = (int) (ty - (graphics().height() / 2) * (1 / Globals.globalScale));
+		ty = (int) (ty + (graphics().height()));
 
-		// debugLayer.setOrigin(tx, ty);
+		System.out.println("debug: "+tx+","+ty);
+		
+		debugLayer.setOrigin(tx, ty);
 	}
 
 	/**

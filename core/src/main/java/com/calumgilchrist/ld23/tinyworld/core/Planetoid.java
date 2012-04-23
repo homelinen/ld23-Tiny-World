@@ -18,6 +18,8 @@ public abstract class Planetoid {
 	public Planetoid(Sprite s, BodyDef bodyDef, World world, float mass){
 		//TODO: Need an initial mass
 		
+		System.out.println("Planetoid created");
+		
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
 		
@@ -53,7 +55,7 @@ public abstract class Planetoid {
 	public Sprite getSprite(){
 		return sprite;
 	}
-	
+
 	public Body getBody() {
 		return this.pBody;
 	}
@@ -63,7 +65,7 @@ public abstract class Planetoid {
 	}
 	
 	public void update(){
-		Vec2 center = this.getBody().getWorldCenter().mul(Globals.PHYS_RATIO);
+		Vec2 center = this.getBody().getPosition().mul(Globals.PHYS_RATIO);
 		
 		// CircleShape circle = new CircleShape();
 		// circle.m_radius = this.sprite.getWidth() * Globals.globalScale / Globals.PHYS_RATIO / Globals.magicBoundRatio;
