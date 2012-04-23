@@ -125,8 +125,6 @@ public class DynamicFactory extends Factory {
 
 		Vec2 pos = new Vec2(x, y);
 		
-		System.out.println("Spawn pos: " + pos);
-		
 		return pos;
 	}
 
@@ -213,7 +211,6 @@ public class DynamicFactory extends Factory {
 		destroyList.add(astr.getBody());
 		
 		astr.getSprite().getImageLayer().destroy();
-		System.out.println(astr.getSprite().getImageLayer().destroyed());
 	}
 	
 	/**

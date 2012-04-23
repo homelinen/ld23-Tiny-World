@@ -56,7 +56,6 @@ public class Menu {
 		layer = createTextLayer(layout);
 		layer.setTranslation((graphics().width() / 2) - (layout.width() / 2),
 				startY);
-		System.out.println(layout.width());
 
 		return layer;
 	}

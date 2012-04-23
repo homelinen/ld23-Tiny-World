@@ -38,7 +38,7 @@ public class TinyWorld implements Game {
 	
 	private static final float nanoToSecs = 1E9f;
 
-	private static final int spawnIntervalSecs = 4;
+	private static final int spawnIntervalSecs = 1;
 	private long lastSpawnTime;
 	
 	private static final boolean debugPhysics = false;
