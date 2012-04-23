@@ -14,9 +14,9 @@ import org.jbox2d.dynamics.World;
 public abstract class Planetoid {
 	private Sprite sprite;
 	private Body pBody;
+	private float forceFactor;
 	
 	public Planetoid(Sprite s, BodyDef bodyDef, World world, float mass){
-		//TODO: Need an initial mass
 		
 		this.sprite = s;
 		this.pBody = world.createBody(bodyDef);
@@ -31,6 +31,27 @@ public abstract class Planetoid {
 		
 		pBody.createFixture(fixDef);
 		pBody.m_mass = mass;
+		
+		forceFactor = 0;
+	}
+	
+	public Planetoid(Sprite s, BodyDef bodyDef, World world, float mass, float forceFactor){
+		
+		this.sprite = s;
+		this.pBody = world.createBody(bodyDef);
+		
+		CircleShape circle = new CircleShape();
+		
+		circle.m_radius = this.sprite.getWidth() / Globals.PHYS_RATIO / Globals.magicBoundRatio;
+		
+		FixtureDef fixDef = new FixtureDef();
+	
+		fixDef.shape = circle;
+		
+		pBody.createFixture(fixDef);
+		pBody.m_mass = mass;
+		
+		this.forceFactor = forceFactor;
 	}
 	
 	/**
@@ -47,6 +68,11 @@ public abstract class Planetoid {
 	public void applyThrust(Vec2 force) {
 
 		force = force.mul(1/Globals.PHYS_RATIO);
+		
+		//Nasty hack to change player speed
+		if (this.forceFactor > 0) {
+			force = force.mulLocal(this.forceFactor);
+		}
 		this.getBody().applyForce(force, this.getBody().getWorldCenter());
 	}
 	
