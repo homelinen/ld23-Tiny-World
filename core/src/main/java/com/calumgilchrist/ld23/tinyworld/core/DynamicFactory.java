@@ -36,8 +36,9 @@ public class DynamicFactory extends Factory {
 		
 		float astrWeight = rand.nextInt(asteroidMaxWeight);
 		
+		//TODO: Multiplier should be somewhere else (Reduces mulitplication)
 		// Start Vector off screen (This should be random)
-		Vec2 astrStart = genStartPos(graphics().width(), graphics().height());
+		Vec2 astrStart = genStartPos(graphics().width(), graphics().height()).mul(1/Globals.globalScale);
 
 		// Set up an asteroid
 		BodyDef astrBodyDef = new BodyDef();
@@ -70,7 +71,7 @@ public class DynamicFactory extends Factory {
 		float  cometWeight = rand.nextInt(cometMaxWeight);
 		
 		// Start Vector off screen (This should be random)
-		Vec2 cometStart = genStartPos(graphics().width(), graphics().height());
+		Vec2 cometStart = genStartPos(graphics().width(), graphics().height()).mul(1/Globals.globalScale);
 
 		// Set up an asteroid
 		BodyDef cometBodyDef = new BodyDef();
@@ -116,14 +117,16 @@ public class DynamicFactory extends Factory {
 		} else {
 			y = getSpawnBound(-height, height);
 
-			maxRand = height * 2;
+			maxRand = width * 2;
 
 			// Get position between width and -width
 			x = rand.nextInt(maxRand) - width;
 		}
 
 		Vec2 pos = new Vec2(x, y);
-
+		
+		System.out.println("Spawn pos: " + pos);
+		
 		return pos;
 	}
 
