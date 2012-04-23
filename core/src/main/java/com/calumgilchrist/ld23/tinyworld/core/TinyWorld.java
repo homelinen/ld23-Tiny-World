@@ -43,6 +43,8 @@ public class TinyWorld implements Game {
 	int fps;
 	long oldTime;
 	
+	MusicPlayer music;
+	
 	private KeyboardInput keyboard;
 	private MouseInput mouse;
 
@@ -91,6 +93,10 @@ public class TinyWorld implements Game {
 		graphics().rootLayer().add(bgLayer);
 		
 		graphics().setSize(1336, 768);
+		
+		music = new MusicPlayer();
+		music.add("music/e");
+		music.start();
 
 		menus.menuInit();
 	}
@@ -198,6 +204,8 @@ public class TinyWorld implements Game {
 
 	@Override
 	public void update(float delta) {
+		
+		music.update();
 
 		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
 			// X position is the middle of the screen subtract half the width of the title
