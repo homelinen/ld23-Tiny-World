@@ -29,8 +29,12 @@ public class TinyWorld implements Game {
 
 	DynamicFactory factory;
 	StarFactory starFactory;
+	
+	private static final float nanoToSecs = 1E9f;
 
-	private static final int spawnInterval = 50;
+	private static final int spawnIntervalSecs = 4;
+	private long lastSpawnTime;
+	
 	
 	private static final boolean debugPhysics = false;
 	
@@ -73,6 +77,7 @@ public class TinyWorld implements Game {
 		frameCount = 0;
 		fps = 0;
 		oldTime = System.nanoTime();
+		lastSpawnTime = System.nanoTime();
 		
 		planetoidLayer = graphics().createGroupLayer();
 		
@@ -182,7 +187,7 @@ public class TinyWorld implements Game {
 		if (frameCount > 100) {
 			float curTime = System.nanoTime();
 			
-			float dTime = (curTime - oldTime) / 1E9f;
+			float dTime = (curTime - oldTime) / nanoToSecs;
 			
 			oldTime = (long) curTime;
 			fps = (int) (frameCount / dTime);
@@ -229,6 +234,8 @@ public class TinyWorld implements Game {
 			
 			planetoidGenerator();
 
+			spawnBodies();
+			
 			cameraFollowPlayer();
 			cameraFollowDebug();
 			
@@ -241,6 +248,19 @@ public class TinyWorld implements Game {
 	@Override
 	public int updateRate() {
 		return 25;
+	}
+	
+	/**
+	 * Spawn bodies after spawnIntervale frames 
+	 */
+	public void spawnBodies() {
+		long curTime = System.nanoTime();
+		long dTime = (long) ((curTime - lastSpawnTime) / nanoToSecs);
+		
+		if (dTime > spawnIntervalSecs) {
+			factory.createDebris(1);
+			lastSpawnTime = curTime;
+		}
 	}
 	
 	/**
