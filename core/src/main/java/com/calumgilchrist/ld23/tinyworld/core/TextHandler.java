@@ -37,21 +37,29 @@ public class TextHandler {
 	 * @param message
 	 * @param pos
 	 */
-	public TextHandler(String message, Vec2 pos, ImageLayer textLayer) {
+	public TextHandler(String message, Vec2 pos) {
 		setText(message);
 		
 		textFont = graphics().createFont("Courier", Font.Style.PLAIN, 12);
 		textFormat = new TextFormat(textFont, 100, Alignment.LEFT, Color.rgb(255, 255,255), new TextFormat().effect);
 		textLayout = graphics().layoutText("" + message, textFormat);
 		
-		iLayer = textLayer;
+		this.pos = pos;
+		
+		canv = graphics().createImage((int) textLayout.width() + 50, (int) textLayout.width() + 50);
+		this.iLayer = graphics().createImageLayer(canv);
 	}
 	
-	public TextHandler(String message, Vec2 pos, Font textFont, int color, ImageLayer textLayer) {
+	public TextHandler(String message, Vec2 pos, Font textFont, int color) {
+		setText(message);
+		
+		this.pos = pos;
+		
 		textFormat = new TextFormat(textFont, 100, Alignment.LEFT, color, new TextFormat().effect);
 		textLayout = graphics().layoutText("" + message, textFormat);
 		
-		iLayer = textLayer;
+		canv = graphics().createImage((int) textLayout.width() + 50, (int) textLayout.width() + 50);
+		this.iLayer = graphics().createImageLayer(canv);
 	}
 	
 	/**
@@ -59,19 +67,17 @@ public class TextHandler {
 	 */
 	public void initText() {
 		
-		//TODO: Tweak size
-		canv = graphics().createImage((int) textLayout.width() + 50, (int) textLayout.width() + 50);
-		canv.canvas().drawText(textLayout, 20, 20);
+//		canv.canvas().drawText(textLayout, 20, 20);
 		iLayer = graphics().createImageLayer(canv);
 		
-		graphics().rootLayer().add(iLayer);
+		
 	}
 	
-	public void drawFpsCounter() {
+	public void update() {
 		canv.canvas().clear();
 		textLayout = graphics().layoutText("" + message, textFormat);
 		
-		canv.canvas().drawText(textLayout, 20, 20);
+		canv.canvas().drawText(textLayout, pos.x, pos.y);
 	}
 	
 	public void setText(String text) {
@@ -84,5 +90,9 @@ public class TextHandler {
 	
 	public void setPos(Vec2 pos) {
 		this.pos = pos;
+	}
+	
+	public ImageLayer getTextLayer() {
+		return iLayer;
 	}
 }

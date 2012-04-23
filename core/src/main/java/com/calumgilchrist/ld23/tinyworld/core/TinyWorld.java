@@ -67,7 +67,9 @@ public class TinyWorld implements Game {
 	int frameCount;
 	int fps;
 	long oldTime;
-	private static final boolean showFps = false; 
+	private static final boolean showFps = true; 
+	
+	private TextHandler fpsHandler;
 	
 	//FPS Text Stuff
 	private CanvasImage fpsTextImage;
@@ -106,10 +108,13 @@ public class TinyWorld implements Game {
 		graphics().setSize(1024, 768);
 		
 		menus.menuInit();
+		
+		if (showFps) {
+			initFPSCounter();
+		}
 	}
 
 	public void gameInit() {
-		Globals.state = Globals.STATE_GAME;
 		graphics().rootLayer().remove(menus.menuLayer);
 
 		planetoids = new ArrayList<Asteroid>();
@@ -150,10 +155,6 @@ public class TinyWorld implements Game {
 		setScale(2.0f);
 		
 		debugInit();
-		
-		if (showFps) {
-			initFPSCounter();
-		}
 	}
 	
 	public void debugInit() {
@@ -194,20 +195,22 @@ public class TinyWorld implements Game {
 				canv.canvas().clear();
 				world.drawDebugData();
 			}
-		}
-		
-		if (showFps) {
-			//Calculate FPS
-			frameCount++;
-			if (frameCount > 50) {
-				float curTime = System.nanoTime();
-				
-				float dTime = (curTime - oldTime) / nanoToSecs;
-				
-				oldTime = (long) curTime;
-				fps = (int) (frameCount / dTime);
-				frameCount = 0;
-				drawFpsCounter();
+			
+			if (showFps) {
+				//Calculate FPS
+				frameCount++;
+				if (frameCount > 50) {
+					float curTime = System.nanoTime();
+					
+					float dTime = (curTime - oldTime) / nanoToSecs;
+					
+					oldTime = (long) curTime;
+					fps = (int) (frameCount / dTime);
+					frameCount = 0;
+					
+					fpsHandler.setText("" + fps);
+					fpsHandler.update();
+				}
 			}
 		}
 	}
@@ -311,20 +314,15 @@ public class TinyWorld implements Game {
 		Font textFont = graphics().createFont("Courier", Font.Style.BOLD, 12);
 		fpsTextformat = new TextFormat(textFont, 20, Alignment.LEFT, Color.rgb(255, 247, 50), new TextFormat().effect);
 		
-		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
+		fpsHandler = new TextHandler("" + fps, new Vec2(20, 20));
 		
-		//TODO: Tweak size
-		fpsTextImage = graphics().createImage((int) fpsTextLayout.width() + 50, (int) fpsTextLayout.width() + 50);
-		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
-		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
+//		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
 		
-		graphics().rootLayer().add(fpsTextLayer);
-	}
-	
-	public void drawFpsCounter() {
-		fpsTextImage.canvas().clear();
-		fpsTextLayout = graphics().layoutText("" + fps, fpsTextformat);
+//		//TODO: Tweak size
+//		fpsTextImage = graphics().createImage((int) fpsTextLayout.width() + 50, (int) fpsTextLayout.width() + 50);
+//		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
+//		fpsTextLayer = graphics().createImageLayer(fpsTextImage);
 		
-		fpsTextImage.canvas().drawText(fpsTextLayout, 20, 20);
+		graphics().rootLayer().add(fpsHandler.getTextLayer());
 	}
 }
