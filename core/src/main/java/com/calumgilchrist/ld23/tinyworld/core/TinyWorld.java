@@ -107,11 +107,11 @@ public class TinyWorld implements Game {
 		
 		graphics().setSize(1336, 768);
 		
-		music = new MusicPlayer();
-		music.add("music/e");
-		music.start();
+		// music = new MusicPlayer();
+		// music.add("music/e");
+		// music.start();
 
-		menus.menuInit();
+		// menus.menuInit();
 	}
 
 	public void gameInit() {
@@ -223,7 +223,7 @@ public class TinyWorld implements Game {
 	@Override
 	public void update(float delta) {
 		
-		music.update();
+		// music.update();
 
 		if(Globals.state == Globals.STATE_MENU || Globals.state == Globals.STATE_CREDITS){
 			// X position is the middle of the screen subtract half the width of the title
