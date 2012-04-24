@@ -77,6 +77,7 @@ public class Menus {
 		
 		creditsMenu.addMenuItem("Calum Gilchrist");
 		creditsMenu.addMenuItem("Daniel Bell");
+		creditsMenu.addMenuItem("Music - brandon75689");
 		creditsMenu.addMenuItem("Back");
 		
 		menuItemLayers = creditsMenu.getMenuItems();
@@ -88,7 +89,7 @@ public class Menus {
 	}
 	
 	public boolean handleCreditsMenu(int index){
-		if(index == 2){
+		if(index == 3){
 			graphics().rootLayer().remove(menuLayer);
 			menuInit();
 		}
