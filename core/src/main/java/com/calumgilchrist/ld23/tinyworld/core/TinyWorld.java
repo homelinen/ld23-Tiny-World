@@ -106,7 +106,7 @@ public class TinyWorld implements Game {
 
 		Globals.state = Globals.STATE_MENU;
 		
-		graphics().setSize(1336, 768);
+		graphics().setSize(1024, 720);
 
 		// create and add background image layer
 		Image bgImage = assets().getImage("images/starfield.png");
