@@ -1,0 +1,11 @@
+*.class
+*.jar
+.classpath
+.settings/
+
+#Meld
+*.orig
+
+#Maven Binary stuff
+*/target/*
+target/
